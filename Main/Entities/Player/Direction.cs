@@ -19,12 +19,6 @@ public partial class Direction : Node
         (true,  false, "BackRight"),  // 7
     };
 
-    // public override void _Ready()
-    // {
-    //     lookAt = GetNode<Marker2D>("../../../LookAt");
-    //     animatedSprite = GetNode<AnimatedSprite2D>("../..");
-    // }
-
     public string GetDirection(int section)
     {
         if (section >= 0 && section < sectionMap.Length)
