@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://dh45k8re21imm"]
+
+[ext_resource type="Script" uid="uid://bjy5lrnxejv8m" path="res://Main/Main.cs" id="1_yh5la"]
+[ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
+[ext_resource type="PackedScene" uid="uid://wtqj1t7hpe8p" path="res://Main/Entities/Player/Player.tscn" id="3_qvhan"]
+[ext_resource type="Script" uid="uid://caoawx78mp4aa" path="res://Main/GUI/Camera.cs" id="4_eunhr"]
+[ext_resource type="Script" uid="uid://e7a24qw1bk2m" path="res://Main/GUI/Fps.cs" id="5_k3v36"]
+[ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
+
+[node name="Main" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_yh5la")
+
+[node name="MapGenerator" parent="." instance=ExtResource("2_2w1kt")]
+
+[node name="Player" parent="." instance=ExtResource("3_qvhan")]
+
+[node name="Camera" type="Camera2D" parent="."]
+script = ExtResource("4_eunhr")
+
+[node name="GUI" type="CanvasLayer" parent="Camera"]
+
+[node name="UI" type="Control" parent="Camera/GUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="fps" type="Label" parent="Camera/GUI/UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("5_k3v36")
+
+[node name="BulletPool" type="Node2D" parent="."]
+script = ExtResource("6_liyct")

@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkmygg16bwx4r"]
+
+[ext_resource type="Script" uid="uid://cuiauy6ek70lx" path="res://Main/Guns/Bullet.cs" id="1_b5fjm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b5fjm"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b5fjm"]
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_b5fjm")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_b5fjm")
+
+[node name="AnimatedBullet" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_b5fjm")

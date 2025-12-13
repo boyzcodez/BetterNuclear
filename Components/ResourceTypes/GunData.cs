@@ -1,0 +1,57 @@
+using Godot;
+using System;
+
+[GlobalClass]
+public partial class GunData : Resource
+{
+    [Export] public string GunName { get; set; } = "weapon";
+    [Export(PropertyHint.Enum, "LV1_,LV2_,LV3_,LV4_,LV5_")]
+    public string LVL { get; set; } = "LV1_";
+    
+    [Export] public int Damage { get; set; } = 1;
+    [Export] public float Knockback { get; set; } = 0f;
+    [Export] public float BulletSpeed { get; set; } = 140f;
+    [Export] public float BulletLifeTime {get;set;} = 4f;
+    [Export] public bool UsesAmmo { get; set; } = true;
+    [Export] public int CurrentAmmo { get; set; } = 10;
+    [Export] public int MaxAmmo { get; set; } = 10;
+    [Export] public float FireRate { get; set; } = 0.2f;
+    [Export] public int BulletCount { get; set; } = 1;
+    [Export] public float SpreadAngle { get; set; } = 0f;
+    [Export] public float RandomFactor { get; set; } = 0f;
+
+    [ExportGroup("XP")]
+    [Export] public int currentXP { get; set; } = 0;
+    [Export] public int maxXP { get; set; } = 10;
+    [Export] public GunData NextLevelData { get; set; }
+
+    [ExportGroup("Bullet")]
+    [Export] public PackedScene BulletScene { get; set; }
+    [Export] public AnimationData BulletNorm {get;set;}
+    [Export] public AnimationData BulletHit {get;set;}
+    [Export] public Vector2 ShootPosition { get; set; }
+    [Export] public int GunSpot_X_axis { get; set; } = 6;
+    [Export] public Texture2D icon { get; set; }
+
+    [ExportGroup("Animations")]
+    [Export] public AnimationData NormalAnimationData {get;set;}
+    [Export] public AnimationData ShootAnimationData {get;set;}
+    [Export] public bool UsesAnimations {get;set;} = true;
+    
+    [ExportGroup("Gun Parts")]
+    [Export] public bool isEnemy { get; set; } = false;
+    [Export] public bool rotate { get; set; } = false;
+    [Export] public bool LaserSight { get; set; } = false;
+    [Export] public AudioStreamRandomizer Sound {get;set;}
+    
+
+    public void UseBullet()
+    {
+        if (UsesAmmo) CurrentAmmo -= 1;
+    }
+    public void ReFillAmmo(int ammoAmount)
+    {
+        CurrentAmmo += ammoAmount;
+        CurrentAmmo = Math.Clamp(CurrentAmmo, 0, MaxAmmo);
+    }
+}

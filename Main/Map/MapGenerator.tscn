@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvj3rj3lgr7cn"]
+
+[ext_resource type="PackedScene" uid="uid://c1fjkcrv31mtn" path="res://Main/Map/WalkerUnit.tscn" id="1_4xjwc"]
+[ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
+[ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
+[ext_resource type="Script" uid="uid://c7oq1es2g6b3c" path="res://Main/Map/WalkerUnit.cs" id="2_fk063"]
+
+[node name="MapGenerator" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Ground" type="TileMapLayer" parent="."]
+z_index = -1
+tile_set = ExtResource("1_toh0s")
+
+[node name="Walls" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("1_toh0s")
+
+[node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("FloorMap", "WallMap")]
+script = ExtResource("1_7qmhp")
+FloorMap = NodePath("../Ground")
+WallMap = NodePath("../Walls")
+
+[node name="WalkerUnit" parent="WalkerHead" instance=ExtResource("1_4xjwc")]
+script = ExtResource("2_fk063")
+
+[node name="WalkerUnit2" parent="WalkerHead" instance=ExtResource("1_4xjwc")]
+script = ExtResource("2_fk063")
+
+[node name="WalkerUnit3" parent="WalkerHead" instance=ExtResource("1_4xjwc")]
+script = ExtResource("2_fk063")
+
+[node name="WalkerUnit4" parent="WalkerHead" instance=ExtResource("1_4xjwc")]
+script = ExtResource("2_fk063")
+
+[node name="Environment" type="Node2D" parent="."]

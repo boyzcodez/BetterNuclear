@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dgg07406lrcj4"]
+
+[ext_resource type="Shader" uid="uid://chlitnn26jnif" path="res://Components/Shaders/Guns.gdshader" id="1_xxo4e"]
+
+[resource]
+shader = ExtResource("1_xxo4e")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 2
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
