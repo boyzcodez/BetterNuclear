@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class WalkerHead : Node2D
 {
@@ -43,6 +44,7 @@ public partial class WalkerHead : Node2D
             }
         }
             
+        Godot.Collections.Array<Godot.Vector2I> Walls = [];
 
         for (int x = -MapLength; x < MapLength; x++)
         {
@@ -51,12 +53,16 @@ public partial class WalkerHead : Node2D
                 var location = new Vector2I(x, y);
                 if (!floorSet.Contains(location))
                 {
-                    WallMap.SetCell(location, 0, new Vector2I(1, 0));
-                    FloorMap.SetCell(location, 0, new Vector2I(2,1));
+                    //WallMap.SetCell(location, 0, new Vector2I(1, 0));
+                    FloorMap.SetCell(location, 1, new Vector2I(1,1));
+
+                    Walls.Add(location);
                 }
                  
             }
         }
+
+        //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
         player.GlobalPosition = floorSet[floorSet.Count - 1] * 32 + new Vector2(16,16);
         

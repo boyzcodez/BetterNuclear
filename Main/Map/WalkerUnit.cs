@@ -25,6 +25,8 @@ public partial class WalkerUnit : Node2D
         Vector2I location = (Vector2I)parent.GlobalPosition;
         TileMapLayer tm = parent.FloorMap;
 
+        Godot.Collections.Array<Godot.Vector2I> Ground = [];
+
         foreach (int dir in PathSteps)
         {
             var ModifierDirection = Vector2I.Zero;
@@ -45,9 +47,12 @@ public partial class WalkerUnit : Node2D
                     break;
             }
             location += ModifierDirection;
-            tm.SetCell(location, 0, new Vector2I(0, 1));
+            //tm.SetCell(location, 0, new Vector2I(0, 1));
+            Ground.Add(location);
             carvedTiles.Add(location);
         }
+
+        tm.SetCellsTerrainConnect(Ground, 0, 0);
 
     }
 }
