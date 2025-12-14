@@ -10,7 +10,7 @@ public partial class WalkerHead : Node2D
     [Export] public TileMapLayer FloorMap;
     [Export] public TileMapLayer WallMap;
 
-    public List<Vector2I> floorSet;
+    public Godot.Collections.Array<Godot.Vector2I> floorSet = [];
     private Player player;
 
     public override void _Ready()
@@ -29,38 +29,40 @@ public partial class WalkerHead : Node2D
             walker.CalcPaht();
         }
 
-        BuildWalls();
+        BuildMap();
     }
 
-    public void BuildWalls()
+    public void BuildMap()
     {
-        floorSet = new();
+        floorSet.Clear();
 
         foreach (WalkerUnit walker in GetChildren())
         {
-            foreach (var pos in walker.carvedTiles)
+            foreach (var pos in walker.Ground)
             {
                 if (!floorSet.Contains(pos)) floorSet.Add(pos);
             }
         }
+
+        FloorMap.SetCellsTerrainConnect(floorSet, 0, 0);
             
-        Godot.Collections.Array<Godot.Vector2I> Walls = [];
+        // Godot.Collections.Array<Godot.Vector2I> Walls = [];
 
-        for (int x = -MapLength; x < MapLength; x++)
-        {
-            for (int y = -MapLength; y < MapLength; y++)
-            {
-                var location = new Vector2I(x, y);
-                if (!floorSet.Contains(location))
-                {
-                    //WallMap.SetCell(location, 0, new Vector2I(1, 0));
-                    FloorMap.SetCell(location, 1, new Vector2I(1,1));
+        // for (int x = -MapLength; x < MapLength; x++)
+        // {
+        //     for (int y = -MapLength; y < MapLength; y++)
+        //     {
+        //         var location = new Vector2I(x, y);
+        //         if (!floorSet.Contains(location))
+        //         {
+        //             //WallMap.SetCell(location, 0, new Vector2I(1, 0));
+        //             FloorMap.SetCell(location, 1, new Vector2I(1,1));
 
-                    Walls.Add(location);
-                }
+        //             Walls.Add(location);
+        //         }
                  
-            }
-        }
+        //     }
+        //}
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
@@ -68,13 +70,13 @@ public partial class WalkerHead : Node2D
         
     }
 
-    // public override void _Input(InputEvent input)
-    // {
-    //     if (input.IsActionPressed("space"))
-    //     {
-    //         Spawner.CalcRound();
-    //     }
-    // }
+    public override void _Input(InputEvent input)
+    {
+        if (input.IsActionPressed("space"))
+        {
+            GenerateMap();
+        }
+    }
 
     public void Explosion(int size, Vector2 position)
     {

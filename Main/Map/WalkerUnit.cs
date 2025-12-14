@@ -5,12 +5,12 @@ public partial class WalkerUnit : Node2D
 {
     public enum Dirs{LEFT,RIGHT,UP,DOWN}
     private Vector2 floorTile = new Vector2I(0, 0);
-    public List<Vector2I> carvedTiles;
+    public Godot.Collections.Array<Godot.Vector2I> Ground = [];
     
 
     public void CalcPaht()
     {
-        carvedTiles = new();
+        Ground.Clear();
 
         var parent = GetParent<WalkerHead>();
         var PathLength = parent.PathLength;
@@ -24,8 +24,6 @@ public partial class WalkerUnit : Node2D
 
         Vector2I location = (Vector2I)parent.GlobalPosition;
         TileMapLayer tm = parent.FloorMap;
-
-        Godot.Collections.Array<Godot.Vector2I> Ground = [];
 
         foreach (int dir in PathSteps)
         {
@@ -49,10 +47,7 @@ public partial class WalkerUnit : Node2D
             location += ModifierDirection;
             //tm.SetCell(location, 0, new Vector2I(0, 1));
             Ground.Add(location);
-            carvedTiles.Add(location);
         }
-
-        tm.SetCellsTerrainConnect(Ground, 0, 0);
 
     }
 }
