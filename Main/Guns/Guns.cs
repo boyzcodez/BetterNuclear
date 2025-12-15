@@ -115,7 +115,7 @@ public partial class Guns : Node2D
 
             //if (currentGun.rotate) bullet.Rotation = rotation;
 
-            bullet.Activate(rotation);
+            //bullet.Activate(rotation);
         }
 
         _cooldown = currentGun.FireRate;

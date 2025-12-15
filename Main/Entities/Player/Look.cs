@@ -3,9 +3,17 @@ using System;
 
 public partial class Look : Marker2D
 {
+    [Export] public PackedScene bul;
     [Export] public float SnapDegrees = 5f;
     [Export] private float BaseOffset = 14f;
     [Export] private float MinOffset = 7f;
+
+    private Node2D main;
+    public override void _Ready()
+    {
+        main = GetTree().GetFirstNodeInGroup("Main") as Node2D;
+    }
+
     public override void _Process(double delta)
     {
         Vector2 toMouse = GetGlobalMousePosition() - GlobalPosition;
@@ -23,5 +31,16 @@ public partial class Look : Marker2D
 
 
         Rotation = snappedAngle;
+    }
+    public override void _Input(InputEvent input)
+    {
+        if (input.IsActionPressed("shoot"))
+        {
+            var instance = bul.Instantiate() as Bullet;
+            instance.GlobalPosition = GlobalPosition;
+            instance.Velocity = Vector2.Left * 50f;
+
+            main.AddChild(instance);
+        }
     }
 }

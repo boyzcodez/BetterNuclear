@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i2wofviyt1sq"
-path="res://.godot/imported/NewBullets.png-31b343275a53656f32bdd5466ec24138.ctex"
+uid="uid://1fxgqdgxqk2c"
+path="res://.godot/imported/RobotEnemy2.png-ca971a42d16ffa7ce85fba9146030f9b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Guns/Player/NewBullets.png"
-dest_files=["res://.godot/imported/NewBullets.png-31b343275a53656f32bdd5466ec24138.ctex"]
+source_file="res://Assets/Entities/RobotEnemy2.png"
+dest_files=["res://.godot/imported/RobotEnemy2.png-ca971a42d16ffa7ce85fba9146030f9b.ctex"]
 
 [params]
 

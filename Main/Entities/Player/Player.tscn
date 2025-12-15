@@ -1,10 +1,11 @@
-[gd_scene load_steps=50 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=51 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
 [ext_resource type="Script" uid="uid://dat11fw722oki" path="res://Main/Entities/Player/AnimatedBody.cs" id="2_0atn1"]
 [ext_resource type="Script" uid="uid://c5i0txx826l2v" path="res://Main/Entities/Player/Direction.cs" id="4_37f4v"]
 [ext_resource type="Script" uid="uid://cl7bshfygfold" path="res://Main/Entities/Player/Look.cs" id="4_d1ek6"]
+[ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="6_0j5e5"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="6_jujs3"]
 [ext_resource type="Resource" uid="uid://vfqgjerlv601" path="res://Main/Guns/Player/Rifle.tres" id="7_0j4od"]
 
@@ -357,6 +358,7 @@ one_shot = true
 [node name="Look" type="Marker2D" parent="."]
 position = Vector2(0, -6)
 script = ExtResource("4_d1ek6")
+bul = ExtResource("6_0j5e5")
 
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
 position = Vector2(6, 0)

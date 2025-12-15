@@ -7,6 +7,7 @@ public partial class WalkerHead : Node2D
     [Export] public int MapLength = 100;
     [Export] public int PathLength = 100;
 
+    [Export] public TileMapLayer UnderGround;
     [Export] public TileMapLayer FloorMap;
     [Export] public TileMapLayer WallMap;
 
@@ -46,23 +47,23 @@ public partial class WalkerHead : Node2D
 
         FloorMap.SetCellsTerrainConnect(floorSet, 0, 0);
             
-        // Godot.Collections.Array<Godot.Vector2I> Walls = [];
+        Godot.Collections.Array<Godot.Vector2I> Walls = [];
 
-        // for (int x = -MapLength; x < MapLength; x++)
-        // {
-        //     for (int y = -MapLength; y < MapLength; y++)
-        //     {
-        //         var location = new Vector2I(x, y);
-        //         if (!floorSet.Contains(location))
-        //         {
-        //             //WallMap.SetCell(location, 0, new Vector2I(1, 0));
-        //             FloorMap.SetCell(location, 1, new Vector2I(1,1));
+        for (int x = -MapLength; x < MapLength; x++)
+        {
+            for (int y = -MapLength; y < MapLength; y++)
+            {
+                var location = new Vector2I(x, y);
+                if (!floorSet.Contains(location))
+                {
+                    //WallMap.SetCell(location, 0, new Vector2I(1, 0));
+                    UnderGround.SetCell(location, 5, new Vector2I(1,1));
 
-        //             Walls.Add(location);
-        //         }
+                    //Walls.Add(location);
+                }
                  
-        //     }
-        //}
+            }
+        }
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 

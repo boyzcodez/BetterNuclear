@@ -44,7 +44,7 @@ public partial class BulletPool : Node2D
         for (int i = pool.Count; i < amount; i++)
         {
             var bullet = gunData.BulletScene.Instantiate<Bullet>();
-            bullet.Init(gunData, this);
+            //bullet.Init(gunData, this);
             CallDeferred("add_child", bullet);
             pool.Enqueue(bullet);
 
@@ -98,10 +98,10 @@ public partial class BulletPool : Node2D
     {
         //EventBus.TriggerScreenShake(0.4f);
 
-        foreach (var bullet in _enemyBullets)
-        {
-            if (IsInstanceValid(bullet) && bullet.active)
-                bullet.Deactivate();
-        }
+        // foreach (var bullet in _enemyBullets)
+        // {
+        //     if (IsInstanceValid(bullet) && bullet.active)
+        //         bullet.Deactivate();
+        // }
     }
 }

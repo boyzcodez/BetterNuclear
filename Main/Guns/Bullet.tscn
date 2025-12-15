@@ -1,18 +1,24 @@
-[gd_scene load_steps=4 format=3 uid="uid://dkmygg16bwx4r"]
+[gd_scene load_steps=5 format=3 uid="uid://dkmygg16bwx4r"]
 
 [ext_resource type="Script" uid="uid://cuiauy6ek70lx" path="res://Main/Guns/Bullet.cs" id="1_b5fjm"]
+[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_t7fqo"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_b5fjm"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vu3qx"]
+atlas = ExtResource("1_t7fqo")
+region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_b5fjm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vu3qx")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
 
-[node name="Bullet" type="Area2D"]
-collision_layer = 0
-collision_mask = 0
-script = ExtResource("1_b5fjm")
-
-[node name="Collision" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_b5fjm")
-
-[node name="AnimatedBullet" type="AnimatedSprite2D" parent="."]
+[node name="Bullet" type="AnimatedSprite2D"]
+z_index = 5
 sprite_frames = SubResource("SpriteFrames_b5fjm")
+script = ExtResource("1_b5fjm")

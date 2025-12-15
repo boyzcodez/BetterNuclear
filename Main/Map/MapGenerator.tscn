@@ -8,6 +8,10 @@
 [node name="MapGenerator" type="Node2D"]
 y_sort_enabled = true
 
+[node name="UnderGround" type="TileMapLayer" parent="."]
+z_index = -2
+tile_set = ExtResource("1_toh0s")
+
 [node name="Ground" type="TileMapLayer" parent="."]
 z_index = -1
 tile_set = ExtResource("1_toh0s")
@@ -16,8 +20,9 @@ tile_set = ExtResource("1_toh0s")
 y_sort_enabled = true
 tile_set = ExtResource("1_toh0s")
 
-[node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("FloorMap", "WallMap")]
+[node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("UnderGround", "FloorMap", "WallMap")]
 script = ExtResource("1_7qmhp")
+UnderGround = NodePath("../UnderGround")
 FloorMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")
 
