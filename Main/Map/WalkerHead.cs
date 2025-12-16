@@ -13,9 +13,11 @@ public partial class WalkerHead : Node2D
 
     public Godot.Collections.Array<Godot.Vector2I> floorSet = [];
     private Player player;
+    private Main main;
 
     public override void _Ready()
     {
+        main = GetTree().GetFirstNodeInGroup("Main") as Main;
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
         GenerateMap();
     }
@@ -56,7 +58,7 @@ public partial class WalkerHead : Node2D
                 var location = new Vector2I(x, y);
                 if (!floorSet.Contains(location))
                 {
-                    //WallMap.SetCell(location, 0, new Vector2I(1, 0));
+                    WallMap.SetCell(location, 5, new Vector2I(12, 6));
                     UnderGround.SetCell(location, 5, new Vector2I(1,1));
 
                     //Walls.Add(location);
@@ -68,7 +70,7 @@ public partial class WalkerHead : Node2D
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
         player.GlobalPosition = floorSet[floorSet.Count - 1] * 32 + new Vector2(16,16);
-        
+        main.walls = WallMap;
     }
 
     public override void _Input(InputEvent input)

@@ -18,3 +18,4 @@ hframes = 6
 vframes = 7
 
 [node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
+position = Vector2(0, -9)

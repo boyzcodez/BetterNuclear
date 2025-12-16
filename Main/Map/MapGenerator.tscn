@@ -16,7 +16,7 @@ tile_set = ExtResource("1_toh0s")
 z_index = -1
 tile_set = ExtResource("1_toh0s")
 
-[node name="Walls" type="TileMapLayer" parent="."]
+[node name="Walls" type="TileMapLayer" parent="." groups=["Walls"]]
 y_sort_enabled = true
 tile_set = ExtResource("1_toh0s")
 

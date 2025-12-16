@@ -38,7 +38,8 @@ public partial class Look : Marker2D
         {
             var instance = bul.Instantiate() as Bullet;
             instance.GlobalPosition = GlobalPosition;
-            instance.Velocity = Vector2.Left * 50f;
+            instance.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized() * 100f;
+            instance.Behaviors.Add(new BounceBehavior(3));
 
             main.AddChild(instance);
         }

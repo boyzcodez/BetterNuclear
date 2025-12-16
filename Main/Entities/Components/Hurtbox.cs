@@ -3,7 +3,7 @@ using System;
 
 public partial class Hurtbox : Node2D, ICollidable
 {
-    public float Radius = 30f;
+    public float Radius = 15f;
     public int Health = 5;
 
     public Vector2 _Position => GlobalPosition;
