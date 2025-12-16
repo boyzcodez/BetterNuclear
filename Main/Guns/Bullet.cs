@@ -53,7 +53,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
             if (Main.Instance.IsWallAt(probe))
             {
                 Vector2 normal = new Vector2(signX, 0);
-                Velocity = Velocity.Bounce(normal);
+                //Velocity = Velocity.Bounce(normal);
                 NotifyWallHit(normal);
             }
             else
@@ -71,7 +71,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
             if (Main.Instance.IsWallAt(probe))
             {
                 Vector2 normal = new Vector2(0, signY);
-                Velocity = Velocity.Bounce(normal);
+                //Velocity = Velocity.Bounce(normal);
                 NotifyWallHit(normal);
             }
             else
