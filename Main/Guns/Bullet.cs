@@ -29,7 +29,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public override void _PhysicsProcess(double delta)
     {
         
-        MoveAndCollideWithWalls((float)delta);
+        //MoveAndCollideWithWalls((float)delta);
+        MoveWithGridRay((float)delta);
 
         foreach (var behavior in Behaviors) behavior.OnUpdate(this, (float)delta);
 
@@ -100,5 +101,84 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         Visible = false;
         SetPhysicsProcess(false);
     }
+
+
+    private void MoveWithGridRay(float delta)
+{
+    float maxDist = Velocity.Length() * delta;
+    if (maxDist <= 0f)
+        return;
+
+    Vector2 dir = Velocity.Normalized();
+    Vector2 pos = GlobalPosition;
+
+    float tileSize = 32f; //fix this
+    const int MAX_STEPS = 32; // safety cap
+
+    float remaining = maxDist;
+
+    for (int step = 0; step < MAX_STEPS && remaining > 0f; step++)
+    {
+        Vector2I cell = Main.Instance.WorldToCell(pos);
+
+        int stepX = dir.X > 0 ? 1 : -1;
+        int stepY = dir.Y > 0 ? 1 : -1;
+
+        float nextX = (cell.X + (stepX > 0 ? 1 : 0)) * tileSize;
+        float nextY = (cell.Y + (stepY > 0 ? 1 : 0)) * tileSize;
+
+        float distX = dir.X != 0
+            ? (nextX - pos.X) / dir.X
+            : float.PositiveInfinity;
+
+        float distY = dir.Y != 0
+            ? (nextY - pos.Y) / dir.Y
+            : float.PositiveInfinity;
+
+        // Force positive distances
+        if (distX < 0f) distX = float.PositiveInfinity;
+        if (distY < 0f) distY = float.PositiveInfinity;
+
+        float travel = Mathf.Min(distX, distY);
+
+        // Clamp travel so we ALWAYS move
+        if (travel <= 0f)
+            travel = 0.0001f;
+
+        if (travel > remaining)
+        {
+            pos += dir * remaining;
+            break;
+        }
+
+        pos += dir * travel;
+        remaining -= travel;
+
+        bool hitX = distX < distY;
+        Vector2I nextCell = cell + new Vector2I(
+            hitX ? stepX : 0,
+            hitX ? 0 : stepY
+        );
+
+        if (Main.Instance.IsWallCell(nextCell))
+        {
+            Vector2 normal = hitX
+                ? new Vector2(-stepX, 0)
+                : new Vector2(0, -stepY);
+
+            GlobalPosition = pos;
+            NotifyWallHit(normal);
+            return;
+        }
+
+        // Nudge into next cell deterministically
+        pos += hitX
+            ? new Vector2(stepX * 0.001f, 0)
+            : new Vector2(0, stepY * 0.001f);
+    }
+
+    GlobalPosition = pos;
+}
+
 
 }

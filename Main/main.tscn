@@ -36,6 +36,7 @@ offset_bottom = 23.0
 script = ExtResource("5_k3v36")
 
 [node name="BulletPool" type="Node2D" parent="."]
+y_sort_enabled = true
 script = ExtResource("6_liyct")
 
 [node name="Enemy" parent="." instance=ExtResource("7_ib3t1")]

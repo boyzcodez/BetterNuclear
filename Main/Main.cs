@@ -18,15 +18,25 @@ public partial class Main : Node2D
         grid = new SpatialGrid(96f);
     }
 
+    // this is for bounce logic
     public bool IsWallAt(Godot.Vector2 worldpos)
     {
         Vector2I cell = walls.LocalToMap(walls.ToLocal(worldpos));
 
-        GD.Print(cell);
         // SourceId == -1 means empty
         return walls.GetCellSourceId(cell) != -1;
     }
 
+    public Vector2I WorldToCell(Godot.Vector2 worldPos)
+    {
+        return walls.LocalToMap(walls.ToLocal(worldPos));
+    }
+    public bool IsWallCell(Vector2I cell)
+    {
+        return walls.GetCellSourceId(cell) != -1;
+    }
+    /// //
+    
     public override void _PhysicsProcess(double delta)
     {
         grid.Clear();
