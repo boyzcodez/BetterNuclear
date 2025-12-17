@@ -10,6 +10,7 @@ public partial class GunData : Resource
     
     [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
     public string DamageType { get; set; } = "Impact";
+    [Export] public int CollisionLayer {get; set;} = 2; //1 Player, 2 Enemy, 3 ???
     [Export] public int Damage { get; set; } = 1;
     [Export] public float Knockback { get; set; } = 0f;
     [Export] public float BulletSpeed { get; set; } = 140f;

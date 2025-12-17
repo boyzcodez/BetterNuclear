@@ -20,8 +20,11 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 [resource]
 script = ExtResource("1_npjdg")
 Name = "Rifle"
+BulletSpeed = 500.0
+UsesAmmo = false
 CurrentAmmo = 30
 MaxAmmo = 30
+FireRate = 0.1
 Behaviors = Array[Object]([SubResource("Resource_xa0j0")])
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")

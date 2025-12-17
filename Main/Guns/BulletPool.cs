@@ -43,11 +43,31 @@ public partial class BulletPool : Node2D
         for (int i = pool.Count; i < amount; i++)
         {
             var bullet = bulletScene.Instantiate<Bullet>();
-            //bullet.Init(new DamageData(gunData.Damage, gunData.Knockback, gunData.Name, gunData.DamageType));
+
+            // making a data set for the bullet
+            bullet.Init(
+                new IBulletInitData(
+                    new DamageData(
+                        gunData.Damage,
+                        gunData.Knockback,
+                        gunData.Name,
+                        gunData.DamageType
+                    ),
+                    gunData.BulletNorm,
+                    gunData.BulletSpeed,
+                    gunData.BulletLifeTime,
+                    gunData.CollisionLayer,
+                    key,
+                    this
+                )
+            );
+
+            // giving the bullet it's behaviors
             foreach (var beh in gunData.Behaviors)
             {
                 bullet.Behaviors.Add(beh.CreateBehavior());
             }
+
             CallDeferred("add_child", bullet);
             pool.Enqueue(bullet);
 
@@ -62,7 +82,7 @@ public partial class BulletPool : Node2D
     }
 
 
-    public Bullet GetBullet(string key, GunData gunData)
+    public Bullet GetBullet(string key)
     {
         if (!_pools.TryGetValue(key, out var pool) || pool.Count == 0)
         {
@@ -77,7 +97,7 @@ public partial class BulletPool : Node2D
     {
         _pools[key].Enqueue(bullet);
     }
-    
+
     // public void NewBullets(string key, GunData gunData, int amount)
     // {
     //     if (_pools.ContainsKey(key))
