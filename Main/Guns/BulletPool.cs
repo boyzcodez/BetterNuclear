@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public partial class BulletPool : Node2D
 {
+    [Export] public PackedScene bulletScene;
     public Dictionary<string, Queue<Bullet>> _pools = new();
     public List<Bullet> _enemyBullets = new();
     private int TotalBulletAmount = 0;
@@ -19,7 +20,7 @@ public partial class BulletPool : Node2D
     {
         if (_pools.TryGetValue(key, out var pool))
         {
-            if (pool.Count > 0 && pool.Peek().SceneFilePath != gunData.BulletScene.ResourcePath)
+            if (pool.Count > 0)
             {
                 foreach (var bullet in pool)
                 {
@@ -35,27 +36,29 @@ public partial class BulletPool : Node2D
             _pools[key] = pool;
         }
 
-        var amount = CalculatePoolSize(gunData.BulletLifeTime, gunData.FireRate, gunData.MaxAmmo);
-        //var amount = gunData.MaxAmmo;
-        GD.Print("Added bullets " + amount);
+        var amount = CalculatePoolSize(gunData.BulletLifeTime, gunData.FireRate, gunData.MaxAmmo, gunData.BulletCount);
         TotalBulletAmount += amount;
         GD.Print("total amount of bullets " + TotalBulletAmount);
 
         for (int i = pool.Count; i < amount; i++)
         {
-            var bullet = gunData.BulletScene.Instantiate<Bullet>();
-            //bullet.Init(gunData, this);
+            var bullet = bulletScene.Instantiate<Bullet>();
+            //bullet.Init(new DamageData(gunData.Damage, gunData.Knockback, gunData.Name, gunData.DamageType));
+            foreach (var beh in gunData.Behaviors)
+            {
+                bullet.Behaviors.Add(beh.CreateBehavior());
+            }
             CallDeferred("add_child", bullet);
             pool.Enqueue(bullet);
 
-            if (gunData.isEnemy) _enemyBullets.Add(bullet);
+            //if (gunData.isEnemy) _enemyBullets.Add(bullet);
         }
     }
 
-    private int CalculatePoolSize(float lifetime, float firerate, int maxammo)
+    private int CalculatePoolSize(float lifetime, float firerate, int maxammo, int bulletCount)
     {
         int theoretical = Mathf.CeilToInt(lifetime/ Mathf.Max(firerate, 0.0001f));
-        return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.1f));
+        return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.1f * bulletCount));
     }
 
 
@@ -68,40 +71,37 @@ public partial class BulletPool : Node2D
         }
 
         var bullet = _pools[key].Dequeue();
-        //bullet.Visible = true;
-        //UniversalStopButton.EnableNode(bullet);
         return bullet;
     }
     public void ReturnBullet(string key, Bullet bullet)
     {
-        //bullet.Visible = false;
-        //UniversalStopButton.DisableNode(bullet);
         _pools[key].Enqueue(bullet);
     }
-    public void NewBullets(string key, GunData gunData, int amount)
-    {
-        if (_pools.ContainsKey(key))
-        {
-            foreach (var bullet in _pools[key])
-            {
-                if (_enemyBullets.Contains(bullet)) _enemyBullets.Remove(bullet);
-                bullet.QueueFree();
-            }
+    
+    // public void NewBullets(string key, GunData gunData, int amount)
+    // {
+    //     if (_pools.ContainsKey(key))
+    //     {
+    //         foreach (var bullet in _pools[key])
+    //         {
+    //             if (_enemyBullets.Contains(bullet)) _enemyBullets.Remove(bullet);
+    //             bullet.QueueFree();
+    //         }
                 
 
-            _pools.Remove(key);
-        }
+    //         _pools.Remove(key);
+    //     }
 
-        PreparePool(key, gunData);
-    }
-    public void ClearBullets()
-    {
-        //EventBus.TriggerScreenShake(0.4f);
+    //     PreparePool(key, gunData);
+    // }
+    // public void ClearBullets()
+    // {
+    //     EventBus.TriggerScreenShake(0.4f);
 
-        // foreach (var bullet in _enemyBullets)
-        // {
-        //     if (IsInstanceValid(bullet) && bullet.active)
-        //         bullet.Deactivate();
-        // }
-    }
+    //     foreach (var bullet in _enemyBullets)
+    //     {
+    //         if (IsInstanceValid(bullet) && bullet.active)
+    //             bullet.Deactivate();
+    //     }
+    // }
 }

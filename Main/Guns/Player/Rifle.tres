@@ -1,8 +1,13 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=5 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" load_steps=7 format=3 uid="uid://vfqgjerlv601"]
 
+[ext_resource type="Script" uid="uid://dpyi4trxhquig" path="res://Main/Guns/Bullets/Appliers/ApplyBounce.cs" id="1_arnsw"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
+
+[sub_resource type="Resource" id="Resource_xa0j0"]
+script = ExtResource("1_arnsw")
+metadata/_custom_type_script = "uid://dpyi4trxhquig"
 
 [sub_resource type="Resource" id="Resource_lbm6o"]
 script = ExtResource("1_dmcvw")
@@ -14,7 +19,10 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
 [resource]
 script = ExtResource("1_npjdg")
-GunName = "Rifle"
+Name = "Rifle"
+CurrentAmmo = 30
+MaxAmmo = 30
+Behaviors = Array[Object]([SubResource("Resource_xa0j0")])
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 metadata/_custom_type_script = "uid://batyimatw3rwc"

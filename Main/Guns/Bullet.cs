@@ -15,7 +15,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public List<IBulletBehavior> Behaviors = new();
 
-    public bool Active = true;
+    public bool Active = false;
     public bool HasHit { get; private set; }
     public Vector2 PendingDisplacement { get; private set; }
 
@@ -25,6 +25,9 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         main.bullets.Add(this);
+
+        Visible = false;
+        SetPhysicsProcess(false);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -58,6 +61,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     }
     public void Deactivate()
     {
+        Velocity = Vector2.Zero;
         Active = false;
         Visible = false;
         SetPhysicsProcess(false);

@@ -19,6 +19,5 @@ animations = [{
 }]
 
 [node name="Bullet" type="AnimatedSprite2D"]
-z_index = 5
 sprite_frames = SubResource("SpriteFrames_b5fjm")
 script = ExtResource("1_b5fjm")

@@ -18,7 +18,7 @@ public partial class Guns : Node2D
     public bool shooting = false;
     private int _currentGunIndex = 0;
     private float _cooldown = 0f;
-    public string type;
+    public string id;
     
     public override void _Ready()
     {
@@ -32,20 +32,20 @@ public partial class Guns : Node2D
 
         foreach (var gunData in guns)
         {
-            type = gunData.GunName + gunData.LVL + GetInstanceId();
-            //pool?.PreparePool(type, gunData);
+            var id = gunData.Name + GetInstanceId();
+            pool?.PreparePool(id, gunData);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
             if (gunData.UsesAnimations)
             {
-                AddAnimation(gunData.NormalAnimationData, gunData.GunName);
-                AddAnimation(gunData.ShootAnimationData, gunData.GunName + "Shoot");
+                AddAnimation(gunData.NormalAnimationData, gunData.Name);
+                AddAnimation(gunData.ShootAnimationData, gunData.Name + "Shoot");
             }
         }
 
         EquipGun(0);
-        sprite?.Play(currentGun.GunName);
+        sprite?.Play(currentGun.Name);
 
         // add to exp list so that when an enemy dies the correct gun will the the exp
         //if (!guns[_currentGunIndex].isEnemy) XpHandler.AddGun(guns[_currentGunIndex].GunName, this);
@@ -61,12 +61,12 @@ public partial class Guns : Node2D
     public void EquipGun(int index)
     {
         currentGun = guns[index];
-        type = currentGun.GunName + currentGun.LVL + GetInstanceId();
+        id = currentGun.Name + GetInstanceId();
 
-        sprite?.Play(currentGun.GunName);
+        sprite?.Play(currentGun.Name);
         muzzleFlash.Position = currentGun.ShootPosition;
         Position = new Vector2(currentGun.GunSpot_X_axis, 0);
-        if (AudioLibrary.ContainsKey(currentGun.GunName)) audioSystem.Stream = AudioLibrary[currentGun.GunName];
+        if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Stream = AudioLibrary[currentGun.Name];
     }
 
     public override void _Process(double delta)
@@ -95,7 +95,7 @@ public partial class Guns : Node2D
         
         sprite.FireAnimation();
         PlayAnimation();
-        if (AudioLibrary.ContainsKey(currentGun.GunName)) audioSystem.Play();
+        if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Play();
         else GD.Print("This gun has no Sound");
 
 
@@ -110,12 +110,13 @@ public partial class Guns : Node2D
             //Vector2 direction = baseDirection.Rotated(angleOffset); 
             float rotation = GlobalRotation + angleOffset + (float)GD.RandRange(-currentGun.RandomFactor, currentGun.RandomFactor);
 
-            Bullet bullet = pool.GetBullet(type, currentGun);
+            Bullet bullet = pool.GetBullet(id, currentGun);
             bullet.GlobalPosition = muzzleFlash.GlobalPosition + new Vector2(10 * NumBet(currentGun.RandomFactor), 10* NumBet(currentGun.RandomFactor));
+            bullet.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized() * currentGun.BulletSpeed;
 
             //if (currentGun.rotate) bullet.Rotation = rotation;
 
-            //bullet.Activate(rotation);
+            bullet.Activate();
         }
 
         _cooldown = currentGun.FireRate;
@@ -123,11 +124,11 @@ public partial class Guns : Node2D
     private async void PlayAnimation()
     {
         muzzleFlash.Play("default");
-        sprite.Play(currentGun.GunName + "Shoot");
+        sprite.Play(currentGun.Name + "Shoot");
 
         await ToSignal(sprite, "animation_finished");
 
-        sprite.Play(currentGun.GunName);
+        sprite.Play(currentGun.Name);
     }
     private float NumBet(double bet)
     {

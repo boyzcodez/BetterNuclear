@@ -32,16 +32,4 @@ public partial class Look : Marker2D
 
         Rotation = snappedAngle;
     }
-    public override void _Input(InputEvent input)
-    {
-        if (input.IsActionPressed("shoot"))
-        {
-            var instance = bul.Instantiate() as Bullet;
-            instance.GlobalPosition = GlobalPosition;
-            instance.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized() * 800f;
-            instance.Behaviors.Add(new BounceBehavior(10));
-
-            main.AddChild(instance);
-        }
-    }
 }

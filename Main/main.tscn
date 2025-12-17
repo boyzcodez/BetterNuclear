@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dh45k8re21imm"]
+[gd_scene load_steps=9 format=3 uid="uid://dh45k8re21imm"]
 
 [ext_resource type="Script" uid="uid://bjy5lrnxejv8m" path="res://Main/Main.cs" id="1_yh5la"]
 [ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://caoawx78mp4aa" path="res://Main/GUI/Camera.cs" id="4_eunhr"]
 [ext_resource type="Script" uid="uid://e7a24qw1bk2m" path="res://Main/GUI/Fps.cs" id="5_k3v36"]
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
+[ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="7_f6fdm"]
 [ext_resource type="PackedScene" uid="uid://xx8wm6pgpb8x" path="res://Main/Entities/Enemy/Enemy.tscn" id="7_ib3t1"]
 
 [node name="Main" type="Node2D" groups=["Main"]]
@@ -35,10 +36,10 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("5_k3v36")
 
-[node name="BulletPool" type="Node2D" parent="."]
+[node name="BulletPool" type="Node2D" parent="." groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
+bulletScene = ExtResource("7_f6fdm")
 
 [node name="Enemy" parent="." instance=ExtResource("7_ib3t1")]
-z_index = 1
 position = Vector2(-100, 0)

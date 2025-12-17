@@ -4,10 +4,12 @@ using System;
 [GlobalClass]
 public partial class GunData : Resource
 {
-    [Export] public string GunName { get; set; } = "weapon";
+    [Export] public string Name { get; set; } = "weapon";
     [Export(PropertyHint.Enum, "LV1_,LV2_,LV3_,LV4_,LV5_")]
     public string LVL { get; set; } = "LV1_";
     
+    [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
+    public string DamageType { get; set; } = "Impact";
     [Export] public int Damage { get; set; } = 1;
     [Export] public float Knockback { get; set; } = 0f;
     [Export] public float BulletSpeed { get; set; } = 140f;
@@ -19,6 +21,7 @@ public partial class GunData : Resource
     [Export] public int BulletCount { get; set; } = 1;
     [Export] public float SpreadAngle { get; set; } = 0f;
     [Export] public float RandomFactor { get; set; } = 0f;
+    [Export] public ApplyBehavior[] Behaviors {get;set;} = [];
 
     [ExportGroup("XP")]
     [Export] public int currentXP { get; set; } = 0;
@@ -26,7 +29,6 @@ public partial class GunData : Resource
     [Export] public GunData NextLevelData { get; set; }
 
     [ExportGroup("Bullet")]
-    [Export] public PackedScene BulletScene { get; set; }
     [Export] public AnimationData BulletNorm {get;set;}
     [Export] public AnimationData BulletHit {get;set;}
     [Export] public Vector2 ShootPosition { get; set; }
@@ -38,11 +40,11 @@ public partial class GunData : Resource
     [Export] public AnimationData ShootAnimationData {get;set;}
     [Export] public bool UsesAnimations {get;set;} = true;
     
-    [ExportGroup("Gun Parts")]
-    [Export] public bool isEnemy { get; set; } = false;
-    [Export] public bool rotate { get; set; } = false;
-    [Export] public bool LaserSight { get; set; } = false;
-    [Export] public AudioStreamRandomizer Sound {get;set;}
+    // [ExportGroup("Gun Parts")]
+    // [Export] public bool isEnemy { get; set; } = false;
+    // [Export] public bool rotate { get; set; } = false;
+    // [Export] public bool LaserSight { get; set; } = false;
+    // [Export] public AudioStreamRandomizer Sound {get;set;}
     
 
     public void UseBullet()
