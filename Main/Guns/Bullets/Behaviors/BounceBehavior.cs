@@ -11,6 +11,7 @@ public class BounceBehavior : IBulletBehavior
 
     public void OnUpdate(Bullet b, float delta)
     {
+        b.AddDisplacement(b.Velocity * delta);
     }
 
     public void OnHit(Bullet b, ICollidable collidable)

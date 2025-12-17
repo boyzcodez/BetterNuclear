@@ -17,6 +17,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public bool Active = true;
     public bool HasHit { get; private set; }
+    public Vector2 PendingDisplacement { get; private set; }
 
     private Main main;
 
@@ -28,9 +29,13 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public override void _PhysicsProcess(double delta)
     {
+        Vector2 displacement = PendingDisplacement;
+        PendingDisplacement = Vector2.Zero;
+
+        MoveWithGridRay(displacement);
         
         //MoveAndCollideWithWalls((float)delta);
-        MoveWithGridRay((float)delta);
+        //MoveWithGridRay((float)delta);
 
         foreach (var behavior in Behaviors) behavior.OnUpdate(this, (float)delta);
 
@@ -58,17 +63,22 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         SetPhysicsProcess(false);
     }
 
-
-    private void MoveWithGridRay(float delta)
+    
+    public void AddDisplacement(Vector2 deltaMove)
     {
-        float maxDist = Velocity.Length() * delta;
+        PendingDisplacement += deltaMove;
+    }
+
+    private void MoveWithGridRay(Vector2 displacement)
+    {
+        float maxDist = displacement.Length();
         if (maxDist <= 0f)
             return;
 
-        Vector2 dir = Velocity.Normalized();
+        Vector2 dir = displacement / maxDist;
         Vector2 pos = GlobalPosition;
 
-        float tileSize = 32f; // fix this, if needed
+        const float tileSize = 32f;
         const int MAX_STEPS = 32; // safety cap
 
         float remaining = maxDist;
@@ -83,21 +93,21 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
             float nextX = (cell.X + (stepX > 0 ? 1 : 0)) * tileSize;
             float nextY = (cell.Y + (stepY > 0 ? 1 : 0)) * tileSize;
 
-            float distX = dir.X != 0
+            float distX = dir.X != 0f
                 ? (nextX - pos.X) / dir.X
                 : float.PositiveInfinity;
 
-            float distY = dir.Y != 0
+            float distY = dir.Y != 0f
                 ? (nextY - pos.Y) / dir.Y
                 : float.PositiveInfinity;
 
-            // Force positive distances
+            // Ensure positive distances
             if (distX < 0f) distX = float.PositiveInfinity;
             if (distY < 0f) distY = float.PositiveInfinity;
 
             float travel = Mathf.Min(distX, distY);
 
-            // Clamp travel so we ALWAYS move
+            // Guarantee forward progress
             if (travel <= 0f)
                 travel = 0.0001f;
 
@@ -111,6 +121,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
             remaining -= travel;
 
             bool hitX = distX < distY;
+
             Vector2I nextCell = cell + new Vector2I(
                 hitX ? stepX : 0,
                 hitX ? 0 : stepY
@@ -127,10 +138,10 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
                 return;
             }
 
-            // Nudge into next cell deterministically
+            // Nudge into the next cell to avoid precision issues
             pos += hitX
-                ? new Vector2(stepX * 0.001f, 0)
-                : new Vector2(0, stepY * 0.001f);
+                ? new Vector2(stepX * 0.001f, 0f)
+                : new Vector2(0f, stepY * 0.001f);
         }
 
         GlobalPosition = pos;
