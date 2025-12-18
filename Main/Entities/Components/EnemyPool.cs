@@ -45,6 +45,8 @@ public partial class EnemyPool : Node2D
         }
     }
 
+
+
     private void CalcRound(TileMapLayer NewGeneration)
     {
         groundMap = NewGeneration;
@@ -69,6 +71,7 @@ public partial class EnemyPool : Node2D
             SummonEnemy(spot, chosen);
         }
     }
+
     private void CalcSpawnPoints()
     {
         validSpawnPoints.Clear();
@@ -80,6 +83,7 @@ public partial class EnemyPool : Node2D
             validSpawnPoints.Add(worldPos);
         }
     }
+    
     private int EnemiesPerRound()
     {
         return 5;
@@ -98,6 +102,9 @@ public partial class EnemyPool : Node2D
 
         return pool;
     }
+
+
+
     private void SummonEnemy(Vector2 spot, string chosen)
     {
         if (!pools.TryGetValue(chosen, out var pool) || pool.Count == 0)
