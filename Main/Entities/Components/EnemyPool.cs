@@ -83,7 +83,8 @@ public partial class EnemyPool : Node2D
             validSpawnPoints.Add(worldPos);
         }
     }
-    
+
+    // i need to count the enemies for the round in this function
     private int EnemiesPerRound()
     {
         return 5;
