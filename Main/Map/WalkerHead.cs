@@ -8,7 +8,7 @@ public partial class WalkerHead : Node2D
     [Export] public int PathLength = 100;
 
     [Export] public TileMapLayer UnderGround;
-    [Export] public TileMapLayer FloorMap;
+    [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
     public Godot.Collections.Array<Godot.Vector2I> floorSet = [];
@@ -24,7 +24,7 @@ public partial class WalkerHead : Node2D
 
     public void GenerateMap()
     {
-        FloorMap.Clear();
+        GroundMap.Clear();
         WallMap.Clear();
 
         foreach (WalkerUnit walker in GetChildren())
@@ -47,7 +47,7 @@ public partial class WalkerHead : Node2D
             }
         }
 
-        FloorMap.SetCellsTerrainConnect(floorSet, 0, 0);
+        GroundMap.SetCellsTerrainConnect(floorSet, 0, 0);
             
         Godot.Collections.Array<Godot.Vector2I> Walls = [];
 
@@ -71,6 +71,8 @@ public partial class WalkerHead : Node2D
 
         player.GlobalPosition = floorSet[floorSet.Count - 1] * 32 + new Vector2(16,16);
         main.walls = WallMap;
+
+        Eventbus.TriggerSpawnEnemies(GroundMap);
     }
 
     public override void _Input(InputEvent input)
@@ -83,7 +85,7 @@ public partial class WalkerHead : Node2D
 
     public void Explosion(int size, Vector2 position)
     {
-        Vector2I centerPos = FloorMap.LocalToMap(position);
+        Vector2I centerPos = GroundMap.LocalToMap(position);
 
         for (int x = -size; x <= size; x++)
         {

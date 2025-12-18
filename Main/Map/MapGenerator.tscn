@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvj3rj3lgr7cn"]
+[gd_scene load_steps=11 format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="PackedScene" uid="uid://c1fjkcrv31mtn" path="res://Main/Map/WalkerUnit.tscn" id="1_4xjwc"]
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
 [ext_resource type="Script" uid="uid://c7oq1es2g6b3c" path="res://Main/Map/WalkerUnit.cs" id="2_fk063"]
+[ext_resource type="Script" uid="uid://bvt060s0mfqqe" path="res://Main/Entities/Components/EnemyPool.cs" id="5_rvxhn"]
+[ext_resource type="Resource" uid="uid://ixuvv54rvmwx" path="res://Main/Entities/Enemy/List/PistolDude.tres" id="6_8scsi"]
+[ext_resource type="Resource" uid="uid://bn2vn85t4t0wj" path="res://Main/Entities/Enemy/List/ChaseDude.tres" id="7_uvev8"]
+[ext_resource type="Resource" uid="uid://ds17dw2ryhtl" path="res://Main/Entities/Enemy/List/Elite.tres" id="8_lpw80"]
+[ext_resource type="Resource" uid="uid://cwb802hcofpcf" path="res://Main/Entities/Enemy/List/ShotgunDude.tres" id="9_ccqbt"]
+[ext_resource type="Resource" uid="uid://bytvm5rujp75h" path="res://Main/Entities/Enemy/List/Test.tres" id="10_vlute"]
 
 [node name="MapGenerator" type="Node2D"]
 y_sort_enabled = true
@@ -12,7 +18,7 @@ y_sort_enabled = true
 z_index = -2
 tile_set = ExtResource("1_toh0s")
 
-[node name="Ground" type="TileMapLayer" parent="."]
+[node name="Ground" type="TileMapLayer" parent="." groups=["Ground"]]
 z_index = -1
 tile_set = ExtResource("1_toh0s")
 
@@ -20,10 +26,10 @@ tile_set = ExtResource("1_toh0s")
 y_sort_enabled = true
 tile_set = ExtResource("1_toh0s")
 
-[node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("UnderGround", "FloorMap", "WallMap")]
+[node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
 script = ExtResource("1_7qmhp")
 UnderGround = NodePath("../UnderGround")
-FloorMap = NodePath("../Ground")
+GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")
 
 [node name="WalkerUnit" parent="WalkerHead" instance=ExtResource("1_4xjwc")]
@@ -39,3 +45,8 @@ script = ExtResource("2_fk063")
 script = ExtResource("2_fk063")
 
 [node name="Environment" type="Node2D" parent="."]
+
+[node name="EnemyPool" type="Node2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("5_rvxhn")
+enemies = [ExtResource("6_8scsi"), ExtResource("7_uvev8"), ExtResource("8_lpw80"), ExtResource("9_ccqbt"), ExtResource("10_vlute")]

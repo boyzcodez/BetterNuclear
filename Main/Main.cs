@@ -41,7 +41,11 @@ public partial class Main : Node2D
     {
         grid.Clear();
 
-        foreach (var hurtbox in hurtboxes) grid.Insert(hurtbox);
+        foreach (var hurtbox in hurtboxes)
+        {
+            if (!hurtbox.active) continue;
+            grid.Insert(hurtbox);
+        } 
         foreach (var bullet in bullets)
         {
             if (!bullet.Active) continue;

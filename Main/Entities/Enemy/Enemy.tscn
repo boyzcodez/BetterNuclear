@@ -1,15 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://xx8wm6pgpb8x"]
 
+[ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="Texture2D" uid="uid://1fxgqdgxqk2c" path="res://Assets/Entities/RobotEnemy2.png" id="1_fmkkr"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_2iryk"]
-radius = 6.0
-
-[node name="Enemy" type="CharacterBody2D"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_2iryk")
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_4prcw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -10)

@@ -23,7 +23,7 @@ public partial class WalkerUnit : Node2D
         }
 
         Vector2I location = (Vector2I)parent.GlobalPosition;
-        TileMapLayer tm = parent.FloorMap;
+        TileMapLayer tm = parent.GroundMap;
 
         foreach (int dir in PathSteps)
         {

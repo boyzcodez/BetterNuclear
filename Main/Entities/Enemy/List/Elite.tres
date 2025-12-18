@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://ds17dw2ryhtl"]
+
+[ext_resource type="Script" uid="uid://crfka6tc2q6fd" path="res://Components/ResourceTypes/EnemyData.cs" id="1_lgw2v"]
+[ext_resource type="PackedScene" uid="uid://xx8wm6pgpb8x" path="res://Main/Entities/Enemy/Enemy.tscn" id="1_sf58t"]
+
+[resource]
+script = ExtResource("1_lgw2v")
+name = "Elite"
+value = 5
+enemyScene = ExtResource("1_sf58t")
+metadata/_custom_type_script = "uid://crfka6tc2q6fd"
