@@ -1,12 +1,11 @@
 using Godot;
 using System.Collections.Generic;
-using System.Numerics;
 
 public partial class Main : Node2D
 {
     public static Main Instance {get; private set;}
 
-    private SpatialGrid grid;
+    public SpatialGrid grid;
     public TileMapLayer walls;
 
     public List<Bullet> bullets = new();
@@ -27,7 +26,7 @@ public partial class Main : Node2D
         return walls.GetCellSourceId(cell) != -1;
     }
 
-    public Vector2I WorldToCell(Godot.Vector2 worldPos)
+    public Vector2I WorldToCell(Vector2 worldPos)
     {
         return walls.LocalToMap(walls.ToLocal(worldPos));
     }

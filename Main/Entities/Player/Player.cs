@@ -3,6 +3,8 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
+    public static Player Instance {get; private set;}
+
     private const float SPEED = 120f;
     private const float DODGE_SPEED = 200f;
     private const float DODGE_DURATION = 0.4f;
