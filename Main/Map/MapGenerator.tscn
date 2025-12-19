@@ -28,6 +28,7 @@ tile_set = ExtResource("1_toh0s")
 
 [node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
 script = ExtResource("1_7qmhp")
+PathLength = 150
 UnderGround = NodePath("../UnderGround")
 GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")

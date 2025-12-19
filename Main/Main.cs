@@ -18,7 +18,7 @@ public partial class Main : Node2D
     }
 
     // this is for bounce logic
-    public bool IsWallAt(Godot.Vector2 worldpos)
+    public bool IsWallAt(Vector2 worldpos)
     {
         Vector2I cell = walls.LocalToMap(walls.ToLocal(worldpos));
 
