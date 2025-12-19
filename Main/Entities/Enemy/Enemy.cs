@@ -19,6 +19,7 @@ public partial class Enemy : Node2D
     private float Radius = 6f;
     private float moveSpeed = 60f;
     private Vector2 Velocity;
+    Vector2 lastSlideDir = Vector2.Zero;
 
     public override void _Ready()
     {
@@ -134,15 +135,23 @@ public partial class Enemy : Node2D
         // Try X only
         Vector2 xMove = new Vector2(move.X, 0);
         if (!Main.Instance.IsWallAt(pos + xMove))
+        {
+            lastSlideDir = Vector2.Right * Mathf.Sign(desiredVelocity.X);
             return new Vector2(desiredVelocity.X, 0);
+        }
+            
 
         // Try Y only
         Vector2 yMove = new Vector2(0, move.Y);
         if (!Main.Instance.IsWallAt(pos + yMove))
+        {
+            lastSlideDir = Vector2.Down * Mathf.Sign(desiredVelocity.Y);
             return new Vector2(0, desiredVelocity.Y);
+        }
+            
 
         // Fully blocked
-        return Vector2.Zero;
+        return lastSlideDir * moveSpeed * 0.3f;
     }
 
 
