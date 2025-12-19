@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class ChaseState : IEnemyState
+public class ChaseState : IEnemyState
 {
     public Vector2 GetDesiredDirection(Enemy enemy)
     {
