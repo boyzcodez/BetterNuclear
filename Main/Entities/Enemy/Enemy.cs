@@ -16,10 +16,11 @@ public partial class Enemy : Node2D
 
     private IEnemyState currentState;
 
-    private float Radius = 6f;
+    private float Radius = 15f;
     private float moveSpeed = 60f;
     private Vector2 Velocity;
-    Vector2 lastSlideDir = Vector2.Zero;
+    private Vector2 move;
+    private Vector2 lastSlideDir = Vector2.Zero;
 
     public override void _Ready()
     {
@@ -33,62 +34,32 @@ public partial class Enemy : Node2D
 
         currentState = new ChaseState();
     }
-
-    // public override void _PhysicsProcess(double delta)
-    // {
-    //     Vector2 desired = currentState.GetDesiredDirection(this);
-
-    //     Vector2 wallAvoid = GetWallAvoidance(desired) * 1.5f;
-    //     Vector2 separation = GetSeparationForce() * 1.2f;
-
-    //     Vector2 finalDir = 
-    //         desired +
-    //         wallAvoid +
-    //         separation;
-
-    //     if (finalDir.LengthSquared() > 0.001f) finalDir = finalDir.Normalized();
-
-    //     Velocity = finalDir * moveSpeed;
-    //     GlobalPosition += Velocity * (float)delta;
-    // }
     public override void _PhysicsProcess(double delta)
     {
         Vector2 desiredDir = currentState.GetDesiredDirection(this);
-        Vector2 seperation = GetSeparationForce() * 1.2f;
+        Vector2 seperation = GetSeparationForce() * 1.2f; // norm 1.2f
         Vector2 velocity = desiredDir + seperation;
 
         if (velocity.LengthSquared() > 0.001f) velocity = velocity.Normalized() * moveSpeed;
 
         velocity = SlideAlongWalls(velocity, (float)delta);
 
+        // this technically makes it better at not sliding through walls but i dont know
+
+        // int steps = Mathf.CeilToInt(move.Length() / (Radius * 0.5f));
+        // steps = Mathf.Max(1, steps);
+
+        // Vector2 stepVel = velocity / steps;
+        // for (int i = 0; i < steps; i++)
+        // {
+        //     Vector2 slid = SlideAlongWalls(stepVel, (float)delta);
+        //     GlobalPosition += slid * (float)delta;
+        // }
+        
+
+        // before changing position, might need to check that enemies dont 
+        // push eachother through walls
         GlobalPosition += velocity * (float)delta;
-    }
-
-
-    Vector2 GetWallAvoidance(Vector2 desiredDir)
-    {
-        Vector2 avoidance = Vector2.Zero;
-
-        float probeDist = 24f;
-        float sideAngle = Mathf.Pi / 4f;
-
-        Vector2[] probes =
-        {
-            desiredDir,
-            desiredDir.Rotated(sideAngle),
-            desiredDir.Rotated(-sideAngle)
-        };
-
-        foreach (var dir in probes)
-        {
-            Vector2 probePos = GlobalPosition + dir * probeDist;
-            if (Main.Instance.IsWallAt(probePos))
-            {
-                avoidance -= dir;
-            }
-        }
-
-        return avoidance;
     }
 
     Vector2 GetSeparationForce()
@@ -113,42 +84,41 @@ public partial class Enemy : Node2D
         return force;
     }
 
-    private bool IsBlocked(Vector2 from, Vector2 move)
-    {
-        Vector2 target = from + move;
-        return Main.Instance.IsWallAt(target);
-    }
     private bool IsWallAtOffset(Vector2 pos, Vector2 dir, float radius)
     {
-        return Main.Instance.IsWallAt(pos + dir.Normalized() * radius);
+        if (dir.LengthSquared() < 0.0001f) return false;
+
+        Vector2 checkPos = pos + dir.Normalized() * radius;
+        return Main.Instance.IsWallAt(checkPos);
     }
 
     private Vector2 SlideAlongWalls(Vector2 desiredVelocity, float delta)
     {
         Vector2 pos = GlobalPosition;
-        Vector2 move = desiredVelocity * delta;
+        move = desiredVelocity * delta;
 
-        // Try full move first
-        if (!Main.Instance.IsWallAt(pos + move))
+        if (move.LengthSquared() < 0.0001f) return Vector2.Zero;
+
+        if (!IsWallAtOffset(pos + move, move, Radius))
             return desiredVelocity;
 
-        // Try X only
+        // X
         Vector2 xMove = new Vector2(move.X, 0);
-        if (!Main.Instance.IsWallAt(pos + xMove))
+        if (xMove.LengthSquared() > 0.0001f &&
+            !IsWallAtOffset(pos + xMove, xMove, Radius))
         {
             lastSlideDir = Vector2.Right * Mathf.Sign(desiredVelocity.X);
             return new Vector2(desiredVelocity.X, 0);
         }
-            
 
-        // Try Y only
+        // Y
         Vector2 yMove = new Vector2(0, move.Y);
-        if (!Main.Instance.IsWallAt(pos + yMove))
+        if (yMove.LengthSquared() > 0.0001f &&
+            !IsWallAtOffset(pos + yMove, yMove, Radius))
         {
             lastSlideDir = Vector2.Down * Mathf.Sign(desiredVelocity.Y);
             return new Vector2(0, desiredVelocity.Y);
         }
-            
 
         // Fully blocked
         return lastSlideDir * moveSpeed * 0.3f;
