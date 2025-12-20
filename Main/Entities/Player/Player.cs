@@ -4,6 +4,7 @@ using System;
 public partial class Player : CharacterBody2D
 {
     public static Player Instance {get; private set;}
+    public Main main;
 
     private const float SPEED = 120f;
     private const float DODGE_SPEED = 200f;
@@ -23,8 +24,9 @@ public partial class Player : CharacterBody2D
     public override void _Ready()
     {
         dashTimer = GetNode<Timer>("DashCooldown");
+        main = GetTree().GetFirstNodeInGroup("Main") as Main;
     }
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (disabled) return;
         else
@@ -39,6 +41,8 @@ public partial class Player : CharacterBody2D
                 Movement((float)delta);
             }
         }
+
+        main.GenerateTowardsTarget(GlobalPosition);
 
         MoveAndSlide();
     }

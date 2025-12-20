@@ -9,6 +9,7 @@ public partial class Enemy : Node2D
     public bool active = false;
     public string name;
     public EnemyPool pool {get; set;}
+    public Main main;
     public Player player;
     public Vector2 playerPos => player.GlobalPosition;
 
@@ -25,6 +26,7 @@ public partial class Enemy : Node2D
     public override void _Ready()
     {
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
+        main = GetTree().GetFirstNodeInGroup("Main") as Main;
 
         Connect(SignalName.Activation, new Callable(this, nameof(Activate)));
         Connect(SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
@@ -36,13 +38,13 @@ public partial class Enemy : Node2D
     }
     public override void _PhysicsProcess(double delta)
     {
-        Vector2 desiredDir = currentState.GetDesiredDirection(this);
-        Vector2 seperation = GetSeparationForce() * 1.2f; // norm 1.2f
-        Vector2 velocity = desiredDir + seperation;
+        // Vector2 desiredDir = currentState.GetDesiredDirection(this);
+        // Vector2 seperation = GetSeparationForce() * 1.2f; // norm 1.2f
+        // Vector2 velocity = desiredDir + seperation;
 
-        if (velocity.LengthSquared() > 0.001f) velocity = velocity.Normalized() * moveSpeed;
+        // if (velocity.LengthSquared() > 0.001f) velocity = velocity.Normalized() * moveSpeed;
 
-        velocity = SlideAlongWalls(velocity, (float)delta);
+        // velocity = SlideAlongWalls(velocity, (float)delta);
 
         // this technically makes it better at not sliding through walls but i dont know
 
@@ -59,7 +61,11 @@ public partial class Enemy : Node2D
 
         // before changing position, might need to check that enemies dont 
         // push eachother through walls
-        GlobalPosition += velocity * (float)delta;
+
+        Vector2 dir = main.GetDirection(GlobalPosition);
+        Velocity = dir * moveSpeed;
+        
+        GlobalPosition += Velocity * (float)delta;
     }
 
     Vector2 GetSeparationForce()

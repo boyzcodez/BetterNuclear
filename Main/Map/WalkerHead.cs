@@ -49,7 +49,7 @@ public partial class WalkerHead : Node2D
 
         GroundMap.SetCellsTerrainConnect(floorSet, 0, 0);
             
-        Godot.Collections.Array<Godot.Vector2I> Walls = [];
+        Godot.Collections.Array<Vector2I> Walls = [];
 
         for (int x = -MapLength; x < MapLength; x++)
         {
@@ -69,8 +69,12 @@ public partial class WalkerHead : Node2D
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
-        player.GlobalPosition = floorSet[floorSet.Count - 1] * 32 + new Vector2(16,16);
+        var spot = floorSet[floorSet.Count - 1] + new Vector2(16,16);
+        player.GlobalPosition = spot;
+        Explosion(2, spot);
+
         main.walls = WallMap;
+        main.ground = GroundMap;
 
         Eventbus.TriggerSpawnEnemies(GroundMap);
     }
