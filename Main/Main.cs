@@ -15,6 +15,7 @@ public partial class Main : Node2D
         Vector2I.Up,
         Vector2I.Down
     };
+    private Vector2I previousSpot;
 
     public SpatialGrid grid;
     public TileMapLayer walls;
@@ -47,17 +48,33 @@ public partial class Main : Node2D
         return walls.GetCellSourceId(cell) != -1;
     }
     public Vector2 CellToWorldCenter(Vector2I cell)
-{
-    Vector2 localPos = ground.MapToLocal(cell);
-    Vector2 tileSize = ground.TileSet.TileSize;
-    return ground.ToGlobal(localPos + tileSize * 0.5f);
-}
+    {
+        Vector2 localPos = ground.MapToLocal(cell);
+        Vector2 tileSize = ground.TileSet.TileSize;
+        return ground.ToGlobal(localPos + tileSize * 0.5f);
+    }
 
 
 
+    private bool ShouldUpdateFlow(Vector2 pos)
+    {
+        Vector2I cell = WorldToCell(pos);
+
+        if (cell == previousSpot)
+        {
+            return false;
+        }
+        else
+        {
+            previousSpot = cell;
+            return true;
+        }
+    }
     // this is for flow field
     public void GenerateTowardsTarget(Vector2 targetWorldPosition)
     {
+        if (!ShouldUpdateFlow(targetWorldPosition)) return;
+
         flowField.Clear();
 
         Vector2I targetCell = ground.LocalToMap(
@@ -115,9 +132,32 @@ public partial class Main : Node2D
         {
             return dir;
         }
-            
 
         return Vector2.Zero;
+    }
+    // GetSmooth is GPT stuff so careful
+    public Vector2 GetSmoothDirection(Vector2 worldPos)
+    {
+        Vector2 local = ground.ToLocal(worldPos);
+        Vector2 tileSize = ground.TileSet.TileSize;
+        Vector2 gridPos = local / tileSize;
+
+        Vector2I c00 = new(Mathf.FloorToInt(gridPos.X), Mathf.FloorToInt(gridPos.Y));
+        Vector2I c10 = c00 + Vector2I.Right;
+        Vector2I c01 = c00 + Vector2I.Down;
+        Vector2I c11 = c00 + new Vector2I(1, 1);
+
+        Vector2 f = gridPos - c00;
+
+        Vector2 d00 = flowField.GetValueOrDefault(c00);
+        Vector2 d10 = flowField.GetValueOrDefault(c10);
+        Vector2 d01 = flowField.GetValueOrDefault(c01);
+        Vector2 d11 = flowField.GetValueOrDefault(c11);
+
+        Vector2 dx0 = d00.Lerp(d10, f.X);
+        Vector2 dx1 = d01.Lerp(d11, f.X);
+
+        return dx0.Lerp(dx1, f.Y);
     }
     private bool IsWalkable(Vector2I cell)
     {

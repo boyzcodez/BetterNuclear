@@ -59,7 +59,7 @@ public partial class WalkerHead : Node2D
                 if (!floorSet.Contains(location))
                 {
                     WallMap.SetCell(location, 5, new Vector2I(12, 6));
-                    UnderGround.SetCell(location, 5, new Vector2I(1,1));
+                    UnderGround.SetCell(location, 5, new Vector2I(8,5));
 
                     //Walls.Add(location);
                 }
@@ -69,9 +69,11 @@ public partial class WalkerHead : Node2D
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
-        var spot = floorSet[floorSet.Count - 1] + new Vector2(16,16);
-        player.GlobalPosition = spot;
-        Explosion(2, spot);
+        var spot = floorSet[floorSet.Count - 1];
+        var spawn = GroundMap.MapToLocal(spot);
+
+        player.GlobalPosition = spawn;
+        Explosion(2, spawn);
 
         main.walls = WallMap;
         main.ground = GroundMap;
@@ -87,6 +89,9 @@ public partial class WalkerHead : Node2D
         }
     }
 
+    // Explosion doesnt take into account that the map needs to be updated
+    // once a wall is gone, there is no ground underneath, hence the map flow field doesnt
+    // have a direction for said spot
     public void Explosion(int size, Vector2 position)
     {
         Vector2I centerPos = GroundMap.LocalToMap(position);

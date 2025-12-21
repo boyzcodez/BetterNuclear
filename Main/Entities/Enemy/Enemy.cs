@@ -9,7 +9,6 @@ public partial class Enemy : Node2D
     public bool active = false;
     public string name;
     public EnemyPool pool {get; set;}
-    public Main main;
     public Player player;
     public Vector2 playerPos => player.GlobalPosition;
 
@@ -26,7 +25,6 @@ public partial class Enemy : Node2D
     public override void _Ready()
     {
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
-        main = GetTree().GetFirstNodeInGroup("Main") as Main;
 
         Connect(SignalName.Activation, new Callable(this, nameof(Activate)));
         Connect(SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
@@ -62,8 +60,20 @@ public partial class Enemy : Node2D
         // before changing position, might need to check that enemies dont 
         // push eachother through walls
 
-        Vector2 dir = main.GetDirection(GlobalPosition);
-        Velocity = dir * moveSpeed;
+
+
+        Vector2 dir = Main.Instance.GetSmoothDirection(GlobalPosition);
+
+        Vector2 tangent = new Vector2(-dir.Y, dir.X);
+        dir += tangent * Mathf.Sin(Time.GetTicksMsec() * 0.002f) * 0.15f;
+
+        Vector2 desiredVelocity = dir.Normalized() * moveSpeed;
+
+        Velocity = Velocity.Lerp(desiredVelocity, 8f * (float)delta);
+
+
+        // Vector2 dir = Main.Instance.GetDirection(GlobalPosition);
+        // Velocity = dir * moveSpeed;
         
         GlobalPosition += Velocity * (float)delta;
     }
