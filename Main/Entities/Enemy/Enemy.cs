@@ -10,17 +10,28 @@ public partial class Enemy : Node2D
     public string name;
     public EnemyPool pool {get; set;}
     public Player player;
-    public Vector2 playerPos => player.GlobalPosition;
+    
 
     public Hurtbox hurtbox;
 
     private IEnemyState currentState;
 
-    private float Radius = 15f;
+    
     private float moveSpeed = 60f;
     private Vector2 Velocity;
     private Vector2 move;
     private Vector2 lastSlideDir = Vector2.Zero;
+
+
+    // Stats data
+    public float Speed = 30f;
+    public float DashSpeed = 200f;
+    public float Radius = 12f;
+
+    public bool InSight;
+    public Vector2 playerPos => player.GlobalPosition;
+    private IEnemyBehavior behavior;
+
 
     public override void _Ready()
     {
@@ -32,7 +43,9 @@ public partial class Enemy : Node2D
         Visible = false;
         SetPhysicsProcess(false);
 
-        currentState = new ChaseState();
+        //currentState = new ChaseState();
+        ChangeBehavior(new WanderBehavior());
+
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -62,21 +75,66 @@ public partial class Enemy : Node2D
 
 
 
-        Vector2 dir = Main.Instance.GetSmoothDirection(GlobalPosition);
+        // Vector2 dir = Main.Instance.GetSmoothDirection(GlobalPosition);
 
-        Vector2 tangent = new Vector2(-dir.Y, dir.X);
-        dir += tangent * Mathf.Sin(Time.GetTicksMsec() * 0.002f) * 0.15f;
+        // Vector2 tangent = new Vector2(-dir.Y, dir.X);
+        // dir += tangent * Mathf.Sin(Time.GetTicksMsec() * 0.002f) * 0.15f;
 
-        Vector2 desiredVelocity = dir.Normalized() * moveSpeed;
+        // Vector2 desiredVelocity = dir.Normalized() * moveSpeed;
 
-        Velocity = Velocity.Lerp(desiredVelocity, 8f * (float)delta);
+        // Velocity = Velocity.Lerp(desiredVelocity, 8f * (float)delta);
 
 
         // Vector2 dir = Main.Instance.GetDirection(GlobalPosition);
         // Velocity = dir * moveSpeed;
         
-        GlobalPosition += Velocity * (float)delta;
+        //GlobalPosition += Velocity * (float)delta;
+
+        behavior?.Update(this, (float)delta);
     }
+
+
+    public void ChangeBehavior(IEnemyBehavior newBehavior)
+    {
+        behavior?.Exit(this);
+        behavior = newBehavior;
+        behavior.Enter(this);
+    }
+
+    public bool CanMoveTo(Vector2 targetPos)
+{
+        float r = Radius;
+
+        Vector2[] offsets =
+        {
+            new Vector2( r, 0),
+            new Vector2(-r, 0),
+            new Vector2(0,  r),
+            new Vector2(0, -r)
+        };
+
+        foreach (var off in offsets)
+        {
+            if (Main.Instance.IsWallAt(targetPos + off))
+                return false;
+        }
+
+        return true;
+    }
+    public void Move(Vector2 velocity, float delta)
+    {
+        Vector2 nextPos = GlobalPosition + velocity * delta;
+
+        if (CanMoveTo(nextPos)) GlobalPosition = nextPos;
+    }
+    public Vector2 DirectionToPlayer()
+    {
+        return (playerPos - GlobalPosition).Normalized();
+    }
+
+
+
+
 
     Vector2 GetSeparationForce()
     {
