@@ -101,7 +101,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         Vector2 pos = GlobalPosition;
 
         const float tileSize = 32f;
-        const int MAX_STEPS = 32; // safety cap
+        const int MAX_STEPS = 32; // safety cap   might remove later
 
         float remaining = maxDist;
 
