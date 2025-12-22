@@ -7,7 +7,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public Vector2 Velocity;
     public float Radius = 5f;
     public float LifeTime = 5f;
-    public int CollisionLayer = 2; // PlayerBullet, EnemyBullet, etc
+    public int CollisionLayer = 2; // 2 PlayerBullet, 1 EnemyBullet, etc
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
@@ -23,10 +23,12 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     private Main main;
     private BulletPool pool;
+    public CpuParticles2D particles;
 
     public override void _Ready()
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
+        particles = GetNode<CpuParticles2D>("Particles");
         main.bullets.Add(this);
 
         Visible = false;
@@ -39,13 +41,9 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         PendingDisplacement = Vector2.Zero;
 
         MoveWithGridRay(displacement);
-        
-        //MoveAndCollideWithWalls((float)delta);
-        //MoveWithGridRay((float)delta);
 
         foreach (var behavior in Behaviors) behavior.OnUpdate(this, (float)delta);
 
-        //GlobalPosition += Velocity * (float)delta;
         LifeTime -= (float)delta;
 
         if (LifeTime <= 0f) Deactivate();
@@ -58,15 +56,19 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public void Activate()
     {
+        Frame = 0;
+
         Active = true;
         Visible = true;
         SetPhysicsProcess(true);
     }
     public void Deactivate()
     {
+        Play("Default");
+        particles.Emitting = true;
+
         Velocity = Vector2.Zero;
         Active = false;
-        Visible = false;
         SetPhysicsProcess(false);
 
         pool.ReturnBullet(key, this);
@@ -79,6 +81,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         CollisionLayer = data.CollisionLayer;
         pool = data.pool;
         key = data.key;
+        AnimatedSpriteBuilder.BuildAnimation(this, data.animationData);
     }
 
     

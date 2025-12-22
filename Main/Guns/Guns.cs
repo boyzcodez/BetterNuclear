@@ -114,7 +114,7 @@ public partial class Guns : Node2D
             bullet.GlobalPosition = muzzleFlash.GlobalPosition + new Vector2(10 * NumBet(currentGun.RandomFactor), 10* NumBet(currentGun.RandomFactor));
             bullet.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized() * currentGun.BulletSpeed;
 
-            //if (currentGun.rotate) bullet.Rotation = rotation;
+            bullet.Rotation = rotation;
 
             bullet.Activate();
         }

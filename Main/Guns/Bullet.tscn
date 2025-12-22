@@ -1,23 +1,61 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkmygg16bwx4r"]
+[gd_scene load_steps=10 format=3 uid="uid://dkmygg16bwx4r"]
 
 [ext_resource type="Script" uid="uid://cuiauy6ek70lx" path="res://Main/Guns/Bullet.cs" id="1_b5fjm"]
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_t7fqo"]
+[ext_resource type="Texture2D" uid="uid://dwuos3xc5i1b7" path="res://Assets/Particles/ExplosionDust.png" id="3_vu3qx"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vu3qx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_duomx"]
 atlas = ExtResource("1_t7fqo")
-region = Rect2(0, 64, 64, 64)
+region = Rect2(0, 384, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51bwh"]
+atlas = ExtResource("1_t7fqo")
+region = Rect2(64, 384, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vhigj"]
+atlas = ExtResource("1_t7fqo")
+region = Rect2(128, 384, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_b5fjm"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vu3qx")
+"texture": SubResource("AtlasTexture_duomx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51bwh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vhigj")
 }],
 "loop": false,
 "name": &"default",
 "speed": 5.0
 }]
 
+[sub_resource type="Curve" id="Curve_vu3qx"]
+_data = [Vector2(0.023255825, 0.73033714), 0.0, 0.0, 0, 0, Vector2(0.42441863, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.50561804), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_vu3qx"]
+colors = PackedColorArray(1, 1, 1, 1, 0.7647059, 0.7647059, 0.7647059, 0)
+
 [node name="Bullet" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_b5fjm")
 script = ExtResource("1_b5fjm")
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+emitting = false
+texture = ExtResource("3_vu3qx")
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+direction = Vector2(-1, 0)
+spread = 25.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 80.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+scale_amount_curve = SubResource("Curve_vu3qx")
+color_ramp = SubResource("Gradient_vu3qx")
