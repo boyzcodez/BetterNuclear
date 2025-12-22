@@ -12,7 +12,7 @@ public partial class AnimatedBody : AnimatedSprite2D
 
     private Direction directionNode;
     private string currentDirection;
-    private string currentAnim = "";
+    private string currentAnim = "Idle";
 
     public override void _Ready()
     {

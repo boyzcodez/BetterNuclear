@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cywwylr6aqd1b"]
+
+[ext_resource type="Script" uid="uid://c5i0txx826l2v" path="res://Main/Entities/Player/Direction.cs" id="1_k5i43"]
+
+[node name="Direction" type="Node" node_paths=PackedStringArray("lookAt", "animatedSprite")]
+script = ExtResource("1_k5i43")
+lookAt = NodePath("")
+animatedSprite = NodePath("")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
 [ext_resource type="Script" uid="uid://dat11fw722oki" path="res://Main/Entities/Player/AnimatedBody.cs" id="2_0atn1"]
-[ext_resource type="Script" uid="uid://c5i0txx826l2v" path="res://Main/Entities/Player/Direction.cs" id="4_37f4v"]
+[ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="4_a3eui"]
 [ext_resource type="Script" uid="uid://cl7bshfygfold" path="res://Main/Entities/Player/Look.cs" id="4_d1ek6"]
 [ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="6_0j5e5"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="6_jujs3"]
@@ -345,11 +345,10 @@ shape = SubResource("CircleShape2D_8ydey")
 [node name="AnimatedBody" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
-animation = &"FrontIdle"
+animation = &"BackRightRun"
 script = ExtResource("2_0atn1")
 
-[node name="Direction" type="Node" parent="AnimatedBody" node_paths=PackedStringArray("lookAt", "animatedSprite")]
-script = ExtResource("4_37f4v")
+[node name="Direction" parent="AnimatedBody" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("4_a3eui")]
 lookAt = NodePath("../../Look")
 animatedSprite = NodePath("..")
 
