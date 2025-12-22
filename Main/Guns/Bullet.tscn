@@ -41,10 +41,12 @@ point_count = 3
 colors = PackedColorArray(1, 1, 1, 1, 0.7647059, 0.7647059, 0.7647059, 0)
 
 [node name="Bullet" type="AnimatedSprite2D"]
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_b5fjm")
 script = ExtResource("1_b5fjm")
 
 [node name="Particles" type="CPUParticles2D" parent="."]
+y_sort_enabled = true
 emitting = false
 texture = ExtResource("3_vu3qx")
 lifetime = 0.2

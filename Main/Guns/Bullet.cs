@@ -79,6 +79,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         damageData = data.damageData;
         LifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;
+        Radius = data.BulletRadius;
         pool = data.pool;
         key = data.key;
         AnimatedSpriteBuilder.BuildAnimation(this, data.animationData);

@@ -40,6 +40,7 @@ MaxAmmo = 30
 FireRate = 0.1
 Behaviors = Array[Object]([SubResource("Resource_xa0j0")])
 AnimData = SubResource("Resource_ulg0x")
+BulletRaidus = 8.0
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 metadata/_custom_type_script = "uid://batyimatw3rwc"

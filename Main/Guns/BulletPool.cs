@@ -54,6 +54,7 @@ public partial class BulletPool : Node2D
                         gunData.DamageType
                     ),
                     gunData.AnimData,
+                    gunData.BulletRaidus,
                     gunData.BulletSpeed,
                     gunData.BulletLifeTime,
                     gunData.CollisionLayer,

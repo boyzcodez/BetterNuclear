@@ -31,6 +31,7 @@ public partial class GunData : Resource
 
     [ExportGroup("Bullet")]
     [Export] public Animation AnimData {get; set;}
+    [Export] public float BulletRaidus;
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public int GunSpot_X_axis { get; set; } = 6;
     [Export] public Texture2D icon { get; set; }
