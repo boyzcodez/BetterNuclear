@@ -30,7 +30,8 @@ public partial class GunData : Resource
     [Export] public GunData NextLevelData { get; set; }
 
     [ExportGroup("Bullet")]
-    [Export] public Animation AnimData {get; set;}
+    [Export] public Animation ShootAnimation {get; set;}
+    [Export] public Animation HitAnimation {get; set;}
     [Export] public float BulletRaidus;
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public int GunSpot_X_axis { get; set; } = 6;

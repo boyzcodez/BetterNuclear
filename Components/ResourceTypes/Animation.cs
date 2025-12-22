@@ -13,7 +13,8 @@ public partial class Animation : Resource
     [Export] public int FrameRate = 12;
     [Export] public bool Loops = true;
 
-    [Export] public string Name = "Default";
+    [Export(PropertyHint.Enum, "OnShoot,OnHit")]
+    public string Name { get; set; } = "OnShoot";
 
     [Export] public int WhichRow = 0;     // Row index (0-based)
 

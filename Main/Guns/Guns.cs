@@ -111,8 +111,9 @@ public partial class Guns : Node2D
             float rotation = GlobalRotation + angleOffset + (float)GD.RandRange(-currentGun.RandomFactor, currentGun.RandomFactor);
 
             Bullet bullet = pool.GetBullet(id);
+            if (bullet == null) return;
             bullet.GlobalPosition = muzzleFlash.GlobalPosition + new Vector2(10 * NumBet(currentGun.RandomFactor), 10* NumBet(currentGun.RandomFactor));
-            bullet.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized() * currentGun.BulletSpeed;
+            bullet.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized();
 
             bullet.Rotation = rotation;
 

@@ -3,15 +3,17 @@ using System;
 
 public class BounceBehavior : IBulletBehavior
 {
+    public int bouncesTotal;
     public int bouncesLeft = 3;
 
     public void OnSpawn(Bullet b)
     {
+        bouncesLeft = bouncesTotal;
     }
 
     public void OnUpdate(Bullet b, float delta)
     {
-        b.AddDisplacement(b.Velocity * delta);
+        b.AddDisplacement(b.Velocity * b.Speed * delta);
     }
 
     public void OnHit(Bullet b, ICollidable collidable)
@@ -20,6 +22,7 @@ public class BounceBehavior : IBulletBehavior
 
     public BounceBehavior(int bounces)
     {
+        bouncesTotal = bounces;
         bouncesLeft = bounces;
     }
 

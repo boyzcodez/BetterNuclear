@@ -1,33 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dkmygg16bwx4r"]
+[gd_scene load_steps=6 format=3 uid="uid://dkmygg16bwx4r"]
 
 [ext_resource type="Script" uid="uid://cuiauy6ek70lx" path="res://Main/Guns/Bullet.cs" id="1_b5fjm"]
-[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_t7fqo"]
 [ext_resource type="Texture2D" uid="uid://dwuos3xc5i1b7" path="res://Assets/Particles/ExplosionDust.png" id="3_vu3qx"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_duomx"]
-atlas = ExtResource("1_t7fqo")
-region = Rect2(0, 384, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_51bwh"]
-atlas = ExtResource("1_t7fqo")
-region = Rect2(64, 384, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vhigj"]
-atlas = ExtResource("1_t7fqo")
-region = Rect2(128, 384, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_b5fjm"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_duomx")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_51bwh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vhigj")
-}],
+"frames": [],
 "loop": false,
 "name": &"default",
 "speed": 5.0

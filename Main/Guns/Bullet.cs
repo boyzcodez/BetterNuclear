@@ -7,6 +7,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public Vector2 Velocity;
     public float Radius = 5f;
     public float LifeTime = 5f;
+    public float _lifeTime = 5f;
     public int CollisionLayer = 2; // 2 PlayerBullet, 1 EnemyBullet, etc
 
     public Vector2 _Position => GlobalPosition;
@@ -25,6 +26,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     private BulletPool pool;
     public CpuParticles2D particles;
 
+    public float Speed = 200f;
+
     public override void _Ready()
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
@@ -33,6 +36,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
         Visible = false;
         SetPhysicsProcess(false);
+
+        AnimationFinished += OnAnimationEnd;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -56,33 +61,45 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public void Activate()
     {
-        Frame = 0;
+        foreach (var b in Behaviors) b.OnSpawn(this);
+
+        Play("OnShoot");
+
+        LifeTime = _lifeTime;
 
         Active = true;
         Visible = true;
+
         SetPhysicsProcess(true);
     }
     public void Deactivate()
     {
-        Play("Default");
+        Play("OnHit");
+
         particles.Emitting = true;
 
         Velocity = Vector2.Zero;
         Active = false;
-        SetPhysicsProcess(false);
 
+        SetPhysicsProcess(false);
+    }
+    public void OnAnimationEnd()
+    {
+        Visible = false;
         pool.ReturnBullet(key, this);
     }
 
     public void Init(IBulletInitData data)
     {
         damageData = data.damageData;
-        LifeTime = data.BulletLifeTime;
+        _lifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;
         Radius = data.BulletRadius;
+        Speed = data.BulletSpeed;
         pool = data.pool;
         key = data.key;
-        AnimatedSpriteBuilder.BuildAnimation(this, data.animationData);
+        AnimatedSpriteBuilder.BuildAnimation(this, data.ShootAnimation);
+        AnimatedSpriteBuilder.BuildAnimation(this, data.HitAnimation);
     }
 
     

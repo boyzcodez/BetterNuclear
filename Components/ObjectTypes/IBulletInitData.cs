@@ -4,7 +4,8 @@ using System;
 public class IBulletInitData
 {
     public DamageData damageData;
-    public Animation animationData;
+    public Animation ShootAnimation;
+    public Animation HitAnimation;
     public BulletPool pool;
     public float BulletRadius {get; set;}
     public float BulletSpeed { get; set; }
@@ -12,10 +13,11 @@ public class IBulletInitData
     public int CollisionLayer {get;set;}
     public string key {get; set;}
 
-    public IBulletInitData(DamageData newDMG, Animation newANIM, float newRadius, float newSpeed, float newLifeTime, int newLayer, string newKey, BulletPool newPool)
+    public IBulletInitData(DamageData newDMG, Animation newShoot, Animation newHit, float newRadius, float newSpeed, float newLifeTime, int newLayer, string newKey, BulletPool newPool)
     {
         damageData = newDMG;
-        animationData = newANIM;
+        ShootAnimation = newShoot;
+        HitAnimation = newHit;
         BulletRadius = newRadius;
         BulletSpeed = newSpeed;
         BulletLifeTime = newLifeTime;

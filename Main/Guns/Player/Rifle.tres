@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" load_steps=11 format=3 uid="uid://vfqgjerlv601"]
 
 [ext_resource type="Script" uid="uid://dpyi4trxhquig" path="res://Main/Guns/Bullets/Appliers/ApplyBounce.cs" id="1_arnsw"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
@@ -7,20 +7,21 @@
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_pbbwr"]
 
-[sub_resource type="Resource" id="Resource_ulg0x"]
+[sub_resource type="Resource" id="Resource_xa0j0"]
+script = ExtResource("1_arnsw")
+metadata/_custom_type_script = "uid://dpyi4trxhquig"
+
+[sub_resource type="Resource" id="Resource_jlw6v"]
 script = ExtResource("2_pbbwr")
 SpriteSheet = ExtResource("1_jlw6v")
 Vertical = 9
 Horizontal = 8
 FrameRate = 14
 Loops = false
+Name = "OnHit"
 WhichRow = 6
 FrameCount = 4
 metadata/_custom_type_script = "uid://p701hspbelqp"
-
-[sub_resource type="Resource" id="Resource_xa0j0"]
-script = ExtResource("1_arnsw")
-metadata/_custom_type_script = "uid://dpyi4trxhquig"
 
 [sub_resource type="Resource" id="Resource_lbm6o"]
 script = ExtResource("1_dmcvw")
@@ -30,16 +31,27 @@ VerticalFrames = 1
 Looping = true
 metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
+[sub_resource type="Resource" id="Resource_pbbwr"]
+script = ExtResource("2_pbbwr")
+SpriteSheet = ExtResource("1_jlw6v")
+Vertical = 9
+Horizontal = 8
+FrameRate = 0
+Loops = false
+WhichRow = 6
+FrameCount = 1
+metadata/_custom_type_script = "uid://p701hspbelqp"
+
 [resource]
 script = ExtResource("1_npjdg")
 Name = "Rifle"
-BulletSpeed = 500.0
-UsesAmmo = false
+BulletSpeed = 400.0
 CurrentAmmo = 30
 MaxAmmo = 30
-FireRate = 0.1
+FireRate = 0.05
 Behaviors = Array[Object]([SubResource("Resource_xa0j0")])
-AnimData = SubResource("Resource_ulg0x")
+ShootAnimation = SubResource("Resource_pbbwr")
+HitAnimation = SubResource("Resource_jlw6v")
 BulletRaidus = 8.0
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")

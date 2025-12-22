@@ -53,7 +53,8 @@ public partial class BulletPool : Node2D
                         gunData.Name,
                         gunData.DamageType
                     ),
-                    gunData.AnimData,
+                    gunData.ShootAnimation,
+                    gunData.HitAnimation,
                     gunData.BulletRaidus,
                     gunData.BulletSpeed,
                     gunData.BulletLifeTime,
@@ -78,8 +79,8 @@ public partial class BulletPool : Node2D
 
     private int CalculatePoolSize(float lifetime, float firerate, int maxammo, int bulletCount)
     {
-        int theoretical = Mathf.CeilToInt(lifetime/ Mathf.Max(firerate, 0.0001f));
-        return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.1f * bulletCount));
+        int theoretical = Mathf.CeilToInt(lifetime / Mathf.Max(firerate, 0.0001f));
+        return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.2f * bulletCount));
     }
 
 
@@ -89,6 +90,7 @@ public partial class BulletPool : Node2D
         {
             GD.PrintErr("Ran out of Bullets to use");
             //PreparePool(key, gunData);
+            return null;
         }
 
         var bullet = _pools[key].Dequeue();
