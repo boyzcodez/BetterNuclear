@@ -3,6 +3,7 @@ using System;
 
 public partial class Hurtbox : Node2D, ICollidable
 {
+    [Signal] public delegate void HitEventHandler(Vector2 dir, float force);
     [Signal] public delegate void DeathEventHandler();
 
     [Export] public int SetCollisionLayer = 2;
@@ -33,14 +34,14 @@ public partial class Hurtbox : Node2D, ICollidable
     }
 
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(DamageData damageData, Vector2 knockbackDir)
     {
-        GD.Print("took damage");
+        Health -= damageData.Damage;
 
-        Health -= dmg;
+        EmitSignal("Hit", knockbackDir, damageData.Knockback);
+
         if (Health <= 0)
         {
-            GD.Print("i died");
             EmitSignal("Death");
         }
             

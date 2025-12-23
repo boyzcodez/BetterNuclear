@@ -78,7 +78,7 @@ public partial class Main : Node2D
                 float r = bullet.Radius + hurtbox.Radius;
                 if (bullet.GlobalPosition.DistanceSquaredTo(hurtbox.GlobalPosition) <= r * r)
                 {
-                    hurtbox.TakeDamage(1);
+                    hurtbox.TakeDamage(bullet.damageData, bullet.Velocity);
                     bullet.Deactivate();
                     break;
                 }

@@ -38,6 +38,8 @@ public partial class Enemy : Node2D
 
     public Vector2 Velocity { get; private set; }
     private Vector2 lastPosition;
+    public float KnockbackTime = 0f;
+    public Vector2 KnockbackVelocity;
 
 
     public override void _Ready()
@@ -46,6 +48,7 @@ public partial class Enemy : Node2D
 
         Connect(SignalName.Activation, new Callable(this, nameof(Activate)));
         Connect(SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
+        hurtbox.Hit += Knockback;
 
         Visible = false;
         SetPhysicsProcess(false);
@@ -55,6 +58,14 @@ public partial class Enemy : Node2D
     public override void _PhysicsProcess(double delta)
     {
         lastPosition = GlobalPosition;
+
+        if (KnockbackTime > 0)
+        {
+            KnockbackTime -= (float)delta;
+            Move(KnockbackVelocity, (float)delta);
+
+            return;
+        }
 
         behavior?.Update(this, (float)delta);
 
@@ -82,32 +93,46 @@ public partial class Enemy : Node2D
         return true;
     }
     public void Move(Vector2 velocity, float delta)
-{
-    Vector2 pos = GlobalPosition;
-    Vector2 desiredMove = velocity * delta;
-
-    // Try X movement
-    if (desiredMove.X != 0)
     {
-        Vector2 xMovePos = pos + new Vector2(desiredMove.X, 0);
-        if (CanMoveTo(xMovePos))
-            pos.X = xMovePos.X;
-    }
+        Vector2 pos = GlobalPosition;
+        Vector2 desiredMove = velocity * delta;
 
-    // Try Y movement
-    if (desiredMove.Y != 0)
-    {
-        Vector2 yMovePos = pos + new Vector2(0, desiredMove.Y);
-        if (CanMoveTo(yMovePos))
-            pos.Y = yMovePos.Y;
-    }
+        // Try X movement
+        if (desiredMove.X != 0)
+        {
+            Vector2 xMovePos = pos + new Vector2(desiredMove.X, 0);
+            if (CanMoveTo(xMovePos))
+                pos.X = xMovePos.X;
+        }
 
-    GlobalPosition = pos;
-}
+        // Try Y movement
+        if (desiredMove.Y != 0)
+        {
+            Vector2 yMovePos = pos + new Vector2(0, desiredMove.Y);
+            if (CanMoveTo(yMovePos))
+                pos.Y = yMovePos.Y;
+        }
+
+        GlobalPosition = pos;
+    }
     public Vector2 DirectionToPlayer()
     {
         return (playerPos - GlobalPosition).Normalized();
     }
+
+
+    public void Knockback(Vector2 direction, float force)
+    {
+        if (force <= 0) return;
+
+        Vector2 knockback = direction * force;
+
+        if (knockback == Vector2.Zero) return;
+
+        KnockbackTime = 0.2f;
+        KnockbackVelocity = knockback;
+    }
+
 
     public void TriggerAction(string trigger)
     {
