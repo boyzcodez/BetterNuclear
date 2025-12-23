@@ -4,13 +4,16 @@ using System;
 public partial class Hurtbox : Node2D, ICollidable
 {
     [Signal] public delegate void DeathEventHandler();
+
+    [Export] public int SetCollisionLayer = 2;
+    [Export] public float Radius = 15f;
+
     public bool active = true;
-    public float Radius = 15f;
     public int Health = 5;
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
-    int ICollidable.CollisionLayer => 2; // Enemy
+    int ICollidable.CollisionLayer => SetCollisionLayer; // Enemy
 
     private Main main;
 

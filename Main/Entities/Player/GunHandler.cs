@@ -12,7 +12,7 @@ public partial class GunHandler : Node
     public override void _Ready()
     {
         //ui = GetTree().GetFirstNodeInGroup("UIManager") as UiManager;
-        timer = new Timer();
+        timer = GetNode<Timer>("Timer");
         timer.Timeout += CanSwitch;
     }
 

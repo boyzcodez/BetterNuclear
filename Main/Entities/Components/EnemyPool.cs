@@ -15,7 +15,7 @@ public partial class EnemyPool : Node2D
     private List<Vector2> validSpawnPoints = new();
     private TileMapLayer groundMap;
 
-    const int enemyAmount = 15;
+    const int enemyAmount = 10;
 
     public override void _Ready()
     {

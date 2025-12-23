@@ -5,10 +5,10 @@
 [ext_resource type="Script" uid="uid://dat11fw722oki" path="res://Main/Entities/Player/AnimatedBody.cs" id="2_0atn1"]
 [ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="4_a3eui"]
 [ext_resource type="Script" uid="uid://cl7bshfygfold" path="res://Main/Entities/Player/Look.cs" id="4_d1ek6"]
-[ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="6_0j5e5"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="6_jujs3"]
 [ext_resource type="Resource" uid="uid://vfqgjerlv601" path="res://Main/Guns/Player/Rifle.tres" id="7_0j4od"]
 [ext_resource type="Script" uid="uid://bcue2ep2kxlrd" path="res://Main/Entities/Player/GunHandler.cs" id="7_a3eui"]
+[ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ydey"]
 radius = 6.0
@@ -342,6 +342,9 @@ script = ExtResource("1_1skx3")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_8ydey")
 
+[node name="Hurtbox" parent="." instance=ExtResource("10_rx3r3")]
+SetCollisionLayer = 1
+
 [node name="AnimatedBody" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
@@ -358,11 +361,14 @@ one_shot = true
 [node name="Look" type="Marker2D" parent="."]
 position = Vector2(0, -6)
 script = ExtResource("4_d1ek6")
-bul = ExtResource("6_0j5e5")
 
 [node name="GunHandler" type="Node" parent="Look" node_paths=PackedStringArray("guns")]
 script = ExtResource("7_a3eui")
 guns = NodePath("../Guns")
+
+[node name="Timer" type="Timer" parent="Look/GunHandler"]
+wait_time = 0.1
+one_shot = true
 
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
 position = Vector2(6, 0)

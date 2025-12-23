@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7pvuhe7xq3mq"
-path="res://.godot/imported/Simple muzzle flash.png-0af5936c86dc857fffefac0b70ec3c3f.ctex"
+uid="uid://bl8wqyfigxw7b"
+path="res://.godot/imported/Bazooka.png-08a3244f68ddcb3ace9c0fbfeaa43294.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Guns/Simple muzzle flash.png"
-dest_files=["res://.godot/imported/Simple muzzle flash.png-0af5936c86dc857fffefac0b70ec3c3f.ctex"]
+source_file="res://Assets/Guns/Player/Bazooka.png"
+dest_files=["res://.godot/imported/Bazooka.png-08a3244f68ddcb3ace9c0fbfeaa43294.ctex"]
 
 [params]
 

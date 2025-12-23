@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=51 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://82621pfnop8x" path="res://Main/Entities/Enemy/EnemyAnimations.cs" id="4_bqycu"]
 [ext_resource type="Script" uid="uid://7dvy2oo2lfwp" path="res://Main/Entities/Enemy/EnemyLook.cs" id="4_pnidg"]
 [ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="5_we2vw"]
+[ext_resource type="Script" uid="uid://b76q3u8xnistc" path="res://Main/Entities/Enemy/GunRotator.cs" id="7_352va"]
+[ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="8_26qsg"]
+[ext_resource type="Resource" uid="uid://bk0kb7lw036hw" path="res://Main/Guns/Enemy/EnemyRifle.tres" id="9_r7fjr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pnidg"]
 atlas = ExtResource("3_4prcw")
@@ -345,7 +348,7 @@ script = ExtResource("4_bqycu")
 look = NodePath("../EnemyLook")
 
 [node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("5_we2vw")]
-lookAt = NodePath("../../EnemyLook")
+lookAt = NodePath("../../GunRotator")
 animatedSprite = NodePath("..")
 
 [node name="EnemyLook" type="Marker2D" parent="."]
@@ -354,3 +357,12 @@ script = ExtResource("4_pnidg")
 
 [node name="Raycast" type="RayCast2D" parent="EnemyLook"]
 target_position = Vector2(80, 0)
+
+[node name="GunRotator" type="Marker2D" parent="." node_paths=PackedStringArray("look")]
+position = Vector2(0, -8)
+script = ExtResource("7_352va")
+look = NodePath("../EnemyLook")
+
+[node name="Guns" parent="GunRotator" instance=ExtResource("8_26qsg")]
+position = Vector2(6, 0)
+guns = Array[Object]([ExtResource("9_r7fjr")])

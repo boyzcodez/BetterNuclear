@@ -3,16 +3,20 @@ using System;
 
 public partial class Look : Marker2D
 {
-    [Export] public PackedScene bul;
+    // not even sure why this is here
+    //[Export] public PackedScene bul;
     [Export] public float SnapDegrees = 5f;
     [Export] private float BaseOffset = 14f;
     [Export] private float MinOffset = 7f;
 
-    private Node2D main;
-    public override void _Ready()
-    {
-        main = GetTree().GetFirstNodeInGroup("Main") as Node2D;
-    }
+    // honest to god i have no idea why the code below is here
+    // but im too scared to deleted it
+
+    // private Node2D main;
+    // public override void _Ready()
+    // {
+    //     main = GetTree().GetFirstNodeInGroup("Main") as Node2D;
+    // }
 
     public override void _Process(double delta)
     {

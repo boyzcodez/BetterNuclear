@@ -6,6 +6,18 @@ public partial class Enemy : Node2D
     [Signal] public delegate void ActivationEventHandler();
     [Signal] public delegate void DeactivationEventHandler();
 
+    enum AttackType
+    {
+        Shoot,
+        Ability,
+        Nothing
+    }
+
+    [Export(PropertyHint.Enum, "Shoot,Ability,Nothing")]
+    public string Trigger { get; set; } = "Shoot";
+    [Export] public Guns gun;
+    [Export] public Node2D ability;
+
     public bool active = false;
     public string name;
     public EnemyPool pool {get; set;}
@@ -39,7 +51,6 @@ public partial class Enemy : Node2D
         SetPhysicsProcess(false);
 
         ChangeBehavior(new WanderBehavior());
-
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -89,8 +100,24 @@ public partial class Enemy : Node2D
         return (playerPos - GlobalPosition).Normalized();
     }
 
+    private void TriggerAction(string trigger)
+    {
+        switch (trigger)
+        {
+            case "Shoot":
+                gun.Shoot();
+                break;
+            case "Ability":
+                GD.Print("Fix ability dumbass");
+                break;
+            case "Nothing":
+                GD.Print("I will do nothing");
+                break;
+        }
+    }
 
 
+    // might use this to seperate enemies
     Vector2 GetSeparationForce()
     {
         Vector2 force = Vector2.Zero;
