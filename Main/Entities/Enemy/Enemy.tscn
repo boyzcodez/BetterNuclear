@@ -357,7 +357,7 @@ position = Vector2(0, -8)
 script = ExtResource("4_pnidg")
 
 [node name="Raycast" type="RayCast2D" parent="EnemyLook"]
-target_position = Vector2(80, 0)
+target_position = Vector2(200, 0)
 
 [node name="GunRotator" type="Marker2D" parent="." node_paths=PackedStringArray("look")]
 position = Vector2(0, -8)

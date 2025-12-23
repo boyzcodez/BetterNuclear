@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=54 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bcue2ep2kxlrd" path="res://Main/Entities/Player/GunHandler.cs" id="7_a3eui"]
 [ext_resource type="Resource" uid="uid://dti7bbgbg8ss" path="res://Main/Guns/Player/Shotgun.tres" id="10_ovqya"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
+[ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ydey"]
 radius = 6.0
@@ -373,7 +374,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
-guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya")])
+guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya")])
 
 [connection signal="animation_finished" from="AnimatedBody" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

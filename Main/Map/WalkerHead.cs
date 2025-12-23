@@ -24,6 +24,7 @@ public partial class WalkerHead : Node2D
 
     public void GenerateMap()
     {
+        floorSet.Clear();
         GroundMap.Clear();
         WallMap.Clear();
 
@@ -37,7 +38,6 @@ public partial class WalkerHead : Node2D
 
     public void BuildMap()
     {
-        floorSet.Clear();
 
         foreach (WalkerUnit walker in GetChildren())
         {

@@ -87,11 +87,13 @@ public partial class Guns : Node2D
         {
             shaderMaterial.SetShaderParameter("flip_v", false);
             muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, currentGun.ShootPosition.Y);
+            Position = currentGun.GunSpot;
         }
         else
         {
             shaderMaterial.SetShaderParameter("flip_v", true);
             muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, -currentGun.ShootPosition.Y);
+            Position = new Vector2(currentGun.GunSpot.X, -currentGun.GunSpot.Y);
         } 
     }
 

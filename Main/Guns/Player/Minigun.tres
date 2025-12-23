@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://byv5fpmgrbf2n"]
+
+[ext_resource type="Script" uid="uid://dpyi4trxhquig" path="res://Main/Guns/Bullets/Appliers/ApplyBounce.cs" id="1_3bpje"]
+[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="2_814f2"]
+[ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="3_qykow"]
+[ext_resource type="Texture2D" uid="uid://bk7o8jva8nnan" path="res://Assets/Guns/Player/Minigun.png" id="4_mvcnp"]
+[ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="5_kn7ow"]
+[ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="6_sbx4e"]
+
+[sub_resource type="Resource" id="Resource_0qxmk"]
+script = ExtResource("1_3bpje")
+amount = 1
+metadata/_custom_type_script = "uid://dpyi4trxhquig"
+
+[sub_resource type="Resource" id="Resource_ospub"]
+script = ExtResource("3_qykow")
+SpriteSheet = ExtResource("2_814f2")
+Vertical = 9
+Horizontal = 8
+FrameRate = 14
+Loops = false
+WhichRow = 6
+FrameCount = 4
+metadata/_custom_type_script = "uid://p701hspbelqp"
+
+[sub_resource type="Resource" id="Resource_mpw66"]
+script = ExtResource("5_kn7ow")
+SpriteSheet = ExtResource("4_mvcnp")
+HorizontalFrames = 4
+VerticalFrames = 1
+FrameRate = 0
+metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
+
+[sub_resource type="Resource" id="Resource_jgy2k"]
+script = ExtResource("3_qykow")
+SpriteSheet = ExtResource("2_814f2")
+Vertical = 9
+Horizontal = 8
+FrameRate = 0
+Loops = false
+WhichRow = 6
+FrameCount = 1
+metadata/_custom_type_script = "uid://p701hspbelqp"
+
+[sub_resource type="Resource" id="Resource_dl5w8"]
+script = ExtResource("5_kn7ow")
+SpriteSheet = ExtResource("4_mvcnp")
+HorizontalFrames = 4
+VerticalFrames = 1
+FrameRate = 14
+metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
+
+[resource]
+script = ExtResource("6_sbx4e")
+Name = "Minigun"
+BulletRaidus = 6.0
+BulletSpeed = 350.0
+CurrentAmmo = 300
+MaxAmmo = 300
+FireRate = 0.05
+SpreadAngle = 15.0
+Behaviors = Array[Object]([SubResource("Resource_0qxmk")])
+ShootAnimation = SubResource("Resource_jgy2k")
+HitAnimation = SubResource("Resource_ospub")
+ShootPosition = Vector2(16, 0)
+GunSpot = Vector2(12, 6)
+NormalAnimationData = SubResource("Resource_mpw66")
+ShootAnimationData = SubResource("Resource_dl5w8")
+metadata/_custom_type_script = "uid://batyimatw3rwc"

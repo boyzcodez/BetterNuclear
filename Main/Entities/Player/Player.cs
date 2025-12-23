@@ -42,8 +42,6 @@ public partial class Player : CharacterBody2D
             }
         }
 
-        main.GenerateTowardsTarget(GlobalPosition);
-
         MoveAndSlide();
     }
 

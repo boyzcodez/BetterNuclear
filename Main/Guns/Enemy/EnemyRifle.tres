@@ -1,10 +1,15 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://bk0kb7lw036hw"]
+[gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://bk0kb7lw036hw"]
 
+[ext_resource type="Script" uid="uid://d01lk7r4lp0sx" path="res://Main/Guns/Bullets/Appliers/ApplyNormal.cs" id="1_ttlru"]
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_xgx5v"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_ttlru"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="3_p6m0s"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_vhddv"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="5_12j7w"]
+
+[sub_resource type="Resource" id="Resource_p6m0s"]
+script = ExtResource("1_ttlru")
+metadata/_custom_type_script = "uid://d01lk7r4lp0sx"
 
 [sub_resource type="Resource" id="Resource_1eabv"]
 script = ExtResource("2_ttlru")
@@ -13,7 +18,6 @@ Vertical = 9
 Horizontal = 8
 FrameRate = 14
 Loops = false
-Name = "OnHit"
 WhichRow = 1
 FrameCount = 4
 metadata/_custom_type_script = "uid://p701hspbelqp"
@@ -51,7 +55,8 @@ Name = "EnemyRifle"
 CollisionLayer = 1
 BulletSpeed = 150.0
 UsesAmmo = false
-Behaviors = null
+SpreadAngle = 60.0
+Behaviors = Array[Object]([SubResource("Resource_p6m0s")])
 ShootAnimation = SubResource("Resource_re15m")
 HitAnimation = SubResource("Resource_1eabv")
 NormalAnimationData = SubResource("Resource_clglj")

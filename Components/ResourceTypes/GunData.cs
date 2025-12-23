@@ -13,6 +13,7 @@ public partial class GunData : Resource
     [Export] public int CollisionLayer {get; set;} = 2; //1 Player, 2 Enemy, 3 ???
     [Export] public int Damage { get; set; } = 1;
     [Export] public float Knockback { get; set; } = 0f;
+    [Export] public float BulletRaidus {get; set;} = 5f;
     [Export] public float BulletSpeed { get; set; } = 140f;
     [Export] public float BulletLifeTime {get;set;} = 4f;
     [Export] public bool UsesAmmo { get; set; } = true;
@@ -32,7 +33,7 @@ public partial class GunData : Resource
     [ExportGroup("Bullet")]
     [Export] public Animation ShootAnimation {get; set;}
     [Export] public Animation HitAnimation {get; set;}
-    [Export] public float BulletRaidus;
+    
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public Vector2 GunSpot { get; set; } = new Vector2 (6, 0);
     [Export] public Texture2D icon { get; set; }

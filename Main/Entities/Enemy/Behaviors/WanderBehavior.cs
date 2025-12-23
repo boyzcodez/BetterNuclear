@@ -2,11 +2,7 @@ using Godot;
 
 public class WanderBehavior : IEnemyBehavior
 {
-    private RandomNumberGenerator rng = new();
-    private Vector2 _dir;
-
-    private float _moveTime;
-    private float _waitTime;
+    private readonly RandomNumberGenerator _rng = new();
 
     private enum State
     {
@@ -16,22 +12,33 @@ public class WanderBehavior : IEnemyBehavior
 
     private State _state;
 
+    private Vector2 _direction;
+
+    private float _moveTime;
+    private float _waitTime;
+
+    private float _attackCooldown;
+
     public void Enter(Enemy enemy)
     {
-        rng.Randomize();
+        _rng.Randomize();
+
+        ResetAttackCooldown();
         StartWaiting();
     }
 
     public void Update(Enemy enemy, float delta)
     {
-        // Player spotted → switch behavior
-        if (enemy.InSight)
+        UpdateAttackCooldown(delta);
+
+        // --- ATTACK CHECK ---
+        if (enemy.InSight && _attackCooldown <= 0f)
         {
-            //enemy.ChangeBehavior(new ShootBehavior());
-            GD.Print("I should shoot here");
-            return;
+            enemy.TriggerAction("Shoot");
+            ResetAttackCooldown();
         }
 
+        // --- MOVEMENT LOGIC ---
         switch (_state)
         {
             case State.Waiting:
@@ -43,29 +50,44 @@ public class WanderBehavior : IEnemyBehavior
             case State.Moving:
                 _moveTime -= delta;
 
-                Vector2 velocity = _dir * enemy.Speed;
-                enemy.Move(velocity, delta);
+                enemy.Move(_direction * enemy.Speed, delta);
 
-                // Hit wall or time over → wait again
                 if (_moveTime <= 0f)
                     StartWaiting();
-
                 break;
         }
     }
 
-    public void Exit(Enemy enemy) { }
+    public void Death(Enemy enemy)
+    {
+        // Nothing to clean up yet
+    }
+
+    // --------------------
+    // Internal helpers
+    // --------------------
 
     private void StartWaiting()
     {
         _state = State.Waiting;
-        _waitTime = rng.RandfRange(0.3f, 2.2f);
+        _waitTime = _rng.RandfRange(0.3f, 2.2f);
     }
 
     private void StartMoving()
     {
         _state = State.Moving;
-        _dir = Vector2.Right.Rotated(GD.Randf() * Mathf.Tau);
-        _moveTime = rng.RandfRange(0.6f, 3.8f);
+        _direction = Vector2.Right.Rotated(_rng.RandfRange(0f, Mathf.Tau));
+        _moveTime = _rng.RandfRange(0.6f, 3.8f);
+    }
+
+    private void ResetAttackCooldown()
+    {
+        _attackCooldown = _rng.RandfRange(1.2f, 4.5f);
+    }
+
+    private void UpdateAttackCooldown(float delta)
+    {
+        if (_attackCooldown > 0f)
+            _attackCooldown -= delta;
     }
 }
