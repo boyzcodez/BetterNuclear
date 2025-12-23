@@ -33,6 +33,10 @@ public partial class Guns : Node2D
         foreach (var gunData in guns)
         {
             var id = gunData.Name + GetInstanceId();
+
+            gunData.ShootAnimation.Name = gunData.Name + gunData.ShootAnimation.Name;
+            gunData.ShootAnimation.Name = gunData.Name + gunData.HitAnimation.Name;
+
             pool?.PreparePool(id, gunData);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);

@@ -27,6 +27,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public CpuParticles2D particles;
 
     public float Speed = 200f;
+    private string OnShoot;
+    private string OnHit;
 
     public override void _Ready()
     {
@@ -63,7 +65,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     {
         foreach (var b in Behaviors) b.OnSpawn(this);
 
-        Play(key + "OnShoot");
+        Play(OnShoot);
 
         LifeTime = _lifeTime;
 
@@ -74,7 +76,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     }
     public void Deactivate()
     {
-        Play(key + "OnHit");
+        Play(OnHit);
 
         particles.Emitting = true;
 
@@ -99,10 +101,10 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         pool = data.pool;
         key = data.key;
 
-        data.ShootAnimation.Name = key + data.ShootAnimation.Name;
-        data.HitAnimation.Name = key + data.HitAnimation.Name;
+        OnShoot = data.ShootAnimation.Name;
+        OnHit = data.HitAnimation.Name;
 
-        if (SpriteFrames.HasAnimation(data.ShootAnimation.Name)) return;
+        if (SpriteFrames.HasAnimation(OnShoot)) return;
 
         AnimatedSpriteBuilder.BuildAnimation(this, data.ShootAnimation);
         AnimatedSpriteBuilder.BuildAnimation(this, data.HitAnimation);
