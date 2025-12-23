@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=67 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
@@ -9,6 +9,22 @@
 [ext_resource type="Script" uid="uid://b76q3u8xnistc" path="res://Main/Entities/Enemy/GunRotator.cs" id="7_352va"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="8_26qsg"]
 [ext_resource type="Resource" uid="uid://bk0kb7lw036hw" path="res://Main/Guns/Enemy/EnemyRifle.tres" id="9_r7fjr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oiihr"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(0, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6tm83"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(64, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7l8n"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(128, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0xlo3"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(192, 704, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pnidg"]
 atlas = ExtResource("3_4prcw")
@@ -25,6 +41,22 @@ region = Rect2(128, 192, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_352va"]
 atlas = ExtResource("3_4prcw")
 region = Rect2(192, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wkh6w"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(0, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iih0d"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(64, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xx5d7"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(128, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mko4d"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(192, 640, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_26qsg"]
 atlas = ExtResource("3_4prcw")
@@ -90,6 +122,22 @@ region = Rect2(256, 448, 64, 64)
 atlas = ExtResource("3_4prcw")
 region = Rect2(320, 448, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_47e0d"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(0, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5y1k"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(64, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7276"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(128, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_of2m0"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(192, 512, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_soids"]
 atlas = ExtResource("3_4prcw")
 region = Rect2(0, 0, 64, 64)
@@ -105,6 +153,22 @@ region = Rect2(128, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_57i7y"]
 atlas = ExtResource("3_4prcw")
 region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pyp7x"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(0, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjg6n"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(64, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhso2"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(128, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xv8ne"]
+atlas = ExtResource("3_4prcw")
+region = Rect2(192, 576, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cd4mn"]
 atlas = ExtResource("3_4prcw")
@@ -174,6 +238,23 @@ region = Rect2(320, 256, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_oiihr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6tm83")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7l8n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0xlo3")
+}],
+"loop": false,
+"name": &"BackHit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_pnidg")
 }, {
 "duration": 1.0,
@@ -188,6 +269,23 @@ animations = [{
 "loop": true,
 "name": &"BackIdle",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wkh6w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iih0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xx5d7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mko4d")
+}],
+"loop": false,
+"name": &"BackRightHit",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -254,6 +352,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_47e0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5y1k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7276")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_of2m0")
+}],
+"loop": false,
+"name": &"FrontHit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_soids")
 }, {
 "duration": 1.0,
@@ -268,6 +383,23 @@ animations = [{
 "loop": true,
 "name": &"FrontIdle",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pyp7x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjg6n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhso2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xv8ne")
+}],
+"loop": false,
+"name": &"FrontRightHit",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -344,7 +476,7 @@ position = Vector2(0, -9)
 modulate = Color(1, 0.38102978, 0.37415373, 1)
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_760vj")
-animation = &"FrontIdle"
+animation = &"FrontRightHit"
 script = ExtResource("4_bqycu")
 look = NodePath("../EnemyLook")
 
@@ -367,3 +499,5 @@ look = NodePath("../EnemyLook")
 [node name="Guns" parent="GunRotator" instance=ExtResource("8_26qsg")]
 position = Vector2(6, 0)
 guns = Array[Object]([ExtResource("9_r7fjr")])
+
+[connection signal="Hit" from="Hurtbox" to="EnemyAnimations" method="_on_hurtbox_hit"]

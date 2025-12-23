@@ -58,7 +58,20 @@ public partial class EnemyAnimations : AnimatedSprite2D
         sectionIndex = Mathf.Wrap(sectionIndex, 0, 8);
 
         currentDirection = directionNode.GetDirection(sectionIndex);
-        PlayAnimation(currentAnim, 1);
+        PlayAnimation(currentDirection + currentAnim, 1);
+    }
+
+    public void PlayHit()
+    {
+        PlayAnimation("Hit", 2);
+    }
+    public void _on_hurtbox_hit(Vector2 direction, float force)
+    {
+        PlayAnimation(currentDirection + "Hit", 2);
+    }
+    public void PlayDeath()
+    {
+        PlayAnimation("Death", 10);
     }
 
     public void PlayAnimation(string animation, int priority = 0)
@@ -66,7 +79,7 @@ public partial class EnemyAnimations : AnimatedSprite2D
         if (priority >= animationPriority)
         {
             animationPriority = priority;
-            Play(currentDirection + animation);
+            Play(animation);
         }
     }
     private void _on_animation_finished()

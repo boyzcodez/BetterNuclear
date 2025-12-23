@@ -103,6 +103,8 @@ public partial class Guns : Node2D
         else currentGun.UseBullet();
 
         if (currentGun == null) return;
+
+        Eventbus.TriggerScreenShake(currentGun.ShakeIntensity, currentGun.ShakeDuration);
         
         sprite.FireAnimation();
         PlayAnimation();

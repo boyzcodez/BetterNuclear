@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=70 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
@@ -15,6 +15,22 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ydey"]
 radius = 6.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xx6cj"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(0, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmgqw"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(64, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0o6le"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(128, 704, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xe5vh"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(192, 704, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_iov3m"]
 atlas = ExtResource("1_iov3m")
 region = Rect2(0, 192, 64, 64)
@@ -30,6 +46,22 @@ region = Rect2(128, 192, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_d1ek6"]
 atlas = ExtResource("1_iov3m")
 region = Rect2(192, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pcbp"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(0, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tlqq"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(64, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pw4p2"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(128, 640, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10ynb"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(192, 640, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_37f4v"]
 atlas = ExtResource("1_iov3m")
@@ -95,6 +127,22 @@ region = Rect2(256, 448, 64, 64)
 atlas = ExtResource("1_iov3m")
 region = Rect2(320, 448, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekauo"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(0, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkead"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(64, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6bca"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(128, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mjd3i"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(192, 512, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_hlkv5"]
 atlas = ExtResource("1_iov3m")
 region = Rect2(0, 0, 64, 64)
@@ -110,6 +158,22 @@ region = Rect2(128, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ny40"]
 atlas = ExtResource("1_iov3m")
 region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5j2b"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(0, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65wga"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(64, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4b55n"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(128, 576, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_em8hl"]
+atlas = ExtResource("1_iov3m")
+region = Rect2(192, 576, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1mauu"]
 atlas = ExtResource("1_iov3m")
@@ -179,6 +243,23 @@ region = Rect2(320, 256, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_xx6cj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmgqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0o6le")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xe5vh")
+}],
+"loop": false,
+"name": &"BackHit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_iov3m")
 }, {
 "duration": 1.0,
@@ -193,6 +274,23 @@ animations = [{
 "loop": true,
 "name": &"BackIdle",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pcbp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tlqq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pw4p2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10ynb")
+}],
+"loop": false,
+"name": &"BackRightHit",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -259,6 +357,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ekauo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kkead")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6bca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mjd3i")
+}],
+"loop": false,
+"name": &"FrontHit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_hlkv5")
 }, {
 "duration": 1.0,
@@ -273,6 +388,23 @@ animations = [{
 "loop": true,
 "name": &"FrontIdle",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5j2b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65wga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4b55n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_em8hl")
+}],
+"loop": false,
+"name": &"FrontRightHit",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -351,7 +483,7 @@ SetCollisionLayer = 1
 [node name="AnimatedBody" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
-animation = &"BackRightRun"
+animation = &"BackHit"
 script = ExtResource("2_0atn1")
 
 [node name="Direction" parent="AnimatedBody" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("4_a3eui")]
@@ -376,5 +508,6 @@ one_shot = true
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
 guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya")])
 
+[connection signal="Hit" from="Hurtbox" to="AnimatedBody" method="_on_hurtbox_hit"]
 [connection signal="animation_finished" from="AnimatedBody" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

@@ -58,4 +58,6 @@ ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
+ShakeIntensity = 1.1
+ShakeDuration = 0.09
 metadata/_custom_type_script = "uid://batyimatw3rwc"

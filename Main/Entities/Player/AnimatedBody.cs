@@ -18,6 +18,8 @@ public partial class AnimatedBody : AnimatedSprite2D
     {
         directionNode = GetNode<Direction>("Direction");
         player = GetOwner<Player>();
+
+        AnimationFinished += _on_animation_finished;
     }
     public override void _Process(double delta)
     {
@@ -41,7 +43,13 @@ public partial class AnimatedBody : AnimatedSprite2D
 
         //if (player.Dead) PlayAnimation("Death", 10);
         //else if (warpDash.isWarping) PlayAnimation("Glitch", 1);
-        PlayAnimation(currentAnim, 1);
+        PlayAnimation(currentDirection + currentAnim, 1);
+    }
+
+    public void _on_hurtbox_hit(Vector2 direction, float force)
+    {
+        Eventbus.TriggerScreenShake(5.0f, 0.2f);
+        PlayAnimation(currentDirection + "Hit", 2);
     }
 
     public void PlayAnimation(string animation, int priority = 0)
@@ -49,7 +57,7 @@ public partial class AnimatedBody : AnimatedSprite2D
         if (priority >= animationPriority)
         {
             animationPriority = priority;
-            Play(currentDirection + animation);
+            Play(animation);
         }
     }
     private void _on_animation_finished()
