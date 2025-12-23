@@ -31,14 +31,14 @@ public class WanderBehavior : IEnemyBehavior
     {
         UpdateAttackCooldown(delta);
 
-        // --- ATTACK CHECK ---
+        // -attack
         if (enemy.InSight && _attackCooldown <= 0f)
         {
             enemy.TriggerAction("Shoot");
             ResetAttackCooldown();
         }
 
-        // --- MOVEMENT LOGIC ---
+        // movement
         switch (_state)
         {
             case State.Waiting:
@@ -60,7 +60,7 @@ public class WanderBehavior : IEnemyBehavior
 
     public void Death(Enemy enemy)
     {
-        // Nothing to clean up yet
+        ResetAttackCooldown();
     }
 
     // --------------------

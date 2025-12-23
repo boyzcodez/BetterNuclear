@@ -82,11 +82,28 @@ public partial class Enemy : Node2D
         return true;
     }
     public void Move(Vector2 velocity, float delta)
-    {
-        nextPos = GlobalPosition + velocity * delta;
+{
+    Vector2 pos = GlobalPosition;
+    Vector2 desiredMove = velocity * delta;
 
-        if (CanMoveTo(nextPos)) GlobalPosition = nextPos;
+    // Try X movement
+    if (desiredMove.X != 0)
+    {
+        Vector2 xMovePos = pos + new Vector2(desiredMove.X, 0);
+        if (CanMoveTo(xMovePos))
+            pos.X = xMovePos.X;
     }
+
+    // Try Y movement
+    if (desiredMove.Y != 0)
+    {
+        Vector2 yMovePos = pos + new Vector2(0, desiredMove.Y);
+        if (CanMoveTo(yMovePos))
+            pos.Y = yMovePos.Y;
+    }
+
+    GlobalPosition = pos;
+}
     public Vector2 DirectionToPlayer()
     {
         return (playerPos - GlobalPosition).Normalized();
@@ -144,11 +161,14 @@ public partial class Enemy : Node2D
     }
     public void Deactivate()
     {
+        behavior?.Death(this);
+
         active = false;
         hurtbox.active = false;
         Visible = false;
 
         SetPhysicsProcess(false);
+        pool.Return(this);
     }
 
 }

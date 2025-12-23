@@ -16,10 +16,10 @@ public partial class EnemyPool : Node2D
     private TileMapLayer groundMap;
 
     const int enemyAmount = 10;
+    private int enemyCount;
 
     public override void _Ready()
     {
-        //groundMap = GetTree().GetFirstNodeInGroup("Ground") as TileMapLayer;
         PreparePool();
 
         Eventbus.SpawnEnemies += CalcRound;
@@ -54,7 +54,7 @@ public partial class EnemyPool : Node2D
         ResetEnemies();
 
         rng.Randomize();
-        int enemyCount = EnemiesPerRound();
+        enemyCount = EnemiesPerRound();
 
         List<Vector2> availableSpots = validSpawnPoints;
         availableSpots = availableSpots.OrderBy(_ => rng.Randi()).ToList();
@@ -121,9 +121,17 @@ public partial class EnemyPool : Node2D
         selected.GlobalPosition = spot;
         selected.EmitSignal("Activation");
     }
-    private void Return(Enemy enemy)
+    public void Return(Enemy enemy)
     {
+        enemyCount -= 1;
+        currentEnemies.Remove(enemy);
+
         pools[enemy.name].Enqueue(enemy);
+
+        if (enemyCount <= 0)
+        {
+            Eventbus.TriggerEnemiesKilled();
+        }
     }
     private void ResetEnemies()
     {

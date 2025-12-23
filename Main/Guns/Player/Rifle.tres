@@ -54,6 +54,7 @@ Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
 ShootAnimation = SubResource("Resource_pbbwr")
 HitAnimation = SubResource("Resource_jlw6v")
 ShootPosition = Vector2(18, -1)
+GunSpot = Vector2(8, 0)
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 metadata/_custom_type_script = "uid://batyimatw3rwc"

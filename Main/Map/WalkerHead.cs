@@ -20,6 +20,8 @@ public partial class WalkerHead : Node2D
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
         GenerateMap();
+
+        Eventbus.EnemiesKilled += GenerateMap;
     }
 
     public void GenerateMap()
