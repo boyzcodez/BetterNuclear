@@ -333,8 +333,9 @@ animations = [{
 "speed": 9.0
 }]
 
-[node name="Enemy" type="Node2D"]
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("gun")]
 script = ExtResource("1_4prcw")
+gun = NodePath("GunRotator/Guns")
 
 [node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
 position = Vector2(0, -9)

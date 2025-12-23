@@ -1,11 +1,14 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
+[GlobalClass]
 public partial class Guns : Node2D
 {
     [Export] public GunData[] guns { get; set; } = [];
     [Export] public bool active = false;
     public GunAnimation sprite { get; set; }
+    private RandomNumberGenerator rng = new();
 
     private Dictionary<string, AudioStreamRandomizer> AudioLibrary = new ();
     private AudioStreamPlayer audioSystem;
@@ -28,14 +31,16 @@ public partial class Guns : Node2D
         shaderMaterial = sprite.Material as ShaderMaterial;
         audioSystem = GetNode<AudioStreamPlayer>("GunAudio");
 
+        rng.Randomize();
+
         //EventBus.Reset += ReFillGuns;
 
         foreach (var gunData in guns)
         {
             var id = gunData.Name + GetInstanceId();
 
-            gunData.ShootAnimation.Name = gunData.Name + gunData.ShootAnimation.Name;
-            gunData.ShootAnimation.Name = gunData.Name + gunData.HitAnimation.Name;
+            gunData.ShootAnimation.Name = gunData.Name + "OnShoot";
+            gunData.HitAnimation.Name = gunData.Name + "OnHit";
 
             pool?.PreparePool(id, gunData);
             
@@ -69,7 +74,7 @@ public partial class Guns : Node2D
 
         sprite?.Play(currentGun.Name);
         muzzleFlash.Position = currentGun.ShootPosition;
-        Position = new Vector2(currentGun.GunSpot_X_axis, 0);
+        Position = currentGun.GunSpot;
         if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Stream = AudioLibrary[currentGun.Name];
     }
 
@@ -81,12 +86,12 @@ public partial class Guns : Node2D
         if (GlobalRotation > -1.5f && GlobalRotation < 1.5f)
         {
             shaderMaterial.SetShaderParameter("flip_v", false);
-            //muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, currentGun.ShootPosition.Y);
+            muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, currentGun.ShootPosition.Y);
         }
         else
         {
             shaderMaterial.SetShaderParameter("flip_v", true);
-            //muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, -currentGun.ShootPosition.Y);
+            muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, -currentGun.ShootPosition.Y);
         } 
     }
 
@@ -105,21 +110,22 @@ public partial class Guns : Node2D
 
         Vector2 baseDirection = Vector2.Right.Rotated(GlobalRotation);
 
-        float spreadRad = Mathf.DegToRad(currentGun.SpreadAngle);
-        float angleStep = currentGun.BulletCount > 1 ? spreadRad / (currentGun.BulletCount - 1) : 0f;
+        float halfSpread = currentGun.SpreadAngle * 0.5f;
 
         for (int i = 0; i < currentGun.BulletCount; i++)
         {
-            float angleOffset = -spreadRad / 2f + i * angleStep;
-            //Vector2 direction = baseDirection.Rotated(angleOffset); 
-            float rotation = GlobalRotation + angleOffset + (float)GD.RandRange(-currentGun.RandomFactor, currentGun.RandomFactor);
+            float angleOffsetDeg = (float)GD.RandRange(-halfSpread, halfSpread);
+            float angleOffsetRad = Mathf.DegToRad(angleOffsetDeg);
 
             Bullet bullet = pool.GetBullet(id);
             if (bullet == null) return;
-            bullet.GlobalPosition = muzzleFlash.GlobalPosition + new Vector2(10 * NumBet(currentGun.RandomFactor), 10* NumBet(currentGun.RandomFactor));
-            bullet.Velocity = (GetGlobalMousePosition() - GlobalPosition).Normalized();
+            bullet.GlobalPosition = muzzleFlash.GlobalPosition;
+            // + new Vector2(2 * NumBet(currentGun.RandomFactor), 2* NumBet(currentGun.RandomFactor));
 
-            bullet.Rotation = rotation;
+            var dir = baseDirection.Rotated(angleOffsetRad);
+
+            bullet.Velocity = dir;
+            bullet.Rotation = dir.Angle();
 
             bullet.Activate();
         }

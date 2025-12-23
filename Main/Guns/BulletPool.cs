@@ -8,8 +8,6 @@ public partial class BulletPool : Node2D
     public List<Bullet> _enemyBullets = new();
     private int TotalBulletAmount = 0;
 
-    
-
     public override void _Ready()
     {
         // EventBus.ClearBullets += ClearBullets;
@@ -79,8 +77,24 @@ public partial class BulletPool : Node2D
 
     private int CalculatePoolSize(float lifetime, float firerate, int maxammo, int bulletCount)
     {
-        int theoretical = Mathf.CeilToInt(lifetime / Mathf.Max(firerate, 0.0001f));
-        return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.2f * bulletCount));
+        // int theoretical = Mathf.CeilToInt(lifetime / Mathf.Max(firerate, 0.0001f));
+        // return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.2f * bulletCount));
+
+        if (lifetime <= 0f || firerate <= 0f || bulletCount <= 0)
+        return 0;
+
+        float firingDuration = maxammo * firerate;
+
+        // How long bullets can overlap
+        float overlapTime = Mathf.Min(lifetime, firingDuration);
+
+        // Number of shots during the overlap
+        float shotsDuringOverlap = overlapTime / firerate;
+
+        // Total bullets alive at once
+        float simultaneousBullets = shotsDuringOverlap * bulletCount;
+
+        return Mathf.CeilToInt(simultaneousBullets);
     }
 
 

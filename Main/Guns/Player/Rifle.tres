@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="GunData" load_steps=11 format=3 uid="uid://vfqgjerlv601"]
 
-[ext_resource type="Script" uid="uid://dpyi4trxhquig" path="res://Main/Guns/Bullets/Appliers/ApplyBounce.cs" id="1_arnsw"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_jlw6v"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
+[ext_resource type="Script" uid="uid://d01lk7r4lp0sx" path="res://Main/Guns/Bullets/Appliers/ApplyNormal.cs" id="1_pbbwr"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_pbbwr"]
 
-[sub_resource type="Resource" id="Resource_xa0j0"]
-script = ExtResource("1_arnsw")
-metadata/_custom_type_script = "uid://dpyi4trxhquig"
+[sub_resource type="Resource" id="Resource_ulg0x"]
+script = ExtResource("1_pbbwr")
+metadata/_custom_type_script = "uid://d01lk7r4lp0sx"
 
 [sub_resource type="Resource" id="Resource_jlw6v"]
 script = ExtResource("2_pbbwr")
@@ -18,7 +18,6 @@ Vertical = 9
 Horizontal = 8
 FrameRate = 14
 Loops = false
-Name = "OnHit"
 WhichRow = 6
 FrameCount = 4
 metadata/_custom_type_script = "uid://p701hspbelqp"
@@ -45,15 +44,15 @@ metadata/_custom_type_script = "uid://p701hspbelqp"
 [resource]
 script = ExtResource("1_npjdg")
 Name = "Rifle"
-BulletSpeed = 400.0
+BulletSpeed = 350.0
 CurrentAmmo = 30
 MaxAmmo = 30
 FireRate = 0.05
-Behaviors = Array[Object]([SubResource("Resource_xa0j0")])
+Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
 ShootAnimation = SubResource("Resource_pbbwr")
 HitAnimation = SubResource("Resource_jlw6v")
 BulletRaidus = 6.0
-ShootPosition = Vector2(14, 0)
+ShootPosition = Vector2(18, -1)
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 metadata/_custom_type_script = "uid://batyimatw3rwc"
