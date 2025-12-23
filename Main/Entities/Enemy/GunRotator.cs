@@ -11,6 +11,7 @@ public partial class GunRotator : Marker2D
     public float angle;
     private float lastFacingAngle = 0f;
     
+    private Player player;
     private Enemy owner;
     private Guns guns;
 
@@ -18,6 +19,7 @@ public partial class GunRotator : Marker2D
     {
         owner = GetParent<Enemy>();
         guns = GetNodeOrNull<Guns>("Guns");
+        player = GetTree().GetFirstNodeInGroup("Player") as Player;
 
         owner.Connect(Enemy.SignalName.Activation, new Callable(this, nameof(Activate)));
         owner.Connect(Enemy.SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
@@ -45,7 +47,6 @@ public partial class GunRotator : Marker2D
             angle = lastFacingAngle;
         }
 
-        // Convert to degrees
         float angleDegrees = Mathf.RadToDeg(angle);
 
         // Snap to nearest increment (e.g., 10°)
