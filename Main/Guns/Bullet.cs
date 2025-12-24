@@ -1,7 +1,7 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
+[GlobalClass]
 public partial class Bullet : AnimatedSprite2D, ICollidable
 {
     public Vector2 Velocity;
@@ -78,7 +78,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     {
         Play(OnHit);
 
-        particles.Emitting = true;
+        //particles.Emitting = true;
 
         Velocity = Vector2.Zero;
         Active = false;

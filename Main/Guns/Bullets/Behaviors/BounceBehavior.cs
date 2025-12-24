@@ -36,6 +36,6 @@ public class BounceBehavior : IBulletBehavior
 
         b.Velocity = b.Velocity.Bounce(normal);
         b.Rotation = b.Velocity.Angle();
-        b.particles.Emitting = true;
+        //b.particles.Emitting = true;
     }
 }
