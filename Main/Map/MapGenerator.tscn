@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bvj3rj3lgr7cn"]
+[gd_scene load_steps=13 format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="PackedScene" uid="uid://c1fjkcrv31mtn" path="res://Main/Map/WalkerUnit.tscn" id="1_4xjwc"]
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://cwb802hcofpcf" path="res://Main/Entities/Enemy/List/ShotgunDude.tres" id="9_ccqbt"]
 [ext_resource type="Resource" uid="uid://bytvm5rujp75h" path="res://Main/Entities/Enemy/List/Test.tres" id="10_vlute"]
 [ext_resource type="Script" uid="uid://8dgyvxwyg3ii" path="res://Main/Items/Items.cs" id="11_lpw80"]
+[ext_resource type="Resource" uid="uid://bbogxuusw4tku" path="res://Main/Items/List/AmmoResource.tres" id="12_ccqbt"]
 
 [node name="MapGenerator" type="Node2D"]
 y_sort_enabled = true
@@ -61,3 +62,4 @@ enemies = [ExtResource("6_8scsi"), ExtResource("7_uvev8"), ExtResource("8_lpw80"
 
 [node name="Items" type="Node2D" parent="."]
 script = ExtResource("11_lpw80")
+itemScenes = [ExtResource("12_ccqbt")]

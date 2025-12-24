@@ -180,6 +180,7 @@ public partial class Enemy : Node2D
     {
         if (active) behavior?.Death(this);
         EmitSignal("Deactivation");
+        pool.Return();
     }
 
 
@@ -195,7 +196,6 @@ public partial class Enemy : Node2D
     {
         active = false;
         hurtbox.active = false;
-        pool.Return();
 
         SetPhysicsProcess(false);
     }

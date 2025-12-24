@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public partial class Items : Node2D
 {
     [Export] public ItemResource[] itemScenes = [];
-    public Dictionary<string, Queue<Bullet>> _pools = new();
+    public Dictionary<string, Queue<ICollectable>> _pools = new();
     private int TotalBulletAmount = 0;
 
     public override void _Ready()
@@ -30,7 +30,7 @@ public partial class Items : Node2D
         }
         else
         {
-            pool = new Queue<Bullet>();
+            pool = new Queue<ICollectable>();
             _pools[item.Name] = pool;
         }
 
@@ -41,5 +41,16 @@ public partial class Items : Node2D
             AddChild(instance);
         }
 
+    }
+
+    public void SpawnItem(string item, Vector2 position)
+    {
+        if (!_pools.TryGetValue(item, out var pool) || pool.Count == 0)
+        {
+            GD.PrintErr("Ran out of items to use");
+        }
+
+        ICollectable getItem = _pools[item].Dequeue(); 
+        getItem.OnActivation(position);
     }
 }

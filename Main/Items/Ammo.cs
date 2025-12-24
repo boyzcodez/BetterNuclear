@@ -14,8 +14,10 @@ public partial class Ammo : Sprite2D, ICollectable
         SetPhysicsProcess(false);
     }
 
-    public void OnActivation()
+    public void OnActivation(Vector2 position)
     {
+        GlobalPosition = position;
+
         EnteredRange = false;
         SetPhysicsProcess(true);
         Visible = true;

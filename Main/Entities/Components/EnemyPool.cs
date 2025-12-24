@@ -133,9 +133,9 @@ public partial class EnemyPool : Node2D
     }
     private void ResetEnemies()
     {
-        foreach (var enemy in currentEnemies)
+        foreach (var enemy in currentEnemies.ToArray())
         {
-            if (enemy.active) enemy.Deactivate();
+            if (enemy.active) enemy.EmitSignal("Deactivation");
             pools[enemy.name].Enqueue(enemy);
             enemy.Visible = false;
         }
