@@ -71,11 +71,11 @@ public partial class WalkerHead : Node2D
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
-        var spot = floorSet[floorSet.Count - 1];
+        var spot = floorSet[floorSet.Count - 5];
         var spawn = GroundMap.MapToLocal(spot);
 
-        player.GlobalPosition = spawn;
         Explosion(2, spawn);
+        player.GlobalPosition = spawn;
 
         main.walls = WallMap;
         main.ground = GroundMap;
