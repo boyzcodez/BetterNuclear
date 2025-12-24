@@ -1,0 +1,66 @@
+[gd_scene load_steps=11 format=3 uid="uid://dyfxa7dpl0ppa"]
+
+[ext_resource type="Texture2D" uid="uid://fjwf7pewlun8" path="res://Assets/Particles/coinsSpin.png" id="1_arhr6"]
+[ext_resource type="Script" uid="uid://l8pmich333jg" path="res://Main/Items/Coin.cs" id="2_2jdse"]
+[ext_resource type="Script" uid="uid://b1ogd8qxjxiq1" path="res://Main/Items/Trail.cs" id="3_7l2ag"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jdse"]
+atlas = ExtResource("1_arhr6")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7l2ag"]
+atlas = ExtResource("1_arhr6")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_np1u2"]
+atlas = ExtResource("1_arhr6")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufakd"]
+atlas = ExtResource("1_arhr6")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vckgn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2jdse")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7l2ag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_np1u2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufakd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="Curve" id="Curve_7l2ag"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_np1u2"]
+offsets = PackedFloat32Array(0.07359307, 0.6883117)
+colors = PackedColorArray(0.89897186, 0.82295007, 0.43101162, 1, 0.8980392, 0.81960785, 0.42745098, 0)
+
+[node name="Coin" type="AnimatedSprite2D"]
+scale = Vector2(0.7, 0.7)
+sprite_frames = SubResource("SpriteFrames_vckgn")
+script = ExtResource("2_2jdse")
+
+[node name="Trail" type="Line2D" parent="."]
+show_behind_parent = true
+width = 4.0
+width_curve = SubResource("Curve_7l2ag")
+default_color = Color(0.8980392, 0.8235294, 0.43137255, 1)
+gradient = SubResource("Gradient_np1u2")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("3_7l2ag")
+length = 10

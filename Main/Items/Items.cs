@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public partial class Items : Node2D
 {
     [Export] public ItemResource[] itemScenes = [];
-    public Dictionary<string, Queue<ICollectable>> _pools = new();
+    public Dictionary<string, Queue<Node2D>> _pools = new();
     private int TotalBulletAmount = 0;
 
     public override void _Ready()
@@ -13,6 +13,8 @@ public partial class Items : Node2D
         {
             PreparePool(item);
         }
+
+        Eventbus.SpawnItem += SpawnItem;
     }
 
     public void PreparePool(ItemResource item)
@@ -30,15 +32,20 @@ public partial class Items : Node2D
         }
         else
         {
-            pool = new Queue<ICollectable>();
+            pool = new Queue<Node2D>();
             _pools[item.Name] = pool;
         }
 
         for (int i = pool.Count; i < item.AmountOfItem; i++)
         {
-            var instance = item.itemScene.Instantiate();
-            //CallDeferred("add_child", instance);
+            var instance = item.itemScene.Instantiate() as Node2D;
+            instance.Visible = false;
+            if (instance is ICollectable collectable)
+            {
+                collectable.Init(item.Name, this);
+            }
             AddChild(instance);
+            pool.Enqueue(instance);
         }
 
     }
@@ -48,9 +55,20 @@ public partial class Items : Node2D
         if (!_pools.TryGetValue(item, out var pool) || pool.Count == 0)
         {
             GD.PrintErr("Ran out of items to use");
+            return;
         }
 
-        ICollectable getItem = _pools[item].Dequeue(); 
-        getItem.OnActivation(position);
+        Node2D getItem = _pools[item].Dequeue();
+        getItem.GlobalPosition = position;
+        getItem.Visible = true;
+        if (getItem is ICollectable collectable)
+        {
+            collectable.OnActivation();
+        }
+    }
+    public void ReturnItem(string key, Node2D item)
+    {
+        item.Visible = false;
+        _pools[key].Enqueue(item);
     }
 }

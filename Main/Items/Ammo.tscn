@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bne6ruql38sfv"]
+[gd_scene load_steps=3 format=3 uid="uid://bne6ruql38sfv"]
 
+[ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="1_j6obs"]
 [ext_resource type="Script" uid="uid://dtmjm4m0bq4g" path="res://Main/Items/Ammo.cs" id="1_n0lb1"]
 
 [node name="Ammo" type="Sprite2D"]
+texture = ExtResource("1_j6obs")
 script = ExtResource("1_n0lb1")

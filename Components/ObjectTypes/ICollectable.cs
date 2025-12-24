@@ -1,11 +1,9 @@
+using System;
 using Godot;
 
 public interface ICollectable
 {
-    void OnActivation(Vector2 position);
+    void Init(string Name, Items pool);
+    void OnActivation();
     void OnDeactivation();
-    void QueueFree()
-    {
-        QueueFree();
-    }
 }

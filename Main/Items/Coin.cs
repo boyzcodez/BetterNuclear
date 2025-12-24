@@ -1,12 +1,12 @@
 using Godot;
+using System;
 
-public partial class Ammo : Sprite2D, ICollectable
+public partial class Coin : AnimatedSprite2D, ICollectable
 {
     private Player player;
-    private bool EnteredRange = false;
+    private Trail trail;
     private float speed = 250f;
     private float pickupThreshold = 10f;
-    private float enterThreshold = 70f;
 
     public string _Name;
     public Items _Pool;
@@ -14,6 +14,7 @@ public partial class Ammo : Sprite2D, ICollectable
     public override void _Ready()
     {
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
+        trail = GetNode<Trail>("Trail");
         SetPhysicsProcess(false);
     }
 
@@ -24,14 +25,15 @@ public partial class Ammo : Sprite2D, ICollectable
     }
     public void OnActivation()
     {
-        SetFloating(true);
-        EnteredRange = false;
+        ToggleRotation(true);
+        Play("default");
         SetPhysicsProcess(true);
     }
     public void OnDeactivation()
     {
+        ToggleRotation(false);
+        Stop();
         SetPhysicsProcess(false);
-        SetFloating(false);
 
         // return back to pool
         _Pool.ReturnItem(_Name, this);
@@ -41,36 +43,29 @@ public partial class Ammo : Sprite2D, ICollectable
     {
         var distance = GlobalPosition.DistanceTo(player.GlobalPosition);
         Vector2 dir = (player.GlobalPosition - GlobalPosition).Normalized();
+        
+        GlobalPosition += dir * speed * (float)delta;
+        trail.Update(GlobalPosition);
 
-        if (EnteredRange)
+        if (distance < pickupThreshold)
         {
-            GlobalPosition += dir * speed * (float)delta;
-            if (distance < pickupThreshold)
-            {
-                OnDeactivation();
-                GD.Print("Collected Ammo");
-            }
-        }
-        else if (distance < enterThreshold)
-        {
-            SetFloating(false);
-            EnteredRange = true;
+            OnDeactivation();
+            GD.Print("Collected Ammo");
         }
     }
 
-    private Tween floatTween;
+    private Tween rotateTween;
 
-    public void SetFloating(bool enabled)
+    public void ToggleRotation(bool enabled)
     {
-        floatTween?.Kill();
-        
+        rotateTween?.Kill();
+
         if (enabled)
         {
-            floatTween = CreateTween();
-            floatTween.SetLoops();
-            floatTween.TweenProperty(this, "position:y", Position.Y - 10f, 1f);
-            floatTween.TweenProperty(this, "position:y", Position.Y, 1f);
+            rotateTween = CreateTween();
+            rotateTween.SetLoops();
+            rotateTween.TweenProperty(this, "rotation", Mathf.Tau, 0.5f);
         }
     }
-
+        
 }

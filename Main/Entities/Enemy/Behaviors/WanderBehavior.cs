@@ -61,12 +61,11 @@ public class WanderBehavior : IEnemyBehavior
     public void Death(Enemy enemy)
     {
         ResetAttackCooldown();
+        Eventbus.TriggerSpawnItem("Coin", enemy.GlobalPosition);
     }
 
-    // --------------------
-    // Internal helpers
-    // --------------------
-
+    
+    // functionality
     private void StartWaiting()
     {
         _state = State.Waiting;
