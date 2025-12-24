@@ -15,7 +15,7 @@ public partial class EnemyPool : Node2D
     private List<Vector2> validSpawnPoints = new();
     private TileMapLayer groundMap;
 
-    const int enemyAmount = 10;
+    const int enemyAmount = 20;
     private int enemyCount;
 
     public override void _Ready()
@@ -121,12 +121,10 @@ public partial class EnemyPool : Node2D
         selected.GlobalPosition = spot;
         selected.EmitSignal("Activation");
     }
-    public void Return(Enemy enemy)
+    public void Return()
     {
         enemyCount -= 1;
-        currentEnemies.Remove(enemy);
-
-        pools[enemy.name].Enqueue(enemy);
+        GD.Print(enemyCount);
 
         if (enemyCount <= 0)
         {
@@ -138,7 +136,8 @@ public partial class EnemyPool : Node2D
         foreach (var enemy in currentEnemies)
         {
             if (enemy.active) enemy.Deactivate();
-            Return(enemy);
+            pools[enemy.name].Enqueue(enemy);
+            enemy.Visible = false;
         }
         currentEnemies.Clear();
     }

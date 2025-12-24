@@ -1,0 +1,10 @@
+using Godot;
+using System;
+
+[GlobalClass]
+public partial class ItemResource : Resource
+{
+    [Export] public PackedScene itemScene;
+    [Export] public string Name;
+    [Export] public int AmountOfItem;
+}

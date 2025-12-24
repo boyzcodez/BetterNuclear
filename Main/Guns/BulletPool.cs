@@ -36,7 +36,7 @@ public partial class BulletPool : Node2D
 
         var amount = CalculatePoolSize(gunData.BulletLifeTime, gunData.FireRate, gunData.MaxAmmo, gunData.BulletCount);
         TotalBulletAmount += amount;
-        GD.Print("total amount of bullets " + TotalBulletAmount);
+        //GD.Print("total amount of bullets " + TotalBulletAmount);
 
         for (int i = pool.Count; i < amount; i++)
         {
@@ -68,7 +68,8 @@ public partial class BulletPool : Node2D
                 bullet.Behaviors.Add(beh.CreateBehavior());
             }
 
-            CallDeferred("add_child", bullet);
+            //CallDeferred("add_child", bullet);
+            AddChild(bullet);
             pool.Enqueue(bullet);
 
             //if (gunData.isEnemy) _enemyBullets.Add(bullet);

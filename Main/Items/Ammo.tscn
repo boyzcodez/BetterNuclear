@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bne6ruql38sfv"]
+
+[ext_resource type="Script" uid="uid://dtmjm4m0bq4g" path="res://Main/Items/Ammo.cs" id="1_n0lb1"]
+
+[node name="Ammo" type="Sprite2D"]
+script = ExtResource("1_n0lb1")

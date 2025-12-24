@@ -61,12 +61,21 @@ public partial class GunRotator : Marker2D
 
     public void Activate()
     {
-        if (guns != null) guns.SetProcess(true);
+        if (guns != null)
+        {
+            guns.SetProcess(true);
+            guns.Visible = true;
+        } 
         SetPhysicsProcess(true);
+        
     }
     public void Deactivate()
     {
-        if (guns != null) guns.SetProcess(false);
+        if (guns != null)
+        {
+            guns.SetProcess(false);
+            guns.Visible = false;
+        } 
         SetPhysicsProcess(false);
     }
 }

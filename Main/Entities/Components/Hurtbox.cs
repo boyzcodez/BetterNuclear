@@ -26,7 +26,6 @@ public partial class Hurtbox : Node2D, ICollidable
         if (GetParent() is Enemy)
         {
             var parent = GetParent() as Enemy;
-            Death += parent.Deactivate;
             parent.hurtbox = this;
             active = false;
         }
@@ -36,8 +35,9 @@ public partial class Hurtbox : Node2D, ICollidable
 
     public void TakeDamage(DamageData damageData, Vector2 knockbackDir)
     {
-        Health -= damageData.Damage;
+        if (Health <= 0) return;
 
+        Health -= damageData.Damage;
         EmitSignal("Hit", knockbackDir, damageData.Knockback);
 
         if (Health <= 0)

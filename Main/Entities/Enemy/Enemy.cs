@@ -29,7 +29,7 @@ public partial class Enemy : Node2D
     // Stats data
     public float Speed = 30f;
     public float DashSpeed = 200f;
-    public float Radius = 12f;
+    public float Radius = 15f;
 
     public bool InSight;
     public Vector2 nextPos;
@@ -48,7 +48,9 @@ public partial class Enemy : Node2D
 
         Connect(SignalName.Activation, new Callable(this, nameof(Activate)));
         Connect(SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
+
         hurtbox.Hit += Knockback;
+        hurtbox.Death += OnDeath;
 
         Visible = false;
         SetPhysicsProcess(false);
@@ -174,6 +176,11 @@ public partial class Enemy : Node2D
         return force;
     }
 
+    public void OnDeath()
+    {
+        if (active) behavior?.Death(this);
+        EmitSignal("Deactivation");
+    }
 
 
     public void Activate()
@@ -186,14 +193,11 @@ public partial class Enemy : Node2D
     }
     public void Deactivate()
     {
-        behavior?.Death(this);
-
         active = false;
         hurtbox.active = false;
-        Visible = false;
+        pool.Return();
 
         SetPhysicsProcess(false);
-        pool.Return(this);
     }
 
 }

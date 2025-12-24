@@ -9,6 +9,7 @@ public static class Eventbus
 
     // effects and stuff
     public static event Action<float, float> ScreenShake;
+    public static event Action<string> SpawnItem;
 
 
     // Stats tracking
@@ -26,4 +27,6 @@ public static class Eventbus
     // effect and stuff
     public static void TriggerScreenShake(float intensity, float duration) =>
         ScreenShake?.Invoke(intensity, duration);
+    public static void TriggerSpawnItem(string item) =>
+        SpawnItem?.Invoke(item);
 }

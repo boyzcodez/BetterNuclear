@@ -471,6 +471,7 @@ gun = NodePath("GunRotator/Guns")
 
 [node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
 position = Vector2(0, -9)
+Radius = 13.0
 
 [node name="EnemyAnimations" type="AnimatedSprite2D" parent="." node_paths=PackedStringArray("look")]
 modulate = Color(1, 0.38102978, 0.37415373, 1)

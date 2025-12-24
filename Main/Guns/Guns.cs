@@ -109,7 +109,6 @@ public partial class Guns : Node2D
         sprite.FireAnimation();
         PlayAnimation();
         if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Play();
-        else GD.Print("This gun has no Sound");
 
 
         Vector2 baseDirection = Vector2.Right.Rotated(GlobalRotation);
