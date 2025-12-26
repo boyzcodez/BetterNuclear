@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class WalkerHead : Node2D
 {
-    public enum Dirs{LEFT,RIGHT,UP,DOWN}
+    public enum Dirs { Left, Right, Up, Down }
 
     [Export] public int WalkerAmount = 6;
     [Export] public int PathLength = 100;
@@ -12,112 +12,132 @@ public partial class WalkerHead : Node2D
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
-    public Godot.Collections.Array<Vector2I> floorSet = [];
+    private HashSet<Vector2I> floorSet = new();
+
     private Player player;
     private Main main;
+
+    private static readonly Vector2I[] Directions =
+    {
+        Vector2I.Left,
+        Vector2I.Right,
+        Vector2I.Up,
+        Vector2I.Down
+    };
 
     public override void _Ready()
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
-        GenerateMap();
 
+        GenerateMap();
         Eventbus.EnemiesKilled += GenerateMap;
     }
 
     public void GenerateMap()
     {
         floorSet.Clear();
+
         GroundMap.Clear();
         WallMap.Clear();
+        UnderGround.Clear();
 
-        BuildMap();
+        BuildPaths();
+        BuildFloors();
+        BuildWalls();
+        SpawnPlayerAndEnemies();
     }
 
-    public void BuildMap()
+    // ------------------------
+    // PATH GENERATION
+    // ------------------------
+    private void BuildPaths()
     {
-
         for (int i = 0; i < WalkerAmount; i++)
-        {
-            Walker();
-        }
+            RunWalker();
+    }
 
-        GroundMap.SetCellsTerrainConnect(floorSet, 0, 0);
-            
-        Godot.Collections.Array<Vector2I> Walls = [];
+    private void RunWalker()
+    {
+        Vector2I position = (Vector2I)GlobalPosition;
+        floorSet.Add(position);
+
+        for (int i = 0; i < PathLength; i++)
+        {
+            position += Directions[GD.RandRange(0, 3)];
+            floorSet.Add(position);
+        }
+    }
+
+    // ------------------------
+    // FLOOR TILEMAP
+    // ------------------------
+    private void BuildFloors()
+    {
+        var floorArray = new Godot.Collections.Array<Vector2I>(floorSet);
+        GroundMap.SetCellsTerrainConnect(floorArray, 0, 0);
+    }
+
+    // ------------------------
+    // WALL TILEMAP
+    // ------------------------
+    private void BuildWalls()
+    {
+        HashSet<Vector2I> wallSet = new();
 
         for (int x = -(PathLength + 50); x < PathLength; x++)
         {
             for (int y = -(PathLength + 50); y < PathLength; y++)
             {
-                var location = new Vector2I(x, y);
-                if (!floorSet.Contains(location))
-                {
-                    WallMap.SetCell(location, 5, new Vector2I(12, 6));
-                    UnderGround.SetCell(location, 5, new Vector2I(8,5));
-                }
-                 
+                Vector2I spot = new Vector2I(x, y);
+
+                if (!floorSet.Contains(spot)) wallSet.Add(spot);
             }
         }
 
-        //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
+        var walls = new Godot.Collections.Array<Vector2I>(wallSet);
 
-        var spot = floorSet[floorSet.Count - 1];
-        var spawn = GroundMap.MapToLocal(spot);
+        // this will be used when i have made a tileset and auto tiling for walls
+        //WallMap.SetCellsTerrainConnect(walls, 0, 1);
 
-        Explosion(2, spawn);
-        player.GlobalPosition = spawn;
+        // setting up the ground below the walls here
+        foreach (var pos in walls)
+        {
+            WallMap.SetCell(pos, 5, new Vector2I(12, 6));
+            UnderGround.SetCell(pos, 5, new Vector2I(8, 5));
+        }
+            
+    }
+
+    // ------------------------
+    // PLAYER & ENEMIES
+    // ------------------------
+    private void SpawnPlayerAndEnemies()
+    {
+        Vector2I lastTile = default;
+        foreach (var tile in floorSet)
+            lastTile = tile;
+
+        Vector2 spawnPos = GroundMap.MapToLocal(lastTile);
+
+        player.GlobalPosition = spawnPos;
 
         main.walls = WallMap;
         main.ground = GroundMap;
 
-        if (Eventbus.gameOn) Eventbus.TriggerSpawnEnemies(GroundMap);
+        if (Eventbus.gameOn)
+            Eventbus.TriggerSpawnEnemies(GroundMap);
     }
 
-    public override void _Input(InputEvent input)
+    // ------------------------
+    // INPUT (DEBUG)
+    // ------------------------
+    public override void _Input(InputEvent e)
     {
         Eventbus.gameOn = true;
 
-        if (input.IsActionPressed("space"))
-        {
+        if (e.IsActionPressed("space"))
             GenerateMap();
-        }
-    }
-
-    public void Walker()
-    {
-        List<int> PathSteps = new();
-        for (int i = 0; i < PathLength; i++)
-        {
-            var stepsi = GD.RandRange(0, Dirs.GetNames(typeof(Dirs)).Length - 1);
-            PathSteps.Add(stepsi);
-        }
-
-        Vector2I location = (Vector2I)GlobalPosition;
-
-        foreach (int dir in PathSteps)
-        {
-            var ModifierDirection = Vector2I.Zero;
-
-            switch (dir)
-            {
-                case 0:
-                    ModifierDirection = Vector2I.Left;
-                    break;
-                case 1:
-                    ModifierDirection = Vector2I.Right;
-                    break;
-                case 2:
-                    ModifierDirection = Vector2I.Up;
-                    break;
-                case 3:
-                    ModifierDirection = Vector2I.Down;
-                    break;
-            }
-            location += ModifierDirection;
-
-            if (!floorSet.Contains(location)) floorSet.Add(location);
-        }
     }
 
     // Explosion doesnt take into account that the map needs to be updated
