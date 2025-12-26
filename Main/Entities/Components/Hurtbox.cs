@@ -35,8 +35,6 @@ public partial class Hurtbox : Node2D, ICollidable
 
     public void TakeDamage(DamageData damageData, Vector2 knockbackDir)
     {
-        if (Health <= 0) return;
-
         Health -= damageData.Damage;
         EmitSignal("Hit", knockbackDir, damageData.Knockback);
 

@@ -1,17 +1,18 @@
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class WalkerHead : Node2D
 {
-    [Export] public int MapLength = 100;
+    public enum Dirs{LEFT,RIGHT,UP,DOWN}
+
+    [Export] public int WalkerAmount = 6;
     [Export] public int PathLength = 100;
 
     [Export] public TileMapLayer UnderGround;
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
-    public Godot.Collections.Array<Godot.Vector2I> floorSet = [];
+    public Godot.Collections.Array<Vector2I> floorSet = [];
     private Player player;
     private Main main;
 
@@ -30,40 +31,30 @@ public partial class WalkerHead : Node2D
         GroundMap.Clear();
         WallMap.Clear();
 
-        foreach (WalkerUnit walker in GetChildren())
-        {
-            walker.CalcPaht();
-        }
-
         BuildMap();
     }
 
     public void BuildMap()
     {
 
-        foreach (WalkerUnit walker in GetChildren())
+        for (int i = 0; i < WalkerAmount; i++)
         {
-            foreach (var pos in walker.Ground)
-            {
-                if (!floorSet.Contains(pos)) floorSet.Add(pos);
-            }
+            Walker();
         }
 
         GroundMap.SetCellsTerrainConnect(floorSet, 0, 0);
             
         Godot.Collections.Array<Vector2I> Walls = [];
 
-        for (int x = -MapLength; x < MapLength; x++)
+        for (int x = -(PathLength + 50); x < PathLength; x++)
         {
-            for (int y = -MapLength; y < MapLength; y++)
+            for (int y = -(PathLength + 50); y < PathLength; y++)
             {
                 var location = new Vector2I(x, y);
                 if (!floorSet.Contains(location))
                 {
                     WallMap.SetCell(location, 5, new Vector2I(12, 6));
                     UnderGround.SetCell(location, 5, new Vector2I(8,5));
-
-                    //Walls.Add(location);
                 }
                  
             }
@@ -71,7 +62,7 @@ public partial class WalkerHead : Node2D
 
         //WallMap.SetCellsTerrainConnect(Walls, 0, 1);
 
-        var spot = floorSet[floorSet.Count - 5];
+        var spot = floorSet[floorSet.Count - 1];
         var spawn = GroundMap.MapToLocal(spot);
 
         Explosion(2, spawn);
@@ -80,14 +71,52 @@ public partial class WalkerHead : Node2D
         main.walls = WallMap;
         main.ground = GroundMap;
 
-        Eventbus.TriggerSpawnEnemies(GroundMap);
+        if (Eventbus.gameOn) Eventbus.TriggerSpawnEnemies(GroundMap);
     }
 
     public override void _Input(InputEvent input)
     {
+        Eventbus.gameOn = true;
+
         if (input.IsActionPressed("space"))
         {
             GenerateMap();
+        }
+    }
+
+    public void Walker()
+    {
+        List<int> PathSteps = new();
+        for (int i = 0; i < PathLength; i++)
+        {
+            var stepsi = GD.RandRange(0, Dirs.GetNames(typeof(Dirs)).Length - 1);
+            PathSteps.Add(stepsi);
+        }
+
+        Vector2I location = (Vector2I)GlobalPosition;
+
+        foreach (int dir in PathSteps)
+        {
+            var ModifierDirection = Vector2I.Zero;
+
+            switch (dir)
+            {
+                case 0:
+                    ModifierDirection = Vector2I.Left;
+                    break;
+                case 1:
+                    ModifierDirection = Vector2I.Right;
+                    break;
+                case 2:
+                    ModifierDirection = Vector2I.Up;
+                    break;
+                case 3:
+                    ModifierDirection = Vector2I.Down;
+                    break;
+            }
+            location += ModifierDirection;
+
+            if (!floorSet.Contains(location)) floorSet.Add(location);
         }
     }
 

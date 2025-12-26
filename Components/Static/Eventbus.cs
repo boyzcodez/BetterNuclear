@@ -3,13 +3,16 @@ using System;
 
 public static class Eventbus
 {
-    // enemy stuff
+    // Enemy stuff
     public static event Action<TileMapLayer> SpawnEnemies;
     public static event Action EnemiesKilled;
 
-    // effects and stuff
+    // Effects and stuff
     public static event Action<float, float> ScreenShake;
     public static event Action<string, Vector2> SpawnItem;
+
+    // Game stuff
+    public static event Action Reset;
 
 
     // Stats tracking
@@ -29,4 +32,8 @@ public static class Eventbus
         ScreenShake?.Invoke(intensity, duration);
     public static void TriggerSpawnItem(string item, Vector2 position) =>
         SpawnItem?.Invoke(item, position);
+    
+    // Game stuff
+    public static void TriggerReset() =>
+        Reset?.Invoke();
 }

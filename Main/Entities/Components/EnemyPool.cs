@@ -124,7 +124,6 @@ public partial class EnemyPool : Node2D
     public void Return()
     {
         enemyCount -= 1;
-        GD.Print(enemyCount);
 
         if (enemyCount <= 0)
         {

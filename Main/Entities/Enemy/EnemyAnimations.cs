@@ -61,10 +61,6 @@ public partial class EnemyAnimations : AnimatedSprite2D
         PlayAnimation(currentDirection + currentAnim, 1);
     }
 
-    public void PlayHit()
-    {
-        PlayAnimation("Hit", 2);
-    }
     public void _on_hurtbox_hit(Vector2 direction, float force)
     {
         PlayAnimation(currentDirection + "Hit", 2);
