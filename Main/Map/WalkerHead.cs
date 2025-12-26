@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 public partial class WalkerHead : Node2D
 {
+    const int VIEW_WIDTH = 40;
+    const int VIEW_HEIGHT = 25;
+    const int MAP_PADDING = 10;
+
+    int width = VIEW_WIDTH + MAP_PADDING * 2;
+    int height = VIEW_HEIGHT + MAP_PADDING * 2;
+
     public enum Dirs { Left, Right, Up, Down }
 
     [Export] public int WalkerAmount = 6;
@@ -12,6 +19,7 @@ public partial class WalkerHead : Node2D
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
+    private Rect2I mapBounds;
     private HashSet<Vector2I> floorSet = new();
 
     private Player player;
@@ -48,70 +56,70 @@ public partial class WalkerHead : Node2D
         SpawnPlayerAndEnemies();
     }
 
-    // ------------------------
-    // PATH GENERATION
-    // ------------------------
+
     private void BuildPaths()
     {
+        mapBounds = new Rect2I(
+            -width / 2,
+            -height / 2,
+            width,
+            height
+        );
+
         for (int i = 0; i < WalkerAmount; i++)
             RunWalker();
     }
 
     private void RunWalker()
     {
-        Vector2I position = (Vector2I)GlobalPosition;
-        floorSet.Add(position);
+        Vector2I pos = Vector2I.Zero;
+        floorSet.Add(pos);
 
         for (int i = 0; i < PathLength; i++)
         {
-            position += Directions[GD.RandRange(0, 3)];
-            floorSet.Add(position);
+            pos += Directions[GD.RandRange(0, 3)];
+
+            if (!mapBounds.HasPoint(pos))
+                continue;
+
+            floorSet.Add(pos);
         }
     }
 
-    // ------------------------
-    // FLOOR TILEMAP
-    // ------------------------
+
     private void BuildFloors()
     {
         var floorArray = new Godot.Collections.Array<Vector2I>(floorSet);
         GroundMap.SetCellsTerrainConnect(floorArray, 0, 0);
     }
 
-    // ------------------------
-    // WALL TILEMAP
-    // ------------------------
+
     private void BuildWalls()
     {
-        HashSet<Vector2I> wallSet = new();
+        Godot.Collections.Array<Vector2I> walls = new();
 
-        for (int x = -(PathLength + 50); x < PathLength; x++)
+        for (int x = mapBounds.Position.X; x < mapBounds.End.X; x++)
         {
-            for (int y = -(PathLength + 50); y < PathLength; y++)
+            for (int y = mapBounds.Position.Y; y < mapBounds.End.Y; y++)
             {
-                Vector2I spot = new Vector2I(x, y);
-
-                if (!floorSet.Contains(spot)) wallSet.Add(spot);
+                Vector2I pos = new(x, y);
+                if (!floorSet.Contains(pos))
+                    walls.Add(pos);
             }
         }
 
-        var walls = new Godot.Collections.Array<Vector2I>(wallSet);
-
-        // this will be used when i have made a tileset and auto tiling for walls
+        // use this when wall terrain set is ready
         //WallMap.SetCellsTerrainConnect(walls, 0, 1);
 
-        // setting up the ground below the walls here
         foreach (var pos in walls)
         {
-            WallMap.SetCell(pos, 5, new Vector2I(12, 6));
+            WallMap.SetCell(pos, 5, new Vector2I(12, 6));  // remove later
             UnderGround.SetCell(pos, 5, new Vector2I(8, 5));
         }
             
     }
 
-    // ------------------------
-    // PLAYER & ENEMIES
-    // ------------------------
+
     private void SpawnPlayerAndEnemies()
     {
         Vector2I lastTile = default;
