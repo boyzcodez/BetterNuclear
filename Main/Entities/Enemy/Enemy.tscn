@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=68 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b76q3u8xnistc" path="res://Main/Entities/Enemy/GunRotator.cs" id="7_352va"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="8_26qsg"]
 [ext_resource type="Resource" uid="uid://bk0kb7lw036hw" path="res://Main/Guns/Enemy/EnemyRifle.tres" id="9_r7fjr"]
+[ext_resource type="PackedScene" uid="uid://cy0fl3is3qri" path="res://Main/Entities/Components/Shadow.tscn" id="10_wbxch"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oiihr"]
 atlas = ExtResource("3_4prcw")
@@ -468,6 +469,7 @@ animations = [{
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("gun")]
 script = ExtResource("1_4prcw")
 gun = NodePath("GunRotator/Guns")
+Speed = 45.0
 
 [node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
 position = Vector2(0, -9)
@@ -502,5 +504,7 @@ look = NodePath("../EnemyLook")
 [node name="Guns" parent="GunRotator" instance=ExtResource("8_26qsg")]
 position = Vector2(6, 0)
 guns = Array[Object]([ExtResource("9_r7fjr")])
+
+[node name="Shadow" parent="." instance=ExtResource("10_wbxch")]
 
 [connection signal="Hit" from="Hurtbox" to="EnemyAnimations" method="_on_hurtbox_hit"]

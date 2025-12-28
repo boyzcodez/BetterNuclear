@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=71 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://dti7bbgbg8ss" path="res://Main/Guns/Player/Shotgun.tres" id="10_ovqya"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
+[ext_resource type="PackedScene" uid="uid://cy0fl3is3qri" path="res://Main/Entities/Components/Shadow.tscn" id="12_m26o7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx6cj"]
 atlas = ExtResource("1_iov3m")
@@ -513,6 +514,8 @@ monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_ovqya")
+
+[node name="Shadow" parent="." instance=ExtResource("12_m26o7")]
 
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody" method="_on_hurtbox_hit"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

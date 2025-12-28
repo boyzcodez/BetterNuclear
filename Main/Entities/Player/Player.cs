@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Player : Node2D
+public partial class Player : Entity
 {
     public static Player Instance {get; private set;}
     public Main main;
@@ -10,6 +10,8 @@ public partial class Player : Node2D
     private const float SPEED = 120f;
     private const float DODGE_SPEED = 200f;
     private const float DODGE_DURATION = 0.4f;
+
+    
 
     public bool isDodging = false;
     private Vector2 dodgeDirection;
@@ -21,16 +23,15 @@ public partial class Player : Node2D
     private CpuParticles2D dashParticles;
     private Timer dashTimer;
 
-    private bool disabled = false;
-
     public override void _Ready()
     {
         dashTimer = GetNode<Timer>("DashCooldown");
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
+        active = true;
     }
     public override void _PhysicsProcess(double delta)
     {
-        if (disabled) return;
+        if (!active) return;
 
         if (dodgeTime > 0f)
         {

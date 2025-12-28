@@ -16,7 +16,7 @@ public partial class EnemyAnimations : AnimatedSprite2D
     private float lastFacingAngle = 0f;
 
     public int animationPriority = 0;
-    private string currentDirection;
+    private string currentDirection = "Front";
     private string currentAnim = "Idle";
 
     private Enemy owner;

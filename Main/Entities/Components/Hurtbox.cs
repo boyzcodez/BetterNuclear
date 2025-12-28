@@ -9,7 +9,9 @@ public partial class Hurtbox : Node2D, ICollidable
     [Export] public int SetCollisionLayer = 2;
     [Export] public float Radius = 15f;
 
-    public bool active = true;
+    public Entity parent;
+
+    public bool active => parent.active;
     public int Health = 5;
 
     public Vector2 _Position => GlobalPosition;
@@ -23,13 +25,11 @@ public partial class Hurtbox : Node2D, ICollidable
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         main.hurtboxes.Add(this);
 
-        if (GetParent() is Enemy)
+        if (GetParent() is Entity _parent)
         {
-            var parent = GetParent() as Enemy;
-            parent.hurtbox = this;
-            active = false;
-        }
-        
+            _parent.hurtbox = this;
+            parent = _parent;
+        } 
     }
 
 

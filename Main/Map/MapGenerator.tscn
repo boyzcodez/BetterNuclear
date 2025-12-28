@@ -17,11 +17,11 @@
 y_sort_enabled = true
 
 [node name="UnderGround" type="TileMapLayer" parent="."]
-z_index = -2
+z_index = -5
 tile_set = ExtResource("1_toh0s")
 
 [node name="Ground" type="TileMapLayer" parent="." groups=["Ground"]]
-z_index = -1
+z_index = -5
 tile_set = ExtResource("1_toh0s")
 
 [node name="Walls" type="TileMapLayer" parent="." groups=["Walls"]]

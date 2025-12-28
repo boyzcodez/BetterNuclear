@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Enemy : Node2D
+public partial class Enemy : Entity
 {
     [Signal] public delegate void ActivationEventHandler();
     [Signal] public delegate void DeactivationEventHandler();
@@ -18,18 +18,15 @@ public partial class Enemy : Node2D
     [Export] public Guns gun;
     [Export] public Node2D ability;
 
-    public bool active = false;
+    
     public string name;
     public EnemyPool pool {get; set;}
     public Player player;
-    
-
-    public Hurtbox hurtbox;
 
     // Stats data
-    public float Speed = 30f;
-    public float DashSpeed = 200f;
-    public float Radius = 15f;
+    [Export] public float Speed = 30f;
+    [Export] public float DashSpeed = 200f;
+    [Export] public float Radius = 15f;
 
     public bool InSight;
     public Vector2 nextPos;
@@ -52,6 +49,7 @@ public partial class Enemy : Node2D
         hurtbox.Hit += Knockback;
         hurtbox.Death += OnDeath;
 
+        active = false;
         Visible = false;
         SetPhysicsProcess(false);
 
@@ -191,7 +189,6 @@ public partial class Enemy : Node2D
     public void Activate()
     {
         active = true;
-        hurtbox.active = true;
         Visible = true;
 
         SetPhysicsProcess(true);
@@ -199,7 +196,6 @@ public partial class Enemy : Node2D
     public void Deactivate()
     {
         active = false;
-        hurtbox.active = false;
 
         SetPhysicsProcess(false);
     }
