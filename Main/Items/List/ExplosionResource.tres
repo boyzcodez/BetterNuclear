@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://d1uwb30p506de"]
+
+[ext_resource type="PackedScene" uid="uid://f36jm68tgosj" path="res://Main/Items/Explosion.tscn" id="1_g5x3v"]
+[ext_resource type="Script" uid="uid://buo4n5miby8sq" path="res://Components/ResourceTypes/ItemResource.cs" id="1_ipm8d"]
+
+[resource]
+script = ExtResource("1_ipm8d")
+itemScene = ExtResource("1_g5x3v")
+Name = "Explosion"
+AmountOfItem = 100
+metadata/_custom_type_script = "uid://buo4n5miby8sq"

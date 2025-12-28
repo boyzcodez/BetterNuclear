@@ -15,11 +15,14 @@ public partial class WalkerHead : Node2D
     [Export] public int WalkerAmount = 6;
     [Export] public int PathLength = 100;
 
+    [Export] public int WallPadding = 3;
+
     [Export] public TileMapLayer UnderGround;
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
     private Rect2I mapBounds;
+    private Rect2I destructionBounds;
     private HashSet<Vector2I> floorSet = new();
 
     private Player player;
@@ -40,6 +43,7 @@ public partial class WalkerHead : Node2D
 
         GenerateMap();
         Eventbus.EnemiesKilled += GenerateMap;
+        Eventbus.Explosion += Explosion;
     }
 
     public void GenerateMap()
@@ -64,6 +68,11 @@ public partial class WalkerHead : Node2D
             -height / 2,
             width,
             height
+        );
+
+        destructionBounds = new Rect2I(
+        mapBounds.Position + Vector2I.One * WallPadding,
+        mapBounds.Size - Vector2I.One * WallPadding * 2
         );
 
         for (int i = 0; i < WalkerAmount; i++)
@@ -160,7 +169,12 @@ public partial class WalkerHead : Node2D
             for (int y = -size; y <= size; y++)
             {
                 Vector2I wallPos = centerPos + new Vector2I(x, y);
-                if (Mathf.Sqrt(x * x + y * y) <= size && WallMap.GetCellSourceId(wallPos) != -1)
+
+                if (!destructionBounds.HasPoint(wallPos))
+                    continue;
+
+                if (Mathf.Sqrt(x * x + y * y) <= size &&
+                    WallMap.GetCellSourceId(wallPos) != -1)
                 {
                     DestroyWall(wallPos);
                 }

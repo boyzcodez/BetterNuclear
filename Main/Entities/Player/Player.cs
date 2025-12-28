@@ -1,11 +1,12 @@
 using Godot;
 using System;
 
-public partial class Player : CharacterBody2D
+public partial class Player : Node2D
 {
     public static Player Instance {get; private set;}
     public Main main;
 
+    private const float Radius = 10f;
     private const float SPEED = 120f;
     private const float DODGE_SPEED = 200f;
     private const float DODGE_DURATION = 0.4f;
@@ -14,6 +15,7 @@ public partial class Player : CharacterBody2D
     private Vector2 dodgeDirection;
     public float dodgeTime = 0f;
     private float dashCooldown = 0.5f;
+    private Vector2 Velocity;
 
     private Node2D warpDashNode;
     private CpuParticles2D dashParticles;
@@ -29,20 +31,73 @@ public partial class Player : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         if (disabled) return;
+
+        if (dodgeTime > 0f)
+        {
+            DodgeLogic((float)delta);
+
+        }
         else
         {
-            if (dodgeTime > 0f)
-            {
-                DodgeLogic((float)delta);
-
-            }
-            else
-            {
-                Movement((float)delta);
-            }
+            Movement((float)delta);
         }
 
-        MoveAndSlide();
+        ApplyMovement((float)delta);
+    }
+
+    private bool CanMoveTo(Vector2 targetPos)
+    {
+        float r = Radius;
+
+        Vector2[] offsets =
+        {
+            new Vector2( r, 0),
+            new Vector2(-r, 0),
+            new Vector2(0,  r),
+            new Vector2(0, -r)
+        };
+
+        foreach (var off in offsets)
+        {
+            if (Main.Instance.IsWallAt(targetPos + off))
+                return false;
+        }
+
+        return true;
+    }
+    private void ApplyMovement(float delta)
+    {
+        Vector2 pos = GlobalPosition;
+        Vector2 move = Velocity * delta;
+
+        if (CanMoveTo(pos + move))
+        {
+            GlobalPosition = pos + move;
+            return;
+        }
+
+        bool xFirst = Mathf.Abs(move.X) > Mathf.Abs(move.Y);
+
+        TryAxis(ref pos, move, xFirst);
+        TryAxis(ref pos, move, !xFirst);
+
+        GlobalPosition = pos;
+    }
+
+    private void TryAxis(ref Vector2 pos, Vector2 move, bool xAxis)
+    {
+        if (xAxis && move.X != 0)
+        {
+            Vector2 xPos = pos + new Vector2(move.X, 0);
+            if (CanMoveTo(xPos))
+                pos.X = xPos.X;
+        }
+        else if (!xAxis && move.Y != 0)
+        {
+            Vector2 yPos = pos + new Vector2(0, move.Y);
+            if (CanMoveTo(yPos))
+                pos.Y = yPos.Y;
+        }
     }
 
     private void Movement(float delta)

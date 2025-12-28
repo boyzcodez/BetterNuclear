@@ -12,9 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8ydey"]
-radius = 6.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx6cj"]
 atlas = ExtResource("1_iov3m")
 region = Rect2(0, 704, 64, 64)
@@ -470,11 +467,11 @@ animations = [{
 "speed": 9.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["Player"]]
-script = ExtResource("1_1skx3")
+[sub_resource type="CircleShape2D" id="CircleShape2D_ovqya"]
+radius = 7.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_8ydey")
+[node name="Player" type="Node2D" groups=["Player"]]
+script = ExtResource("1_1skx3")
 
 [node name="Hurtbox" parent="." instance=ExtResource("10_rx3r3")]
 position = Vector2(0, -9)
@@ -510,6 +507,12 @@ one_shot = true
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
 guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya")])
 
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ovqya")
+
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody" method="_on_hurtbox_hit"]
-[connection signal="animation_finished" from="AnimatedBody" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

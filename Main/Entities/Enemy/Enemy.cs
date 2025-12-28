@@ -76,7 +76,11 @@ public partial class Enemy : Node2D
 
     public bool CanMoveTo(Vector2 targetPos)
     {
-        float r = Radius;
+        //float r = Radius; 
+
+        // this i think fixes corners
+        float padding = 0.5f;
+        float r = Radius - padding;
 
         Vector2[] offsets =
         {

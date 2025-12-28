@@ -27,7 +27,7 @@ public partial class EnemyLook : Marker2D
             LookAt(player.GlobalPosition);
         }
 
-        if (Raycast.IsColliding() && Raycast.GetCollider() == player)
+        if (Raycast.IsColliding())
         {
             owner.InSight = true;
         }
