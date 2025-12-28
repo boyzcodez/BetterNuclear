@@ -20,6 +20,7 @@ script = ExtResource("1_yh5la")
 script = ExtResource("4_eunhr")
 
 [node name="GUI" type="CanvasLayer" parent="Camera"]
+layer = 10
 
 [node name="UI" type="Control" parent="Camera/GUI"]
 layout_mode = 3
