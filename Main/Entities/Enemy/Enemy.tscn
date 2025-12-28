@@ -1,11 +1,13 @@
-[gd_scene load_steps=68 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=70 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="3_4prcw"]
+[ext_resource type="Material" uid="uid://dicctmxaa1dwu" path="res://Components/Shaders/HitFlash.tres" id="3_spb1j"]
 [ext_resource type="Script" uid="uid://82621pfnop8x" path="res://Main/Entities/Enemy/EnemyAnimations.cs" id="4_bqycu"]
 [ext_resource type="Script" uid="uid://7dvy2oo2lfwp" path="res://Main/Entities/Enemy/EnemyLook.cs" id="4_pnidg"]
 [ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="5_we2vw"]
+[ext_resource type="PackedScene" uid="uid://brhsqj15bd123" path="res://Main/Entities/Components/HitFlash.tscn" id="6_rrfo4"]
 [ext_resource type="Script" uid="uid://b76q3u8xnistc" path="res://Main/Entities/Enemy/GunRotator.cs" id="7_352va"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="8_26qsg"]
 [ext_resource type="Resource" uid="uid://bk0kb7lw036hw" path="res://Main/Guns/Enemy/EnemyRifle.tres" id="9_r7fjr"]
@@ -476,7 +478,7 @@ position = Vector2(0, -9)
 Radius = 13.0
 
 [node name="EnemyAnimations" type="AnimatedSprite2D" parent="." node_paths=PackedStringArray("look")]
-modulate = Color(1, 0.38102978, 0.37415373, 1)
+material = ExtResource("3_spb1j")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_760vj")
 animation = &"FrontRightHit"
@@ -486,6 +488,8 @@ look = NodePath("../EnemyLook")
 [node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("5_we2vw")]
 lookAt = NodePath("../../GunRotator")
 animatedSprite = NodePath("..")
+
+[node name="HitFlash" parent="EnemyAnimations" instance=ExtResource("6_rrfo4")]
 
 [node name="EnemyLook" type="Marker2D" parent="."]
 position = Vector2(0, -8)
@@ -508,3 +512,4 @@ guns = Array[Object]([ExtResource("9_r7fjr")])
 [node name="Shadow" parent="." instance=ExtResource("10_wbxch")]
 
 [connection signal="Hit" from="Hurtbox" to="EnemyAnimations" method="_on_hurtbox_hit"]
+[connection signal="Hit" from="Hurtbox" to="EnemyAnimations/HitFlash" method="_on_hurtbox_hit"]
