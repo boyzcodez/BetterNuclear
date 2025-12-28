@@ -497,6 +497,7 @@ one_shot = true
 [node name="Look" type="Marker2D" parent="."]
 position = Vector2(0, -8)
 script = ExtResource("4_d1ek6")
+SnapDegrees = 10.0
 
 [node name="GunHandler" type="Node" parent="Look" node_paths=PackedStringArray("guns")]
 script = ExtResource("7_a3eui")
