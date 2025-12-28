@@ -16,6 +16,7 @@ public partial class Explosion : AnimatedSprite2D, ICollectable
     {
         Play("default");
         Eventbus.TriggerExplosion(2, GlobalPosition);
+        Eventbus.TriggerScreenShake(1.5f, 0.3f);
     }
     public void OnDeactivation()
     {
