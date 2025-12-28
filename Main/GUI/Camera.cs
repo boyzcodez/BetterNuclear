@@ -3,6 +3,12 @@ using System;
 
 public partial class Camera : Camera2D
 {
+    [Export] private float MouseLookMaxDistance = 450f;
+    [Export] private float MouseLookStrength = 0.2f; // 0–1 feel
+    [Export] private float MouseLookSmoothing = 10f;
+
+    private Vector2 _mouseLookOffset = Vector2.Zero;
+
     private Player player;
     private RandomNumberGenerator _rng;
 
@@ -12,6 +18,7 @@ public partial class Camera : Camera2D
     private float _shakeIntensity = 0f;
     private Vector2 _shakeOffset = Vector2.Zero;
     private const float MAX_SHAKE_INTENSITY = 24f;
+
 
     public override void _Ready()
     {
@@ -47,7 +54,25 @@ public partial class Camera : Camera2D
             }
         }
 
-        GlobalPosition = player.GlobalPosition + _shakeOffset;
+        // Mouse position in world space
+        Vector2 mouseWorldPos = GetGlobalMousePosition();
+
+        // Direction from player to mouse
+        Vector2 toMouse = mouseWorldPos - player.GlobalPosition;
+
+        // Clamp distance
+        float distance = Mathf.Min(toMouse.Length(), MouseLookMaxDistance);
+        Vector2 targetOffset = toMouse.Normalized() * distance * MouseLookStrength;
+
+        if (toMouse.Length() < 16f) targetOffset = Vector2.Zero;
+
+        // Smooth interpolation
+        _mouseLookOffset = _mouseLookOffset.Lerp(
+            targetOffset,
+            1f - Mathf.Exp(-MouseLookSmoothing * d)
+        );
+
+        GlobalPosition = player.GlobalPosition + _mouseLookOffset + _shakeOffset;
     }
 
     // Start a screen shake. If already shaking, call is ignored.
