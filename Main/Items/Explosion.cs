@@ -1,16 +1,16 @@
 using Godot;
-using System;
 
 public partial class Explosion : AnimatedSprite2D, ICollectable
 {
     public string _Name;
     public Items _Pool;
+    
     public void Init(string name, Items pool)
     {
         _Name = name;
         _Pool = pool;
 
-        AnimationFinished += OnDeactivation;
+        AnimationFinished += OnDeactivation;  
     }
     public void OnActivation()
     {

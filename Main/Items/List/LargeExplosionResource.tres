@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://c81a5py8wpbe8"]
+
+[ext_resource type="Script" uid="uid://buo4n5miby8sq" path="res://Components/ResourceTypes/ItemResource.cs" id="1_hdr4v"]
+[ext_resource type="PackedScene" uid="uid://lwsx067byndn" path="res://Main/Items/LargeExplosion.tscn" id="1_hmg72"]
+
+[resource]
+script = ExtResource("1_hdr4v")
+itemScene = ExtResource("1_hmg72")
+Name = "LargeExplosion"
+AmountOfItem = 100
+metadata/_custom_type_script = "uid://buo4n5miby8sq"

@@ -38,6 +38,6 @@ public class BounceBehavior : IBulletBehavior
         b.Rotation = b.Velocity.Angle();
         //b.particles.Emitting = true;
 
-        Eventbus.TriggerSpawnItem("Explosion", b.GlobalPosition);
+        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
     }
 }
