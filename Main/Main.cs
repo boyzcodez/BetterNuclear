@@ -16,6 +16,8 @@ public partial class Main : Node2D
     {
         Instance = this;
         grid = new SpatialGrid(96f);
+
+        Eventbus.Explosion += DamageHurtboxesInArea;
     }
 
     // this is for bounce logic
@@ -44,6 +46,28 @@ public partial class Main : Node2D
 
 
     // this is for hit detection
+
+    public void DamageHurtboxesInArea(float radius, Vector2 position, DamageData damageData)
+    {
+        float radiusSq = radius * radius;
+
+        foreach (var hurtbox in hurtboxes)
+        {
+            if (!hurtbox.active) continue;
+            
+            if (position.DistanceSquaredTo(hurtbox.GlobalPosition) <= radiusSq)
+            {
+                Vector2 direction = (hurtbox.GlobalPosition - position).Normalized();
+
+                if (hurtbox.Health > 0)
+                {
+                    hurtbox.TakeDamage(damageData, direction);
+                }
+            }
+        }
+    }
+
+
     public override void _PhysicsProcess(double delta)
     {
         grid.Clear();

@@ -2,6 +2,7 @@ using Godot;
 
 public partial class Explosion : AnimatedSprite2D, ICollectable
 {
+    public DamageData damageData = new DamageData(5, 100f, "Explosion", "Explosion");
     public string _Name;
     public Items _Pool;
     
@@ -15,7 +16,7 @@ public partial class Explosion : AnimatedSprite2D, ICollectable
     public void OnActivation()
     {
         Play("default");
-        Eventbus.TriggerExplosion(2, GlobalPosition);
+        Eventbus.TriggerExplosion(25f, GlobalPosition, damageData);
         Eventbus.TriggerScreenShake(1.5f, 0.3f);
     }
     public void OnDeactivation()

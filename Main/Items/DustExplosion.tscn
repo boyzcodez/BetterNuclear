@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://j3njt40cp30h"]
+
+[ext_resource type="Script" uid="uid://cknaxwehe61nj" path="res://Main/Items/DustExplosion.cs" id="1_nrxwi"]
+[ext_resource type="PackedScene" uid="uid://bo4nnh3nwfxrs" path="res://Main/Items/Dust.tscn" id="1_u8e1p"]
+[ext_resource type="Shader" uid="uid://chlitnn26jnif" path="res://Components/Shaders/Guns.gdshader" id="2_nrxwi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1nonp"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
+[node name="DustExplosion" type="Node2D"]
+script = ExtResource("1_nrxwi")
+
+[node name="Dust" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Dust2" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+frame = 3
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Dust3" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+frame = 3
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Dust4" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+frame = 4
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Dust5" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Dust6" parent="." instance=ExtResource("1_u8e1p")]
+material = SubResource("ShaderMaterial_1nonp")
+minDuration = 0.2
+maxDuration = 0.5
+minDistance = 10.0
+maxDistance = 40.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true

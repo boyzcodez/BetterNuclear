@@ -1,11 +1,12 @@
 using Godot;
 using System.Collections.Generic;
 
-public partial class LargeExplosion : AnimatedSprite2D, ICollectable
+public partial class DustExplosion : Node2D, ICollectable
 {
-    public DamageData damageData = new DamageData(0, 200f, "Explosion", "Explosion");
     public string _Name;
     public Items _Pool;
+
+    public Timer timer;
 
     public List<Dust> dustParticles = new();
 
@@ -14,19 +15,18 @@ public partial class LargeExplosion : AnimatedSprite2D, ICollectable
         _Name = name;
         _Pool = pool;
 
-        AnimationFinished += OnDeactivation;
-
-        foreach (Dust dust in GetChildren())
+        foreach (var child in GetChildren())
         {
-            dustParticles.Add(dust);
+            if (child is Dust dust) dustParticles.Add(dust);
         }
+
+        timer = GetNode<Timer>("Timer");
+        timer.Timeout += OnDeactivation;
     }
     public void OnActivation()
     {
-        Play("default");
-        Eventbus.TriggerExplosion(50f, GlobalPosition, damageData);
-        Eventbus.TriggerScreenShake(2.5f, 0.3f);
-
+        timer.Start(0.6f);
+        
         foreach(var dust in dustParticles)
         {
             dust.Play();

@@ -160,8 +160,9 @@ public partial class WalkerHead : Node2D
     // Explosion doesnt take into account that the map needs to be updated
     // once a wall is gone, there is no ground underneath, hence the map flow field doesnt
     // have a direction for said spot
-    public void Explosion(int size, Vector2 position)
+    public void Explosion(float radius, Vector2 position, DamageData sm)
     {
+        int size = Mathf.RoundToInt(radius / 25f);
         Vector2I centerPos = GroundMap.LocalToMap(position);
 
         for (int x = -size; x <= size; x++)
@@ -177,6 +178,9 @@ public partial class WalkerHead : Node2D
                     WallMap.GetCellSourceId(wallPos) != -1)
                 {
                     DestroyWall(wallPos);
+
+                    Vector2 dustPos = WallMap.ToGlobal(WallMap.MapToLocal(wallPos));
+                    Eventbus.TriggerSpawnItem("DustExplosion", dustPos);
                 }
             }
         }

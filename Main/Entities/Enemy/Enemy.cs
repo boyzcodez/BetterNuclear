@@ -35,8 +35,6 @@ public partial class Enemy : Entity
 
     public Vector2 Velocity { get; private set; }
     private Vector2 lastPosition;
-    public float KnockbackTime = 0f;
-    public Vector2 KnockbackVelocity;
 
 
     public override void _Ready()

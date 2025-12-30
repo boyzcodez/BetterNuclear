@@ -36,6 +36,17 @@ offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("5_k3v36")
 
+[node name="Bg" type="CanvasLayer" parent="Camera"]
+layer = -100
+
+[node name="ColorRect" type="ColorRect" parent="Camera/Bg"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.050980393, 0.047058824, 0.13725491, 1)
+
 [node name="BulletPool" type="Node2D" parent="." groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")

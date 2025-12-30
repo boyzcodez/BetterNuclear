@@ -1,8 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://lwsx067byndn"]
+[gd_scene load_steps=18 format=3 uid="uid://lwsx067byndn"]
 
 [ext_resource type="Texture2D" uid="uid://d3gi7qi8kjmhj" path="res://Assets/SFX/LargeExplosion.png" id="1_ebgdd"]
 [ext_resource type="Script" uid="uid://cqmqcb822grdq" path="res://Main/Items/LargeExplosion.cs" id="2_sfs4w"]
+[ext_resource type="Material" uid="uid://dgg07406lrcj4" path="res://Components/Shaders/Guns.tres" id="3_df3nh"]
+[ext_resource type="PackedScene" uid="uid://bo4nnh3nwfxrs" path="res://Main/Items/Dust.tscn" id="3_ndu7k"]
 [ext_resource type="Texture2D" uid="uid://5i0fqqex0i5b" path="res://Assets/SFX/Dust.png" id="3_s3aes"]
+[ext_resource type="Shader" uid="uid://chlitnn26jnif" path="res://Components/Shaders/Guns.gdshader" id="4_8l816"]
 [ext_resource type="Script" uid="uid://djcq05072tq3l" path="res://Main/Items/Dust.cs" id="4_lud5k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sfs4w"]
@@ -69,36 +72,82 @@ animations = [{
 "speed": 14.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ls2w7"]
+resource_local_to_scene = true
+shader = ExtResource("4_8l816")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
 [node name="LargeExplosion" type="AnimatedSprite2D"]
+z_index = 1
 sprite_frames = SubResource("SpriteFrames_fboqv")
 frame = 7
 frame_progress = 1.0
 script = ExtResource("2_sfs4w")
 
-[node name="Dust" type="Sprite2D" parent="."]
-texture = ExtResource("3_s3aes")
-hframes = 5
-frame = 2
-script = ExtResource("4_lud5k")
+[node name="Dust" parent="." instance=ExtResource("3_ndu7k")]
+material = SubResource("ShaderMaterial_ls2w7")
 
 [node name="Dust2" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
 texture = ExtResource("3_s3aes")
 hframes = 5
 script = ExtResource("4_lud5k")
 
 [node name="Dust3" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
 texture = ExtResource("3_s3aes")
 hframes = 5
 frame = 1
 script = ExtResource("4_lud5k")
 
 [node name="Dust4" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
 texture = ExtResource("3_s3aes")
 hframes = 5
+frame = 2
 script = ExtResource("4_lud5k")
 
 [node name="Dust5" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
 texture = ExtResource("3_s3aes")
 hframes = 5
-frame = 1
+frame = 3
+script = ExtResource("4_lud5k")
+
+[node name="Dust6" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
+texture = ExtResource("3_s3aes")
+hframes = 5
+frame = 3
+script = ExtResource("4_lud5k")
+
+[node name="Dust7" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
+texture = ExtResource("3_s3aes")
+hframes = 5
+frame = 3
+script = ExtResource("4_lud5k")
+
+[node name="Dust8" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
+texture = ExtResource("3_s3aes")
+hframes = 5
+frame = 3
+script = ExtResource("4_lud5k")
+
+[node name="Dust9" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
+texture = ExtResource("3_s3aes")
+hframes = 5
+frame = 4
+script = ExtResource("4_lud5k")
+
+[node name="Dust10" type="Sprite2D" parent="."]
+material = ExtResource("3_df3nh")
+texture = ExtResource("3_s3aes")
+hframes = 5
+frame = 2
 script = ExtResource("4_lud5k")

@@ -28,6 +28,8 @@ public partial class Player : Entity
         dashTimer = GetNode<Timer>("DashCooldown");
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         active = true;
+
+        hurtbox.Hit += Knockback;
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -40,7 +42,12 @@ public partial class Player : Entity
         }
         else
         {
-            Movement((float)delta);
+            if (KnockbackTime > 0)
+            {
+                KnockbackTime -= (float)delta;
+                Velocity = KnockbackVelocity;
+            }
+            else Movement((float)delta);
         }
 
         ApplyMovement((float)delta);
@@ -111,6 +118,18 @@ public partial class Player : Entity
             isDodging = true;
             DodgeRoll(direction);
         }
+    }
+
+    public void Knockback(Vector2 direction, float force)
+    {
+        if (force <= 0) return;
+
+        Vector2 knockback = direction * force;
+
+        if (knockback == Vector2.Zero) return;
+
+        KnockbackTime = 0.2f;
+        KnockbackVelocity = knockback;
     }
 
     private void DodgeRoll(Vector2 direction)

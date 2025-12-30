@@ -10,7 +10,7 @@ public static class Eventbus
     // Effects and stuff
     public static event Action<float, float> ScreenShake;
     public static event Action<string, Vector2> SpawnItem;
-    public static event Action<int, Vector2> Explosion;
+    public static event Action<float, Vector2, DamageData> Explosion;
 
     // Game stuff
     public static event Action Reset;
@@ -33,8 +33,8 @@ public static class Eventbus
         ScreenShake?.Invoke(intensity, duration);
     public static void TriggerSpawnItem(string item, Vector2 position) =>
         SpawnItem?.Invoke(item, position);
-    public static void TriggerExplosion(int size, Vector2 position) =>
-        Explosion?.Invoke(size, position);
+    public static void TriggerExplosion(float size, Vector2 position, DamageData damageData) =>
+        Explosion?.Invoke(size, position, damageData);
     
     // Game stuff
     public static void TriggerReset() =>

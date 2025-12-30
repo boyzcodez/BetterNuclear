@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://hu46ft230uve"]
+
+[ext_resource type="Script" uid="uid://buo4n5miby8sq" path="res://Components/ResourceTypes/ItemResource.cs" id="1_egf86"]
+[ext_resource type="PackedScene" uid="uid://j3njt40cp30h" path="res://Main/Items/DustExplosion.tscn" id="1_wp2ka"]
+
+[resource]
+script = ExtResource("1_egf86")
+itemScene = ExtResource("1_wp2ka")
+Name = "DustExplosion"
+AmountOfItem = 100
+metadata/_custom_type_script = "uid://buo4n5miby8sq"
