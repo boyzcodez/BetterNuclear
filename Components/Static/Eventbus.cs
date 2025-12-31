@@ -17,6 +17,7 @@ public static class Eventbus
 
 
     // Stats tracking
+    public static int activeBullets = 0;
     public static int dangerValue = 0;
     public static bool gameOn = false;
 

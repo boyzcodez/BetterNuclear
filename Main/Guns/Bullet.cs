@@ -24,7 +24,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     private Main main;
     private BulletPool pool;
-    public CpuParticles2D particles;
 
     public float Speed = 200f;
     private string OnShoot;
@@ -33,16 +32,14 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public override void _Ready()
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
-        particles = GetNode<CpuParticles2D>("Particles");
         main.bullets.Add(this);
 
         Visible = false;
-        SetPhysicsProcess(false);
 
         AnimationFinished += OnAnimationEnd;
     }
 
-    public override void _PhysicsProcess(double delta)
+    public void Update(double delta)
     {
         Vector2 displacement = PendingDisplacement;
         PendingDisplacement = Vector2.Zero;
@@ -71,8 +68,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
         Active = true;
         Visible = true;
-
-        SetPhysicsProcess(true);
     }
     public void Deactivate()
     {
@@ -82,8 +77,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
         Velocity = Vector2.Zero;
         Active = false;
-
-        SetPhysicsProcess(false);
     }
     public void OnAnimationEnd()
     {

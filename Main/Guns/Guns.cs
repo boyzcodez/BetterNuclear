@@ -99,36 +99,38 @@ public partial class Guns : Node2D
 
     public void Shoot()
     {
-        if (currentGun.CurrentAmmo <= 0) return;
-        else currentGun.UseBullet();
+        if (currentGun == null || currentGun.CurrentAmmo <= 0)
+            return;
 
-        if (currentGun == null) return;
+        currentGun.UseBullet();
 
-        Eventbus.TriggerScreenShake(currentGun.ShakeIntensity, currentGun.ShakeDuration);
-        
+        Eventbus.TriggerScreenShake(
+            currentGun.ShakeIntensity,
+            currentGun.ShakeDuration
+        );
+
         sprite.FireAnimation();
         PlayAnimation();
-        if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Play();
 
+        // if (hasShootSound)
+        //     audioSystem.Play();
 
-        Vector2 baseDirection = Vector2.Right.Rotated(GlobalRotation);
+        Vector2 muzzlePos = muzzleFlash.GlobalPosition;
 
-        float halfSpread = currentGun.SpreadAngle * 0.5f;
+        float baseAngle = GlobalRotation;
+        float halfSpreadRad = Mathf.DegToRad(currentGun.SpreadAngle * 0.5f);
 
         for (int i = 0; i < currentGun.BulletCount; i++)
         {
-            float angleOffsetDeg = (float)GD.RandRange(-halfSpread, halfSpread);
-            float angleOffsetRad = Mathf.DegToRad(angleOffsetDeg);
+            float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
 
             Bullet bullet = pool.GetBullet(id);
-            if (bullet == null) return;
-            bullet.GlobalPosition = muzzleFlash.GlobalPosition;
-            // + new Vector2(2 * NumBet(currentGun.RandomFactor), 2* NumBet(currentGun.RandomFactor));
+            if (bullet == null)
+                break;
 
-            var dir = baseDirection.Rotated(angleOffsetRad);
-
-            bullet.Velocity = dir;
-            bullet.Rotation = dir.Angle();
+            bullet.GlobalPosition = muzzlePos;
+            bullet.Rotation = angle;
+            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
             bullet.Activate();
         }

@@ -139,8 +139,7 @@ public partial class WalkerHead : Node2D
 
         player.GlobalPosition = spawnPos;
 
-        main.walls = WallMap;
-        main.ground = GroundMap;
+        main.UpdateMap(WallMap, GroundMap);
 
         if (Eventbus.gameOn)
             Eventbus.TriggerSpawnEnemies(GroundMap);
@@ -184,6 +183,8 @@ public partial class WalkerHead : Node2D
                 }
             }
         }
+
+        main.UpdateMap(WallMap, GroundMap);
     }
 
     public void DestroyWall(Vector2I pos)

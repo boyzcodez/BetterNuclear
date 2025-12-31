@@ -103,16 +103,20 @@ public partial class BulletPool : Node2D
     {
         if (!_pools.TryGetValue(key, out var pool) || pool.Count == 0)
         {
-            GD.PrintErr("Ran out of Bullets to use");
+            //GD.PrintErr("Ran out of Bullets to use");
             //PreparePool(key, gunData);
             return null;
         }
 
-        var bullet = _pools[key].Dequeue();
+        Eventbus.activeBullets += 1;
+
+        var bullet = pool.Dequeue();
         return bullet;
     }
     public void ReturnBullet(string key, Bullet bullet)
     {
+        Eventbus.activeBullets -= 1;
+
         _pools[key].Enqueue(bullet);
     }
 

@@ -9,6 +9,8 @@ public partial class Main : Node2D
     public TileMapLayer walls;
     public TileMapLayer ground;
 
+    public WallGrid wallGrid {get;private set;} = new WallGrid();
+
     public List<Bullet> bullets = new();
     public List<Hurtbox> hurtboxes = new();
 
@@ -16,10 +18,18 @@ public partial class Main : Node2D
     {
         Instance = this;
         grid = new SpatialGrid(96f);
+        wallGrid.RebuildFrom(walls);
 
         Eventbus.Explosion += DamageHurtboxesInArea;
     }
 
+    public void UpdateMap(TileMapLayer wal, TileMapLayer grou)
+    {
+        walls = wal;
+        ground = grou;
+
+        wallGrid.RebuildFrom(walls);
+    }
     // this is for bounce logic
     public bool IsWallAt(Vector2 worldpos)
     {
@@ -81,6 +91,7 @@ public partial class Main : Node2D
         {
             if (!bullet.Active) continue;
             grid.Insert(bullet);
+            bullet.Update(delta);
         } 
 
         HandleBulletCollision();
