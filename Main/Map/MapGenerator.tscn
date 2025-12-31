@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvj3rj3lgr7cn"]
+[gd_scene load_steps=16 format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
+[ext_resource type="Resource" uid="uid://clxnaw4xy8tdw" path="res://Main/Map/Maps/LongHallways.tres" id="3_d41uc"]
 [ext_resource type="Script" uid="uid://bvt060s0mfqqe" path="res://Main/Entities/Components/EnemyPool.cs" id="5_rvxhn"]
 [ext_resource type="Resource" uid="uid://ixuvv54rvmwx" path="res://Main/Entities/Enemy/List/PistolDude.tres" id="6_8scsi"]
 [ext_resource type="Resource" uid="uid://bn2vn85t4t0wj" path="res://Main/Entities/Enemy/List/ChaseDude.tres" id="7_uvev8"]
@@ -32,8 +33,7 @@ tile_set = ExtResource("1_toh0s")
 
 [node name="WalkerHead" type="Node2D" parent="." node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
 script = ExtResource("1_7qmhp")
-PathLength = 80
-WallPadding = 8
+MapData = ExtResource("3_d41uc")
 UnderGround = NodePath("../UnderGround")
 GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")

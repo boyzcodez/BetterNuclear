@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MapData" load_steps=2 format=3 uid="uid://chmkky0shxoxx"]
+
+[ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="1_leeuu"]
+
+[resource]
+script = ExtResource("1_leeuu")
+ViewHeight = 40
+WalkerAmount = 8
+PathLength = 120
+WalkerSpawnRadius = 1
+TurnChance = 0.55
+RoomChance = 0.05
+RoomSizeMin = Vector2i(2, 2)
+RoomSizeMax = Vector2i(5, 5)
+MaxFloorTiles = 300
+metadata/_custom_type_script = "uid://c0cl4rnoarrqe"

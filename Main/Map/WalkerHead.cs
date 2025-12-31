@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public partial class WalkerHead : Node2D
 {
     const int VIEW_WIDTH = 40;
-    const int VIEW_HEIGHT = 25;
+    const int VIEW_HEIGHT = 30;
     const int MAP_PADDING = 10;
 
     int width = VIEW_WIDTH + MAP_PADDING * 2;
