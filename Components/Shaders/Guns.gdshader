@@ -1,70 +1,108 @@
 shader_type canvas_item;
 
 uniform float pixel_size : hint_range(1.0, 16.0) = 1.0;
-uniform int mix_sampling : hint_range(-1, 2) = 0;
+uniform int mix_sampling : hint_range(-1, 2) = 0; // -1 off, 0 off, 1 cross, 2 cross+diagonals
 uniform bool flip_h = false;
 uniform bool flip_v = false;
 
 varying float theta;
 varying vec2 block_size;
 
-vec2 get_neighbor_uv(int index, vec2 uv) {
-	switch (index) {
-		case 0: return vec2(uv.x, uv.y + block_size.y);
-		case 1: return vec2(uv.x, uv.y - block_size.y);
-		case 2: return vec2(uv.x + block_size.x, uv.y);
-		case 3: return vec2(uv.x - block_size.x, uv.y);
-		case 4: return vec2(uv.x + block_size.x, uv.y + block_size.y);
-		case 5: return vec2(uv.x + block_size.x, uv.y - block_size.y);
-		case 6: return vec2(uv.x - block_size.x, uv.y + block_size.y);
-		case 7: return vec2(uv.x - block_size.x, uv.y - block_size.y);
-		default: return uv;
-	}
-}
+// Neighbor offsets in "pixel blocks" (up, down, right, left, diagonals...)
+const vec2 OFFS[8] = vec2[](
+	vec2( 0.0,  1.0), // 0 up
+	vec2( 0.0, -1.0), // 1 down
+	vec2( 1.0,  0.0), // 2 right
+	vec2(-1.0,  0.0), // 3 left
+	vec2( 1.0,  1.0), // 4 up-right
+	vec2( 1.0, -1.0), // 5 down-right
+	vec2(-1.0,  1.0), // 6 up-left
+	vec2(-1.0, -1.0)  // 7 down-left
+);
 
 void vertex() {
+	// atan(y, x) == atan2(y, x)
 	theta = atan(MODEL_MATRIX[0][1], MODEL_MATRIX[0][0]);
+
+	// Approximate per-axis scale from MODEL_MATRIX (works well for rotate+scale).
+	float sx = length(MODEL_MATRIX[0].xy);
+	float sy = length(MODEL_MATRIX[1].xy);
+
 	block_size = vec2(
-		pixel_size * TEXTURE_PIXEL_SIZE.x / length(MODEL_MATRIX[0].xy),
-		pixel_size * TEXTURE_PIXEL_SIZE.y / length(MODEL_MATRIX[1].xy)
+		pixel_size * TEXTURE_PIXEL_SIZE.x / max(sx, 1e-6),
+		pixel_size * TEXTURE_PIXEL_SIZE.y / max(sy, 1e-6)
 	);
 }
 
 void fragment() {
-    mat2 rotation = mat2(vec2(cos(theta), sin(theta)), vec2(-sin(theta), cos(theta)));
-    mat2 inverse_rotation = mat2(vec2(cos(theta), -sin(theta)), vec2(sin(theta), cos(theta)));
+	// Compute trig once
+	float c = cos(theta);
+	float s = sin(theta);
 
-    // Snap UV to pixel grid (no mirroring yet)
-    vec2 snapped_uv = inverse_rotation *
-        (floor(rotation * ((UV - 0.5) / block_size)) + 0.5) * block_size + 0.5;
+	// Rotation matrix and its inverse (transpose for pure rotations)
+	mat2 rot     = mat2(vec2(c, s), vec2(-s, c));
+	mat2 inv_rot = mat2(vec2(c,-s), vec2( s, c));
 
-    // --- MIRROR AFTER SNAPPING ---
-    //if (flip_h) snapped_uv.x = 1.0 - snapped_uv.x;
-    if (flip_v) snapped_uv.y = 1.0 - snapped_uv.y;
-    // -----------------------------
+	// Snap UV to rotated pixel grid (centered at 0.5)
+	vec2 uv_c = UV - vec2(0.5);
+	vec2 uv_r = rot * uv_c;
 
-    vec4 color = texture(TEXTURE, snapped_uv);
+	vec2 cell = block_size;
+	vec2 snapped_r = (floor(uv_r / cell) + vec2(0.5)) * cell;
+	vec2 snapped_uv = inv_rot * snapped_r + vec2(0.5);
 
-    if (mix_sampling > 0) {
-        vec4 min_color = texture(TEXTURE, get_neighbor_uv(0, snapped_uv));
-        float min_difference = length(color - min_color);
-        for (int i = 1; i < 4 * mix_sampling; i++) {
-            vec4 neighbor_color = texture(TEXTURE, get_neighbor_uv(i, snapped_uv));
-            float difference = length(color - neighbor_color);
-            if (difference < min_difference) {
-                min_color = neighbor_color;
-                min_difference = difference;
-            }
-        }
-        color = min_color;
-    }
+	// Mirror AFTER snapping (in texture space)
+	if (flip_h) snapped_uv.x = 1.0 - snapped_uv.x;
+	if (flip_v) snapped_uv.y = 1.0 - snapped_uv.y;
 
-    float cut_x = max(abs(rotation[0][0] + rotation[0][1]), abs(inverse_rotation[0][0] + inverse_rotation[0][1])) * block_size.x * 0.5;
-    float cut_y = max(abs(rotation[1][0] + rotation[1][1]), abs(inverse_rotation[1][0] + inverse_rotation[1][1])) * block_size.y * 0.5;
-    if (snapped_uv.x < cut_x || snapped_uv.x > 1.0 - cut_x || snapped_uv.y < cut_y || snapped_uv.y > 1.0 - cut_y)
-        color.a = 0.0;
-    else
-        color.a = step(0.5, color.a);
+	// --- Edge cutoff margin (project rotated half-cell extents back into UV axes) ---
+	// Half a cell in "rotated space"
+	vec2 half_cell = 0.5 * cell;
 
-    COLOR = color;
+	// Project half-cell extents onto UV axes.
+	// margin.x = |inv_rot row0| dot half_cell, margin.y = |inv_rot row1| dot half_cell
+	vec2 margin;
+	margin.x = abs(inv_rot[0][0]) * half_cell.x + abs(inv_rot[0][1]) * half_cell.y;
+	margin.y = abs(inv_rot[1][0]) * half_cell.x + abs(inv_rot[1][1]) * half_cell.y;
+
+	bool outside = (
+		snapped_uv.x < margin.x || snapped_uv.x > 1.0 - margin.x ||
+		snapped_uv.y < margin.y || snapped_uv.y > 1.0 - margin.y
+	);
+
+	// Clamp sample UV to avoid wrap/repeat bleed at edges (optional but usually good)
+	vec2 sample_uv = clamp(snapped_uv, margin, vec2(1.0) - margin);
+
+	vec4 color = texture(TEXTURE, sample_uv);
+
+	// Mix sampling (nearest “most similar” neighbor)
+	if (mix_sampling > 0) {
+		int count = 4 * mix_sampling; // 4 (cross) or 8 (cross + diagonals)
+
+		vec4 best = color;
+		float best_d = 1e20;
+
+		for (int i = 0; i < 8; i++) {
+			if (i >= count) break;
+
+			vec2 nuv = sample_uv + OFFS[i] * cell;
+			vec4 ncol = texture(TEXTURE, nuv);
+			float d = length(color - ncol);
+
+			if (d < best_d) {
+				best_d = d;
+				best = ncol;
+			}
+		}
+		color = best;
+	}
+
+	// Your alpha rules, but applied after outside test
+	if (outside) {
+		color.a = 0.0;
+	} else {
+		color.a = step(0.5, color.a);
+	}
+
+	COLOR = color;
 }
