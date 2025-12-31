@@ -19,6 +19,7 @@ public class NormalBullet : IBulletBehavior
 
     public void OnWallHit(Bullet b, Vector2 normal)
     {
+        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
         b.Deactivate();
     }
 }
