@@ -65,9 +65,6 @@ public partial class BulletPool : Node2D
             AddChild(bullet);
 
             // IMPORTANT: pooled bullets should not be "doing stuff"
-            bullet.Visible = false;
-            bullet.SetProcess(false);
-            bullet.SetPhysicsProcess(false);
 
             pool.Free.Push(bullet);
             pool.CreatedCount++;
@@ -82,10 +79,6 @@ public partial class BulletPool : Node2D
 
         var bullet = pool.Free.Pop();
 
-        bullet.Visible = true;
-        bullet.SetProcess(true);
-        bullet.SetPhysicsProcess(true);
-
         Eventbus.activeBullets += 1;
         return bullet;
     }
@@ -93,10 +86,6 @@ public partial class BulletPool : Node2D
     public void ReturnBullet(StringName key, Bullet bullet)
     {
         if (!IsInstanceValid(bullet)) return;
-
-        bullet.Visible = false;
-        bullet.SetProcess(false);
-        bullet.SetPhysicsProcess(false);
 
         if (_pools.TryGetValue(key, out var pool))
             pool.Free.Push(bullet);

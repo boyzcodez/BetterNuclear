@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class NormalBullet : IBulletBehavior
+public partial class TestBehavior : IBulletBehavior
 {
     public void OnInit(Bullet b)
     {

@@ -6,6 +6,9 @@ public class BounceBehavior : IBulletBehavior
     public int bouncesTotal;
     public int bouncesLeft = 3;
 
+    public void OnInit(Bullet b)
+    {
+    }
     public void OnSpawn(Bullet b)
     {
         bouncesLeft = bouncesTotal;
@@ -17,6 +20,9 @@ public class BounceBehavior : IBulletBehavior
     }
 
     public void OnHit(Bullet b, ICollidable collidable)
+    {
+    }
+    public void OnKill(Bullet b, ICollidable collidable)
     {
     }
 

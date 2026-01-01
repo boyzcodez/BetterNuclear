@@ -504,6 +504,7 @@ collide_with_bodies = false
 position = Vector2(0, -8)
 script = ExtResource("7_352va")
 look = NodePath("../EnemyLook")
+SnapDegrees = 10.0
 
 [node name="Guns" parent="GunRotator" instance=ExtResource("8_26qsg")]
 position = Vector2(6, 0)

@@ -97,6 +97,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         OnShoot = data.ShootAnimation.Name;
         OnHit = data.HitAnimation.Name;
 
+        foreach (var b in Behaviors) b.OnInit(this);
+
         if (SpriteFrames.HasAnimation(OnShoot)) return;
 
         AnimatedSpriteBuilder.BuildAnimation(this, data.ShootAnimation);
