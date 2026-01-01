@@ -14,7 +14,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => CollisionLayer;
 
-    private string key;
+    private StringName key;
     public DamageData damageData;
     public List<IBulletBehavior> Behaviors = new();
 

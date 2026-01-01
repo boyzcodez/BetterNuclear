@@ -4,7 +4,7 @@ using System;
 [GlobalClass]
 public partial class GunData : Resource
 {
-    [Export] public string Name { get; set; } = "weapon";
+    [Export] public StringName GunId {get; set; } = "";
     [Export(PropertyHint.Enum, "LV1_,LV2_,LV3_,LV4_,LV5_")]
     public string LVL { get; set; } = "LV1_";
     

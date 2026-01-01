@@ -50,4 +50,4 @@ color = Color(0.050980393, 0.047058824, 0.13725491, 1)
 [node name="BulletPool" type="Node2D" parent="." groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
-bulletScene = ExtResource("7_f6fdm")
+BulletScene = ExtResource("7_f6fdm")

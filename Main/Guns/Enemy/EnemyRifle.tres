@@ -51,7 +51,7 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
 [resource]
 script = ExtResource("5_12j7w")
-Name = "EnemyRifle"
+GunId = &"EnemyRifle"
 CollisionLayer = 1
 BulletSpeed = 150.0
 UsesAmmo = false

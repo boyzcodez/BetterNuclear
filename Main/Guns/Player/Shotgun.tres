@@ -51,7 +51,7 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
 [resource]
 script = ExtResource("5_miae0")
-Name = "Shotgun"
+GunId = &"Shotgun"
 BulletRaidus = 3.0
 BulletSpeed = 250.0
 BulletLifeTime = 500.0

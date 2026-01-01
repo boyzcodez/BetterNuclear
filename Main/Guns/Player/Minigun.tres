@@ -52,7 +52,7 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
 [resource]
 script = ExtResource("6_sbx4e")
-Name = "Minigun"
+GunId = &"Minigun"
 BulletRaidus = 6.0
 BulletSpeed = 350.0
 CurrentAmmo = 300

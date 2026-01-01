@@ -184,7 +184,7 @@ public partial class WalkerHead : Node2D
             }
         }
 
-        main.UpdateMap(WallMap, GroundMap);
+        //main.UpdateMap(WallMap, GroundMap);
     }
 
     public void DestroyWall(Vector2I pos)

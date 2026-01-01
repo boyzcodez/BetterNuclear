@@ -11,9 +11,9 @@ public class IBulletInitData
     public float BulletSpeed { get; set; }
     public float BulletLifeTime {get;set;}
     public int CollisionLayer {get;set;}
-    public string key {get; set;}
+    public StringName key {get; set;}
 
-    public IBulletInitData(DamageData newDMG, Animation newShoot, Animation newHit, float newRadius, float newSpeed, float newLifeTime, int newLayer, string newKey, BulletPool newPool)
+    public IBulletInitData(DamageData newDMG, Animation newShoot, Animation newHit, float newRadius, float newSpeed, float newLifeTime, int newLayer, StringName newKey, BulletPool newPool)
     {
         damageData = newDMG;
         ShootAnimation = newShoot;

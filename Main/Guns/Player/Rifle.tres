@@ -43,7 +43,7 @@ metadata/_custom_type_script = "uid://p701hspbelqp"
 
 [resource]
 script = ExtResource("1_npjdg")
-Name = "Rifle"
+GunId = &"Rifle"
 Knockback = 100.0
 BulletRaidus = 6.0
 BulletSpeed = 1500.0

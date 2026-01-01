@@ -3,52 +3,48 @@ using System.Collections.Generic;
 
 public partial class BulletPool : Node2D
 {
-    [Export] public PackedScene bulletScene;
-    public Dictionary<string, Queue<Bullet>> _pools = new();
-    public List<Bullet> _enemyBullets = new();
-    private int TotalBulletAmount = 0;
+    [Export] public PackedScene BulletScene;
 
-    public override void _Ready()
+    private sealed class Pool
     {
-        // EventBus.ClearBullets += ClearBullets;
-        // EventBus.Reset += ClearBullets;
+        public readonly Stack<Bullet> Free = new();
+        public int CreatedCount = 0;
     }
 
-    public void PreparePool(string key, GunData gunData)
+    private readonly Dictionary<StringName, Pool> _pools = new();
+    private int _totalCreated = 0;
+
+    public void PreparePool(GunData gunData)
     {
-        if (_pools.TryGetValue(key, out var pool))
+        var key = gunData.GunId;
+
+        if (!_pools.TryGetValue(key, out var pool))
         {
-            if (pool.Count > 0)
-            {
-                foreach (var bullet in pool)
-                {
-                    bullet.QueueFree();
-                    if (_enemyBullets.Contains(bullet)) _enemyBullets.Remove(bullet);
-                }
-                pool.Clear();
-            }
-        }
-        else
-        {
-            pool = new Queue<Bullet>();
+            pool = new Pool();
             _pools[key] = pool;
         }
 
-        var amount = CalculatePoolSize(gunData.BulletLifeTime, gunData.FireRate, gunData.MaxAmmo, gunData.BulletCount);
-        TotalBulletAmount += amount;
-        //GD.Print("total amount of bullets " + TotalBulletAmount);
+        int target = CalculatePoolSize(
+            gunData.BulletLifeTime,
+            gunData.FireRate,
+            gunData.MaxAmmo,
+            gunData.BulletCount
+        );
 
-        for (int i = pool.Count; i < amount; i++)
+        // Only grow (never shrink)
+        int toCreate = target - pool.CreatedCount;
+        if (toCreate <= 0) return;
+
+        for (int i = 0; i < toCreate; i++)
         {
-            var bullet = bulletScene.Instantiate<Bullet>();
+            var bullet = BulletScene.Instantiate<Bullet>();
 
-            // making a data set for the bullet
             bullet.Init(
                 new IBulletInitData(
                     new DamageData(
                         gunData.Damage,
                         gunData.Knockback,
-                        gunData.Name,
+                        gunData.GunId,
                         gunData.DamageType
                     ),
                     gunData.ShootAnimation,
@@ -57,93 +53,64 @@ public partial class BulletPool : Node2D
                     gunData.BulletSpeed,
                     gunData.BulletLifeTime,
                     gunData.CollisionLayer,
-                    key,
+                    key.ToString(),   // if your bullet stores string; otherwise store StringName too
                     this
                 )
             );
 
-            // giving the bullet it's behaviors
+            bullet.Behaviors.Clear();
             foreach (var beh in gunData.Behaviors)
-            {
                 bullet.Behaviors.Add(beh.CreateBehavior());
-            }
 
-            //CallDeferred("add_child", bullet);
             AddChild(bullet);
-            pool.Enqueue(bullet);
 
-            //if (gunData.isEnemy) _enemyBullets.Add(bullet);
+            // IMPORTANT: pooled bullets should not be "doing stuff"
+            bullet.Visible = false;
+            bullet.SetProcess(false);
+            bullet.SetPhysicsProcess(false);
+
+            pool.Free.Push(bullet);
+            pool.CreatedCount++;
+            _totalCreated++;
         }
     }
 
-    private int CalculatePoolSize(float lifetime, float firerate, int maxammo, int bulletCount)
+    public Bullet GetBullet(StringName key)
     {
-        // int theoretical = Mathf.CeilToInt(lifetime / Mathf.Max(firerate, 0.0001f));
-        // return Mathf.Min(maxammo, Mathf.CeilToInt(theoretical * 1.2f * bulletCount));
-
-        if (lifetime <= 0f || firerate <= 0f || bulletCount <= 0)
-        return 0;
-
-        float firingDuration = maxammo * firerate;
-
-        // How long bullets can overlap
-        float overlapTime = Mathf.Min(lifetime, firingDuration);
-
-        // Number of shots during the overlap
-        float shotsDuringOverlap = overlapTime / firerate;
-
-        // Total bullets alive at once
-        float simultaneousBullets = shotsDuringOverlap * bulletCount;
-
-        return Mathf.CeilToInt(simultaneousBullets);
-    }
-
-
-    public Bullet GetBullet(string key)
-    {
-        if (!_pools.TryGetValue(key, out var pool) || pool.Count == 0)
-        {
-            //GD.PrintErr("Ran out of Bullets to use");
-            //PreparePool(key, gunData);
+        if (!_pools.TryGetValue(key, out var pool) || pool.Free.Count == 0)
             return null;
-        }
+
+        var bullet = pool.Free.Pop();
+
+        bullet.Visible = true;
+        bullet.SetProcess(true);
+        bullet.SetPhysicsProcess(true);
 
         Eventbus.activeBullets += 1;
-
-        var bullet = pool.Dequeue();
         return bullet;
     }
-    public void ReturnBullet(string key, Bullet bullet)
-    {
-        Eventbus.activeBullets -= 1;
 
-        _pools[key].Enqueue(bullet);
+    public void ReturnBullet(StringName key, Bullet bullet)
+    {
+        if (!IsInstanceValid(bullet)) return;
+
+        bullet.Visible = false;
+        bullet.SetProcess(false);
+        bullet.SetPhysicsProcess(false);
+
+        if (_pools.TryGetValue(key, out var pool))
+            pool.Free.Push(bullet);
+        // else: unknown key, ignore or push into a "misc" pool
+
+        Eventbus.activeBullets -= 1;
     }
 
-    // public void NewBullets(string key, GunData gunData, int amount)
-    // {
-    //     if (_pools.ContainsKey(key))
-    //     {
-    //         foreach (var bullet in _pools[key])
-    //         {
-    //             if (_enemyBullets.Contains(bullet)) _enemyBullets.Remove(bullet);
-    //             bullet.QueueFree();
-    //         }
-                
+    private static int CalculatePoolSize(float lifetime, float fireRate, int maxAmmo, int bulletCount)
+    {
+        if (lifetime <= 0f || fireRate <= 0f || maxAmmo <= 0 || bulletCount <= 0)
+            return 0;
 
-    //         _pools.Remove(key);
-    //     }
-
-    //     PreparePool(key, gunData);
-    // }
-    // public void ClearBullets()
-    // {
-    //     EventBus.TriggerScreenShake(0.4f);
-
-    //     foreach (var bullet in _enemyBullets)
-    //     {
-    //         if (IsInstanceValid(bullet) && bullet.active)
-    //             bullet.Deactivate();
-    //     }
-    // }
+        float shotsAlive = Mathf.Min(lifetime / fireRate, maxAmmo);
+        return Mathf.CeilToInt(shotsAlive * bulletCount);
+    }
 }

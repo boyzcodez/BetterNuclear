@@ -37,24 +37,22 @@ public partial class Guns : Node2D
 
         foreach (var gunData in guns)
         {
-            var id = gunData.Name + GetInstanceId();
+            gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
+            gunData.HitAnimation.Name = gunData.GunId + "OnHit";
 
-            gunData.ShootAnimation.Name = gunData.Name + "OnShoot";
-            gunData.HitAnimation.Name = gunData.Name + "OnHit";
-
-            pool?.PreparePool(id, gunData);
+            pool?.PreparePool(gunData);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
             if (gunData.UsesAnimations)
             {
-                AddAnimation(gunData.NormalAnimationData, gunData.Name);
-                AddAnimation(gunData.ShootAnimationData, gunData.Name + "Shoot");
+                AddAnimation(gunData.NormalAnimationData, gunData.GunId);
+                AddAnimation(gunData.ShootAnimationData, gunData.GunId + "Shoot");
             }
         }
 
         EquipGun(0);
-        sprite?.Play(currentGun.Name);
+        sprite?.Play(currentGun.GunId);
 
         // add to exp list so that when an enemy dies the correct gun will the the exp
         //if (!guns[_currentGunIndex].isEnemy) XpHandler.AddGun(guns[_currentGunIndex].GunName, this);
@@ -70,12 +68,12 @@ public partial class Guns : Node2D
     public void EquipGun(int index)
     {
         currentGun = guns[index];
-        id = currentGun.Name + GetInstanceId();
+        id = currentGun.GunId;
 
-        sprite?.Play(currentGun.Name);
+        sprite?.Play(currentGun.GunId);
         muzzleFlash.Position = currentGun.ShootPosition;
         Position = currentGun.GunSpot;
-        if (AudioLibrary.ContainsKey(currentGun.Name)) audioSystem.Stream = AudioLibrary[currentGun.Name];
+        if (AudioLibrary.ContainsKey(currentGun.GunId)) audioSystem.Stream = AudioLibrary[currentGun.GunId];
     }
 
     public override void _Process(double delta)
@@ -140,11 +138,11 @@ public partial class Guns : Node2D
     private async void PlayAnimation()
     {
         muzzleFlash.Play("default");
-        sprite.Play(currentGun.Name + "Shoot");
+        sprite.Play(currentGun.GunId + "Shoot");
 
         await ToSignal(sprite, "animation_finished");
 
-        sprite.Play(currentGun.Name);
+        sprite.Play(currentGun.GunId);
     }
     private float NumBet(double bet)
     {
