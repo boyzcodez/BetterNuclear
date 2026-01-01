@@ -31,6 +31,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public override void _Ready()
     {
+        pool = GetTree().GetFirstNodeInGroup("BulletPool") as BulletPool;
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         main.bullets.Add(this);
 
@@ -84,15 +85,14 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         pool.ReturnBullet(key, this);
     }
 
-    public void Init(IBulletInitData data)
+    public void Init(GunData data)
     {
-        damageData = data.damageData;
+        damageData = new DamageData(data.Damage, data.Knockback, data.GunId, data.DamageType);
         _lifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;
-        Radius = data.BulletRadius;
+        Radius = data.BulletRaidus;
         Speed = data.BulletSpeed;
-        pool = data.pool;
-        key = data.key;
+        key = data.GunId;
 
         OnShoot = data.ShootAnimation.Name;
         OnHit = data.HitAnimation.Name;

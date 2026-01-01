@@ -10,12 +10,7 @@ public partial class GunData : Resource
     
     [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
     public string DamageType { get; set; } = "Impact";
-    [Export] public int CollisionLayer {get; set;} = 2; //1 Player, 2 Enemy, 3 ???
-    [Export] public int Damage { get; set; } = 1;
-    [Export] public float Knockback { get; set; } = 0f;
-    [Export] public float BulletRaidus {get; set;} = 5f;
-    [Export] public float BulletSpeed { get; set; } = 140f;
-    [Export] public float BulletLifeTime {get;set;} = 4f;
+    
     [Export] public bool UsesAmmo { get; set; } = true;
     [Export] public int CurrentAmmo { get; set; } = 10;
     [Export] public int MaxAmmo { get; set; } = 10;
@@ -23,7 +18,7 @@ public partial class GunData : Resource
     [Export] public int BulletCount { get; set; } = 1;
     [Export] public float SpreadAngle { get; set; } = 0f;
     [Export] public float RandomFactor { get; set; } = 0f;
-    [Export] public ApplyBehavior[] Behaviors {get;set;} = [];
+    
 
     [ExportGroup("XP")]
     [Export] public int currentXP { get; set; } = 0;
@@ -37,6 +32,14 @@ public partial class GunData : Resource
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public Vector2 GunSpot { get; set; } = new Vector2 (6, 0);
     [Export] public Texture2D icon { get; set; }
+
+    [Export] public int CollisionLayer {get; set;} = 2; //1 Player, 2 Enemy, 3 ???
+    [Export] public int Damage { get; set; } = 1;
+    [Export] public float Knockback { get; set; } = 0f;
+    [Export] public float BulletRaidus {get; set;} = 5f;
+    [Export] public float BulletSpeed { get; set; } = 140f;
+    [Export] public float BulletLifeTime {get;set;} = 4f;
+    [Export] public ApplyBehavior[] Behaviors {get;set;} = [];
 
     [ExportGroup("Animations")]
     [Export] public AnimationData NormalAnimationData {get;set;}

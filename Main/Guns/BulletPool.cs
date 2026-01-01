@@ -38,25 +38,7 @@ public partial class BulletPool : Node2D
         for (int i = 0; i < toCreate; i++)
         {
             var bullet = BulletScene.Instantiate<Bullet>();
-
-            bullet.Init(
-                new IBulletInitData(
-                    new DamageData(
-                        gunData.Damage,
-                        gunData.Knockback,
-                        gunData.GunId,
-                        gunData.DamageType
-                    ),
-                    gunData.ShootAnimation,
-                    gunData.HitAnimation,
-                    gunData.BulletRaidus,
-                    gunData.BulletSpeed,
-                    gunData.BulletLifeTime,
-                    gunData.CollisionLayer,
-                    key.ToString(),   // if your bullet stores string; otherwise store StringName too
-                    this
-                )
-            );
+            bullet.Init(gunData);
 
             bullet.Behaviors.Clear();
             foreach (var beh in gunData.Behaviors)
