@@ -14,9 +14,9 @@ public partial class BulletPool : Node2D
     private readonly Dictionary<StringName, Pool> _pools = new();
     private int _totalCreated = 0;
 
-    public void PreparePool(GunData gunData)
+    public void PreparePool(IBulletInitData initData, int bulletAmount)
     {
-        var key = gunData.GunId;
+        var key = initData.key;
 
         if (!_pools.TryGetValue(key, out var pool))
         {
@@ -24,24 +24,24 @@ public partial class BulletPool : Node2D
             _pools[key] = pool;
         }
 
-        int target = CalculatePoolSize(
-            gunData.BulletLifeTime,
-            gunData.FireRate,
-            gunData.MaxAmmo,
-            gunData.BulletCount
-        );
+        // int target = CalculatePoolSize(
+        //     gunData.BulletLifeTime,
+        //     gunData.FireRate,
+        //     gunData.MaxAmmo,
+        //     gunData.BulletCount
+        // );
 
         // Only grow (never shrink)
-        int toCreate = target - pool.CreatedCount;
-        if (toCreate <= 0) return;
+        //int toCreate = target - pool.CreatedCount;
+        //if (toCreate <= 0) return;
 
-        for (int i = 0; i < toCreate; i++)
+        for (int i = 0; i < bulletAmount; i++)
         {
             var bullet = BulletScene.Instantiate<Bullet>();
-            bullet.Init(gunData);
+            bullet.Init(initData);
 
             bullet.Behaviors.Clear();
-            foreach (var beh in gunData.Behaviors)
+            foreach (var beh in initData.Behaviors)
                 bullet.Behaviors.Add(beh.CreateBehavior());
 
             AddChild(bullet);

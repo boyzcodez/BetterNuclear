@@ -40,7 +40,31 @@ public partial class Guns : Node2D
             gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
             gunData.HitAnimation.Name = gunData.GunId + "OnHit";
 
-            pool?.PreparePool(gunData);
+            var bulletAmount = CalculateNeededBullets(
+                gunData.BulletLifeTime,
+                gunData.FireRate,
+                gunData.MaxAmmo,
+                gunData.BulletCount
+            );
+
+            var initData = new IBulletInitData(
+                    new DamageData(
+                        gunData.Damage,
+                        gunData.Knockback,
+                        gunData.GunId,
+                        gunData.DamageType
+                    ),
+                    gunData.Behaviors,
+                    gunData.ShootAnimation,
+                    gunData.HitAnimation,
+                    gunData.BulletRaidus,
+                    gunData.BulletSpeed,
+                    gunData.BulletLifeTime,
+                    gunData.CollisionLayer,
+                    gunData.GunId
+                );
+
+            pool?.PreparePool(initData, bulletAmount);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
@@ -56,6 +80,14 @@ public partial class Guns : Node2D
 
         // add to exp list so that when an enemy dies the correct gun will the the exp
         //if (!guns[_currentGunIndex].isEnemy) XpHandler.AddGun(guns[_currentGunIndex].GunName, this);
+    }
+    private static int CalculateNeededBullets(float lifetime, float fireRate, int maxAmmo, int bulletCount)
+    {
+        if (lifetime <= 0f || fireRate <= 0f || maxAmmo <= 0 || bulletCount <= 0)
+            return 0;
+
+        float shotsAlive = Mathf.Min(lifetime / fireRate, maxAmmo);
+        return Mathf.CeilToInt(shotsAlive * bulletCount);
     }
 
     public void SwitchGuns(int direction)

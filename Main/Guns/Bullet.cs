@@ -36,7 +36,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         main.bullets.Add(this);
 
         Visible = false;
-
         AnimationFinished += OnAnimationEnd;
     }
 
@@ -74,8 +73,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     {
         Play(OnHit);
 
-        //particles.Emitting = true;
-
         Velocity = Vector2.Zero;
         Active = false;
     }
@@ -85,14 +82,14 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         pool.ReturnBullet(key, this);
     }
 
-    public void Init(GunData data)
+    public void Init(IBulletInitData data)
     {
-        damageData = new DamageData(data.Damage, data.Knockback, data.GunId, data.DamageType);
+        damageData = data.damageData;
         _lifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;
-        Radius = data.BulletRaidus;
+        Radius = data.BulletRadius;
         Speed = data.BulletSpeed;
-        key = data.GunId;
+        key = data.key;
 
         OnShoot = data.ShootAnimation.Name;
         OnHit = data.HitAnimation.Name;

@@ -40,10 +40,7 @@ public class BounceBehavior : IBulletBehavior
             return;
         }
 
-        if (normal.LengthSquared() <= 1e-12f) return;
-        b.Velocity = b.Velocity.Bounce(normal); // already unit from WallGrid
-        //b.particles.Emitting = true;
-
-        //Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+        b.Velocity = b.Velocity.Bounce(normal);
+        b.Rotation = b.Velocity.Angle();
     }
 }
