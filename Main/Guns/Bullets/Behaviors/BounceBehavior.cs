@@ -21,6 +21,7 @@ public class BounceBehavior : IBulletBehavior
 
     public void OnHit(Bullet b, ICollidable collidable)
     {
+        b.Deactivate();
     }
     public void OnKill(Bullet b, ICollidable collidable)
     {

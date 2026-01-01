@@ -14,16 +14,17 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => CollisionLayer;
 
-    private StringName key;
+    public StringName key;
     public DamageData damageData;
+    public IBulletInitData initData;
     public List<IBulletBehavior> Behaviors = new();
 
     public bool Active = false;
     public bool HasHit { get; private set; }
     public Vector2 PendingDisplacement { get; private set; }
 
-    private Main main;
-    private BulletPool pool;
+    public Main main;
+    public BulletPool pool;
 
     public float Speed = 200f;
     private string OnShoot;
@@ -84,6 +85,8 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public void Init(IBulletInitData data)
     {
+        initData = data;
+
         damageData = data.damageData;
         _lifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;

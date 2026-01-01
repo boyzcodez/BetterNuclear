@@ -20,6 +20,7 @@ public class NormalBullet : IBulletBehavior
     }
     public void OnKill(Bullet b, ICollidable collidable)
     {
+        b.Deactivate();
     }
 
     public void OnWallHit(Bullet b, Vector2 normal)

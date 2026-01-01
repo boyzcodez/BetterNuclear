@@ -116,7 +116,18 @@ public partial class Main : Node2D
                     if (hurtbox.Health > 0)
                     {
                         hurtbox.TakeDamage(bullet.damageData, bullet.Velocity);
-                        bullet.Deactivate();
+                        foreach (var behavior in bullet.Behaviors)
+                        {
+                            behavior.OnHit(bullet, hurtbox);
+                        }
+
+                        if (hurtbox.Health <= 0)
+                        {
+                            foreach (var behavior in bullet.Behaviors)
+                            {
+                                behavior.OnKill(bullet, hurtbox);
+                            }
+                        }
                     }
                     
                     break;

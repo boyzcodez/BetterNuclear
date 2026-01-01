@@ -24,25 +24,14 @@ public partial class BulletPool : Node2D
             _pools[key] = pool;
         }
 
-        // int target = CalculatePoolSize(
-        //     gunData.BulletLifeTime,
-        //     gunData.FireRate,
-        //     gunData.MaxAmmo,
-        //     gunData.BulletCount
-        // );
-
-        // Only grow (never shrink)
-        //int toCreate = target - pool.CreatedCount;
-        //if (toCreate <= 0) return;
-
         for (int i = 0; i < bulletAmount; i++)
         {
             var bullet = BulletScene.Instantiate<Bullet>();
-            bullet.Init(initData);
 
             bullet.Behaviors.Clear();
-            foreach (var beh in initData.Behaviors)
-                bullet.Behaviors.Add(beh.CreateBehavior());
+            foreach (var beh in initData.Behaviors) bullet.Behaviors.Add(beh.CreateBehavior());
+            
+            bullet.Init(initData);
 
             AddChild(bullet);
 
@@ -57,7 +46,11 @@ public partial class BulletPool : Node2D
     public Bullet GetBullet(StringName key)
     {
         if (!_pools.TryGetValue(key, out var pool) || pool.Free.Count == 0)
+        {
+            GD.Print("No bullets to use " + key);
             return null;
+        }
+            
 
         var bullet = pool.Free.Pop();
 
