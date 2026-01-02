@@ -29,8 +29,6 @@ public partial class BulletPool : Node2D
             var bullet = BulletScene.Instantiate<Bullet>();
 
             bullet.Behaviors.Clear();
-            foreach (var beh in initData.Behaviors) bullet.Behaviors.Add(beh.CreateBehavior());
-            
             bullet.Init(initData);
 
             AddChild(bullet);

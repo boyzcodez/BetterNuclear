@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://bk0kb7lw036hw"]
 
-[ext_resource type="Script" uid="uid://d01lk7r4lp0sx" path="res://Main/Guns/Bullets/Appliers/ApplyNormal.cs" id="1_ttlru"]
+[ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_ttlru"]
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_xgx5v"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_ttlru"]
 [ext_resource type="Texture2D" uid="uid://borc1r70akfu5" path="res://Assets/Guns/Player/Bolt.png" id="4_ttlru"]
@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_p6m0s"]
 script = ExtResource("1_ttlru")
-metadata/_custom_type_script = "uid://d01lk7r4lp0sx"
+metadata/_custom_type_script = "uid://4rjjvn6s1kor"
 
 [sub_resource type="Resource" id="Resource_1eabv"]
 script = ExtResource("2_ttlru")
@@ -52,15 +52,16 @@ metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 [resource]
 script = ExtResource("5_12j7w")
 GunId = &"EnemyRifle"
-CollisionLayer = 1
-BulletSpeed = 150.0
 UsesAmmo = false
 SpreadAngle = 25.0
-Behaviors = Array[Object]([SubResource("Resource_p6m0s")])
 ShootAnimation = SubResource("Resource_re15m")
 HitAnimation = SubResource("Resource_1eabv")
 ShootPosition = Vector2(10, 0)
 GunSpot = Vector2(8, 1)
+CollisionLayer = 1
+BulletSpeed = 150.0
+Behaviors = Array[Object]([SubResource("Resource_p6m0s")])
+CopyBehaviors = null
 NormalAnimationData = SubResource("Resource_clglj")
 ShootAnimationData = SubResource("Resource_5m0rx")
 metadata/_custom_type_script = "uid://batyimatw3rwc"

@@ -11,9 +11,9 @@ public class IBulletInitData
     public float BulletLifeTime {get;set;}
     public int CollisionLayer {get;set;}
     public StringName key {get; set;}
-    public ApplyBehavior[] Behaviors {get; set;}
+    public BehaviorResource[] Behaviors {get; set;}
 
-    public IBulletInitData(DamageData newDMG, ApplyBehavior[] newBehaviors, Animation newShoot, Animation newHit, float newRadius, float newSpeed, float newLifeTime, int newLayer, StringName newKey)
+    public IBulletInitData(DamageData newDMG, BehaviorResource[] newBehaviors, Animation newShoot, Animation newHit, float newRadius, float newSpeed, float newLifeTime, int newLayer, StringName newKey)
     {
         damageData = newDMG;
         Behaviors = newBehaviors;

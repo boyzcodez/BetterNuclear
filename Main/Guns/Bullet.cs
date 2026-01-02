@@ -16,7 +16,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public StringName key;
     public DamageData damageData;
-    public IBulletInitData initData;
     public List<IBulletBehavior> Behaviors = new();
 
     public bool Active = false;
@@ -85,8 +84,6 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
 
     public void Init(IBulletInitData data)
     {
-        initData = data;
-
         damageData = data.damageData;
         _lifeTime = data.BulletLifeTime;
         CollisionLayer = data.CollisionLayer;
@@ -97,7 +94,11 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         OnShoot = data.ShootAnimation.Name;
         OnHit = data.HitAnimation.Name;
 
-        foreach (var b in Behaviors) b.OnInit(this);
+        foreach (var behavior in data.Behaviors)
+        {
+            var instance = (IBulletBehavior)behavior.Duplicate(true);
+            Behaviors.Add(instance);
+        } 
 
         if (SpriteFrames.HasAnimation(OnShoot)) return;
 

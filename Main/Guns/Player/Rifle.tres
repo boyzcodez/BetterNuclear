@@ -4,12 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_jlw6v"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
-[ext_resource type="Script" uid="uid://c854daqj0xkh2" path="res://Main/Guns/Bullets/Appliers/ApplyTestBeh.cs" id="1_pbbwr"]
+[ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_pbbwr"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_pbbwr"]
 
 [sub_resource type="Resource" id="Resource_ulg0x"]
 script = ExtResource("1_pbbwr")
-metadata/_custom_type_script = "uid://c854daqj0xkh2"
+metadata/_custom_type_script = "uid://4rjjvn6s1kor"
 
 [sub_resource type="Resource" id="Resource_jlw6v"]
 script = ExtResource("2_pbbwr")
@@ -53,8 +53,9 @@ ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
 Knockback = 100.0
 BulletRaidus = 6.0
-BulletSpeed = 1500.0
+BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
+CopyBehaviors = null
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 ShakeIntensity = 1.3

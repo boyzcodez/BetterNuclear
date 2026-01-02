@@ -1,27 +1,27 @@
 using Godot;
 using System;
-using System.Linq;
 
-public partial class TestBehavior : IBulletBehavior
+[GlobalClass]
+public partial class Test : BehaviorResource, IBulletBehavior
 {
     private int bulletAmount = 10;
-    public void OnInit(Bullet b)
+    public override void OnInit(Bullet b)
     {
     }
-    public void OnSpawn(Bullet b)
+    public override void OnSpawn(Bullet b)
     {
     }
 
-    public void OnUpdate(Bullet b, float delta)
+    public override void OnUpdate(Bullet b, float delta)
     {
         b.AddDisplacement(b.Velocity * b.Speed * delta);
     }
 
-    public void OnHit(Bullet b, ICollidable collidable)
+    public override void OnHit(Bullet b, ICollidable collidable)
     {
         b.Deactivate();
     }
-    public void OnKill(Bullet b, ICollidable collidable)
+    public override void OnKill(Bullet b, ICollidable collidable)
     {
         // Spawn `bulletAmount` bullets evenly around 360 degrees
         var spawnPos = b.GlobalPosition;
@@ -40,7 +40,7 @@ public partial class TestBehavior : IBulletBehavior
         }
     }
 
-    public void OnWallHit(Bullet b, Vector2 normal)
+    public override void OnWallHit(Bullet b, Vector2 normal)
     {
         b.Deactivate();
     }
