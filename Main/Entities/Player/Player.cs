@@ -55,14 +55,23 @@ public partial class Player : Entity
 
     private bool CanMoveTo(Vector2 targetPos)
     {
-        float r = Radius;
+        float skin = 0.4f; // try 0.0f to start, then 0.02..0.1
+        float r = Radius - skin;
+
+        // 45° point on a circle is (r/√2, r/√2)
+        float d = r * 0.70710678f;
 
         Vector2[] offsets =
         {
             new Vector2( r, 0),
             new Vector2(-r, 0),
             new Vector2(0,  r),
-            new Vector2(0, -r)
+            new Vector2(0, -r),
+
+            new Vector2( d,  d),
+            new Vector2(-d,  d),
+            new Vector2( d, -d),
+            new Vector2(-d, -d),
         };
 
         foreach (var off in offsets)
