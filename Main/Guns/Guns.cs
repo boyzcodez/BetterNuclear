@@ -68,8 +68,7 @@ public partial class Guns : Node2D
             if (gunData.NeedsCopies)
             {
                 initData.key = gunData.GunId + "Copy";
-                GD.Print(initData.key);
-                initData.Behaviors = gunData.CopyBehaviors;
+                initData.Behaviors = gunData.CopyBehaviors.Length > 0 ? gunData.CopyBehaviors : [new Normal()];
                 pool?.PreparePool(initData, bulletAmount);
             }
             

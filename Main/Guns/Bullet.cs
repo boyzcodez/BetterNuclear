@@ -98,7 +98,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
         {
             var instance = (IBulletBehavior)behavior.Duplicate(true);
             Behaviors.Add(instance);
-        } 
+        }
 
         if (SpriteFrames.HasAnimation(OnShoot)) return;
 
