@@ -6,6 +6,6 @@
 resource_local_to_scene = true
 shader = ExtResource("1_xxo4e")
 shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 2
+shader_parameter/mix_sampling = 0
 shader_parameter/flip_h = false
 shader_parameter/flip_v = false

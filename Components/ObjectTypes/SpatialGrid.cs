@@ -13,7 +13,9 @@ public class SpatialGrid
 
     public void Clear()
     {
-        cells.Clear();
+        //cells.Clear();
+        foreach (var kv in cells)
+            kv.Value.Clear();
     }
 
     private Vector2I WorldToCell(Vector2 pos)
