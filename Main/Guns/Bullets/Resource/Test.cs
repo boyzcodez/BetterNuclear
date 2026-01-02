@@ -4,7 +4,7 @@ using System;
 [GlobalClass]
 public partial class Test : BehaviorResource, IBulletBehavior
 {
-    private int bulletAmount = 10;
+    [Export] private int bulletAmount = 10;
     public override void OnInit(Bullet b)
     {
     }
@@ -35,7 +35,7 @@ public partial class Test : BehaviorResource, IBulletBehavior
             float angle = i * (2f * Mathf.Pi / bulletAmount);
             bullet.GlobalPosition = spawnPos;
             bullet.Rotation = angle;
-            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
             bullet.Activate();
         }
     }

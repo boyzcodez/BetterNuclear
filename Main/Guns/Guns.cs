@@ -65,6 +65,13 @@ public partial class Guns : Node2D
                 );
 
             pool?.PreparePool(initData, bulletAmount);
+            if (gunData.NeedsCopies)
+            {
+                initData.key = gunData.GunId + "Copy";
+                GD.Print(initData.key);
+                initData.Behaviors = gunData.CopyBehaviors;
+                pool?.PreparePool(initData, bulletAmount);
+            }
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
@@ -160,7 +167,7 @@ public partial class Guns : Node2D
 
             bullet.GlobalPosition = muzzlePos;
             bullet.Rotation = angle;
-            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
 
             bullet.Activate();
         }

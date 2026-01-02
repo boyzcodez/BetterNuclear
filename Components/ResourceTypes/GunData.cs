@@ -41,7 +41,7 @@ public partial class GunData : Resource
     [Export] public float BulletLifeTime {get;set;} = 4f;
     [Export] public BehaviorResource[] Behaviors {get;set;} = [];
     [Export] public bool NeedsCopies {get;set;} = false;
-    [Export] public BehaviorResource[] CopyBehaviors {get;set;} = [new Normal()];
+    [Export] public BehaviorResource[] CopyBehaviors {get;set;} = [];
 
     [ExportGroup("Animations")]
     [Export] public AnimationData NormalAnimationData {get;set;}
