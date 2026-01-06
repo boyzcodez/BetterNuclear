@@ -1,17 +1,25 @@
-[gd_scene load_steps=9 format=3 uid="uid://c4um521ghunku"]
+[gd_scene load_steps=11 format=3 uid="uid://c4um521ghunku"]
 
 [ext_resource type="Script" uid="uid://cmwg72wklf4hn" path="res://Main/Guns/Guns.cs" id="1_2omop"]
 [ext_resource type="Script" uid="uid://drv1ygs6ex0tn" path="res://Main/Guns/GunAnimation.cs" id="1_5r443"]
-[ext_resource type="Texture2D" uid="uid://c7pvuhe7xq3mq" path="res://Assets/Guns/Bullets/Simple muzzle flash.png" id="2_5go37"]
+[ext_resource type="Texture2D" uid="uid://dd3w6b7gdq0a" path="res://Assets/Guns/MuzzleFlashes.png" id="2_5go37"]
 [ext_resource type="Material" uid="uid://dgg07406lrcj4" path="res://Components/Shaders/Guns.tres" id="3_5go37"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5go37"]
+atlas = ExtResource("2_5go37")
+region = Rect2(0, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vjrl7"]
 atlas = ExtResource("2_5go37")
-region = Rect2(0, 0, 64, 64)
+region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c202m"]
 atlas = ExtResource("2_5go37")
-region = Rect2(64, 0, 64, 64)
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nt88x"]
+atlas = ExtResource("2_5go37")
+region = Rect2(96, 64, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5r443"]
 animations = [{
@@ -20,17 +28,20 @@ animations = [{
 "texture": null
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_5go37")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_vjrl7")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_c202m")
 }, {
 "duration": 1.0,
-"texture": null
+"texture": SubResource("AtlasTexture_nt88x")
 }],
 "loop": false,
 "name": &"default",
-"speed": 14.0
+"speed": 21.0
 }]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gykxi"]
@@ -46,7 +57,6 @@ script = ExtResource("1_2omop")
 
 [node name="MuzzleFlash" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5r443")
-frame = 3
 frame_progress = 1.0
 
 [node name="GunAnimation" type="AnimatedSprite2D" parent="."]

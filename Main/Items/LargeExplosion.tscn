@@ -1,6 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://lwsx067byndn"]
+[gd_scene load_steps=19 format=3 uid="uid://lwsx067byndn"]
 
-[ext_resource type="Texture2D" uid="uid://d3gi7qi8kjmhj" path="res://Assets/SFX/LargeExplosion.png" id="1_ebgdd"]
+[ext_resource type="Texture2D" uid="uid://bauxraa6loona" path="res://Assets/SFX/LargeExplosion.png" id="1_ebgdd"]
 [ext_resource type="Script" uid="uid://cqmqcb822grdq" path="res://Main/Items/LargeExplosion.cs" id="2_sfs4w"]
 [ext_resource type="Material" uid="uid://dgg07406lrcj4" path="res://Components/Shaders/Guns.tres" id="3_df3nh"]
 [ext_resource type="PackedScene" uid="uid://bo4nnh3nwfxrs" path="res://Main/Items/Dust.tscn" id="3_ndu7k"]
@@ -8,56 +8,45 @@
 [ext_resource type="Shader" uid="uid://chlitnn26jnif" path="res://Components/Shaders/Guns.gdshader" id="4_8l816"]
 [ext_resource type="Script" uid="uid://djcq05072tq3l" path="res://Main/Items/Dust.cs" id="4_lud5k"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sfs4w"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(0, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s3aes"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(96, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ebgdd"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(192, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_df3nh"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(288, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l4miv"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(384, 0, 96, 96)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ndu7k"]
 atlas = ExtResource("1_ebgdd")
-region = Rect2(480, 0, 96, 96)
+region = Rect2(0, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8l816"]
 atlas = ExtResource("1_ebgdd")
-region = Rect2(576, 0, 96, 96)
+region = Rect2(128, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ls2w7"]
 atlas = ExtResource("1_ebgdd")
-region = Rect2(672, 0, 96, 96)
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdp4l"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j164r"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emxsp"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5207o"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jqksl"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(896, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ie4bi"]
+atlas = ExtResource("1_ebgdd")
+region = Rect2(1024, 0, 128, 128)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fboqv"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sfs4w")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s3aes")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ebgdd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_df3nh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l4miv")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ndu7k")
 }, {
@@ -66,10 +55,28 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ls2w7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdp4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j164r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emxsp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5207o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jqksl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ie4bi")
 }],
 "loop": false,
 "name": &"default",
-"speed": 14.0
+"speed": 17.0
 }]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ls2w7"]
@@ -83,7 +90,7 @@ shader_parameter/flip_v = false
 [node name="LargeExplosion" type="AnimatedSprite2D"]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_fboqv")
-frame = 7
+frame = 8
 frame_progress = 1.0
 script = ExtResource("2_sfs4w")
 

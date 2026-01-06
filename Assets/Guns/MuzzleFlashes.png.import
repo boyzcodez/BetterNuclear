@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bauxraa6loona"
-path="res://.godot/imported/LargeExplosion.png-dd7e9e4344853841a9eb6d2fc596857d.ctex"
+uid="uid://dd3w6b7gdq0a"
+path="res://.godot/imported/MuzzleFlashes.png-03483d91120246c30cf6b45f66ff5ed1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/SFX/LargeExplosion.png"
-dest_files=["res://.godot/imported/LargeExplosion.png-dd7e9e4344853841a9eb6d2fc596857d.ctex"]
+source_file="res://Assets/Guns/MuzzleFlashes.png"
+dest_files=["res://.godot/imported/MuzzleFlashes.png-03483d91120246c30cf6b45f66ff5ed1.ctex"]
 
 [params]
 

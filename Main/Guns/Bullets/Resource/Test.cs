@@ -43,5 +43,7 @@ public partial class Test : BehaviorResource, IBulletBehavior
     public override void OnWallHit(Bullet b, Vector2 normal)
     {
         b.Deactivate();
+
+        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
     }
 }
