@@ -4,8 +4,8 @@ using System;
 public partial class Dust : Sprite2D
 {
     [Export] public float minDuration = 0.4f;
-    [Export] public float maxDuration = 0.8f;
-    [Export] public float minDistance = 20f;
+    [Export] public float maxDuration = 2.8f;
+    [Export] public float minDistance = 5f;
     [Export] public float maxDistance = 60f;
     Tween tween;
     public void Play()
@@ -70,11 +70,11 @@ public partial class Dust : Sprite2D
         );
 
         // Optional: fade out
-        tween.TweenProperty(
-            this,
-            "modulate:a",
-            0f,
-            duration
-        );
+        // tween.TweenProperty(
+        //     this,
+        //     "modulate:a",
+        //     0f,
+        //     duration
+        // );
     }
 }

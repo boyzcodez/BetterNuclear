@@ -54,7 +54,7 @@ public partial class Items : Node2D
     {
         if (!_pools.TryGetValue(item, out var pool) || pool.Count == 0)
         {
-            GD.PrintErr("Ran out of items to use");
+            GD.PrintErr("Ran out of item " + item.Capitalize() +" to use");
             return;
         }
 

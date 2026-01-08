@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://j3njt40cp30h"]
+[gd_scene load_steps=10 format=3 uid="uid://j3njt40cp30h"]
 
 [ext_resource type="Script" uid="uid://cknaxwehe61nj" path="res://Main/Items/DustExplosion.cs" id="1_nrxwi"]
 [ext_resource type="PackedScene" uid="uid://bo4nnh3nwfxrs" path="res://Main/Items/Dust.tscn" id="1_u8e1p"]
@@ -12,54 +12,71 @@ shader_parameter/mix_sampling = 0
 shader_parameter/flip_h = false
 shader_parameter/flip_v = false
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nrxwi"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrd3j"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jmlkk"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbnn8"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_os2hb"]
+resource_local_to_scene = true
+shader = ExtResource("2_nrxwi")
+shader_parameter/pixel_size = 1.0
+shader_parameter/mix_sampling = 0
+shader_parameter/flip_h = false
+shader_parameter/flip_v = false
+
 [node name="DustExplosion" type="Node2D"]
 script = ExtResource("1_nrxwi")
 
 [node name="Dust" parent="." instance=ExtResource("1_u8e1p")]
 material = SubResource("ShaderMaterial_1nonp")
-minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
 
 [node name="Dust2" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
+material = SubResource("ShaderMaterial_nrxwi")
 frame = 3
 minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
 
 [node name="Dust3" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
+material = SubResource("ShaderMaterial_hrd3j")
 frame = 3
-minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
 
 [node name="Dust4" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
+material = SubResource("ShaderMaterial_jmlkk")
 frame = 4
-minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
 
 [node name="Dust5" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
-minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
+material = SubResource("ShaderMaterial_xbnn8")
 
 [node name="Dust6" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
-minDuration = 0.2
-maxDuration = 0.5
-minDistance = 10.0
-maxDistance = 40.0
+material = SubResource("ShaderMaterial_os2hb")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.6
+wait_time = 4.0
 one_shot = true

@@ -25,7 +25,7 @@ public partial class DustExplosion : Node2D, ICollectable
     }
     public void OnActivation()
     {
-        timer.Start(0.6f);
+        timer.Start(3f);
         
         foreach(var dust in dustParticles)
         {

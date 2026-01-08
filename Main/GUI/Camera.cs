@@ -78,8 +78,8 @@ public partial class Camera : Camera2D
     // Start a screen shake. If already shaking, call is ignored.
     public void StartShake(float intensity, float duration)
     {
-        if (_isShaking)
-            return; // don't apply new shake while shaking
+        if (_isShaking && intensity < _shakeIntensity)
+            return; // don't apply new shake while shaking unless it's bigger
 
         intensity = Mathf.Min(intensity, MAX_SHAKE_INTENSITY);
         if (intensity <= 0f || duration <= 0f)
