@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://lwsx067byndn"]
+[gd_scene load_steps=12 format=3 uid="uid://lwsx067byndn"]
 
 [ext_resource type="Texture2D" uid="uid://bauxraa6loona" path="res://Assets/SFX/LargeExplosion.png" id="1_ebgdd"]
 [ext_resource type="Script" uid="uid://cqmqcb822grdq" path="res://Main/Items/LargeExplosion.cs" id="2_sfs4w"]
@@ -10,10 +10,6 @@ region = Rect2(0, 0, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_8l816"]
 atlas = ExtResource("1_ebgdd")
 region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ls2w7"]
-atlas = ExtResource("1_ebgdd")
-region = Rect2(256, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bdp4l"]
 atlas = ExtResource("1_ebgdd")
@@ -49,9 +45,6 @@ animations = [{
 "texture": SubResource("AtlasTexture_8l816")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ls2w7")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_bdp4l")
 }, {
 "duration": 1.0,
@@ -71,12 +64,12 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 21.0
+"speed": 14.0
 }]
 
 [node name="LargeExplosion" type="AnimatedSprite2D"]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_fboqv")
-frame = 8
+frame = 7
 frame_progress = 1.0
 script = ExtResource("2_sfs4w")
