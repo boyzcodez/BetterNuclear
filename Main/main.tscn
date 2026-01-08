@@ -1,12 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://dh45k8re21imm"]
+[gd_scene load_steps=11 format=3 uid="uid://dh45k8re21imm"]
 
 [ext_resource type="Script" uid="uid://bjy5lrnxejv8m" path="res://Main/Main.cs" id="1_yh5la"]
 [ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://wtqj1t7hpe8p" path="res://Main/Entities/Player/Player.tscn" id="3_qvhan"]
 [ext_resource type="Script" uid="uid://caoawx78mp4aa" path="res://Main/GUI/Camera.cs" id="4_eunhr"]
 [ext_resource type="Script" uid="uid://e7a24qw1bk2m" path="res://Main/GUI/Fps.cs" id="5_k3v36"]
+[ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="6_f6fdm"]
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
+[ext_resource type="Shader" uid="uid://nlivjsru7y5y" path="res://Components/Shaders/Crack.gdshader" id="6_rj11h"]
 [ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="7_f6fdm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qac2q"]
+shader = ExtResource("6_rj11h")
+shader_parameter/refraction_offset = Vector2(25, 25)
+shader_parameter/reflection_offset = Vector2(1, 1)
+shader_parameter/reflection_color = Color(0.35357884, 0.9941744, 0.99999994, 0.8)
 
 [node name="Main" type="Node2D" groups=["Main"]]
 y_sort_enabled = true
@@ -35,6 +43,19 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 script = ExtResource("5_k3v36")
+
+[node name="ScreenCrack" type="TextureRect" parent="Camera/GUI/UI"]
+material = SubResource("ShaderMaterial_qac2q")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -222.0
+offset_top = -10.0
+offset_right = -30.0
+offset_bottom = 182.0
+grow_horizontal = 0
+texture = ExtResource("6_f6fdm")
 
 [node name="Bg" type="CanvasLayer" parent="Camera"]
 layer = -100
