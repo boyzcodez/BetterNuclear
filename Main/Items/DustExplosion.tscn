@@ -60,16 +60,13 @@ material = SubResource("ShaderMaterial_1nonp")
 
 [node name="Dust2" parent="." instance=ExtResource("1_u8e1p")]
 material = SubResource("ShaderMaterial_nrxwi")
-frame = 3
 minDuration = 0.2
 
 [node name="Dust3" parent="." instance=ExtResource("1_u8e1p")]
 material = SubResource("ShaderMaterial_hrd3j")
-frame = 3
 
 [node name="Dust4" parent="." instance=ExtResource("1_u8e1p")]
 material = SubResource("ShaderMaterial_jmlkk")
-frame = 4
 
 [node name="Dust5" parent="." instance=ExtResource("1_u8e1p")]
 material = SubResource("ShaderMaterial_xbnn8")

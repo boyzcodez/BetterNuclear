@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvj3rj3lgr7cn"]
+[gd_scene load_steps=16 format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
@@ -14,6 +14,7 @@
 [ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="13_bttlk"]
 [ext_resource type="Resource" uid="uid://wnkw22n0l7g0" path="res://Main/Items/List/CoinResource.tres" id="13_vlute"]
 [ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="14_bttlk"]
+[ext_resource type="Resource" uid="uid://bnkv381ul6fs" path="res://Main/Items/List/CraterResource.tres" id="15_d41uc"]
 
 [node name="MapGenerator" type="Node2D"]
 y_sort_enabled = true
@@ -47,4 +48,4 @@ enemies = [ExtResource("6_8scsi"), ExtResource("7_uvev8"), ExtResource("8_lpw80"
 [node name="Items" type="Node2D" parent="."]
 y_sort_enabled = true
 script = ExtResource("11_lpw80")
-itemScenes = [ExtResource("12_ccqbt"), ExtResource("13_vlute"), ExtResource("12_vlute"), ExtResource("13_bttlk"), ExtResource("14_bttlk")]
+itemScenes = [ExtResource("12_ccqbt"), ExtResource("13_vlute"), ExtResource("12_vlute"), ExtResource("13_bttlk"), ExtResource("14_bttlk"), ExtResource("15_d41uc")]

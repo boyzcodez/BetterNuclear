@@ -19,9 +19,12 @@ public partial class Dust : Sprite2D
         }
 
         // Reset transform and modulate to default "spawn" values
-        this.Position = Vector2.Zero;
-        this.Rotation = 0f;
-        this.Scale = Vector2.One;
+
+        Frame = GD.RandRange(0, 2);
+
+        Position = Vector2.Zero;
+        Rotation = 0f;
+        Scale = Vector2.One;
         Modulate = new Color(Modulate.R, Modulate.G, Modulate.B, 1f);
 
         // Random generator

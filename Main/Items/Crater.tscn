@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbrehgvxgmroh"]
+
+[ext_resource type="Texture2D" uid="uid://c7nf8ywwuj8c6" path="res://Assets/SFX/Crater.png" id="1_wnw6d"]
+[ext_resource type="Script" uid="uid://kj1mest30uwv" path="res://Main/Items/Crater.cs" id="2_0u007"]
+
+[node name="Crater" type="Sprite2D"]
+z_index = -1
+texture = ExtResource("1_wnw6d")
+script = ExtResource("2_0u007")

@@ -18,6 +18,7 @@ public partial class LargeExplosion : AnimatedSprite2D, ICollectable
     {
         Play("default");
         Eventbus.TriggerSpawnItem("DustExplosion", GlobalPosition);
+        Eventbus.TriggerSpawnItem("Crater", GlobalPosition);
         Eventbus.TriggerExplosion(50f, GlobalPosition, damageData);
         Eventbus.TriggerScreenShake(5f, 0.3f);
     }

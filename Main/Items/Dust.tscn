@@ -1,12 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://bo4nnh3nwfxrs"]
 
 [ext_resource type="Material" uid="uid://dgg07406lrcj4" path="res://Components/Shaders/Guns.tres" id="1_wbiag"]
-[ext_resource type="Texture2D" uid="uid://5i0fqqex0i5b" path="res://Assets/SFX/Dust.png" id="2_7wkw5"]
+[ext_resource type="Texture2D" uid="uid://mm52vthkr2ak" path="res://Assets/Particles/SpiralDust.png" id="2_wbiag"]
 [ext_resource type="Script" uid="uid://djcq05072tq3l" path="res://Main/Items/Dust.cs" id="3_kin5y"]
 
 [node name="Dust" type="Sprite2D"]
 material = ExtResource("1_wbiag")
-texture = ExtResource("2_7wkw5")
-hframes = 5
-frame = 2
+texture = ExtResource("2_wbiag")
+hframes = 3
+vframes = 3
 script = ExtResource("3_kin5y")

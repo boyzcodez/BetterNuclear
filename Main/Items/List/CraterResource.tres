@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://bnkv381ul6fs"]
+
+[ext_resource type="PackedScene" uid="uid://cbrehgvxgmroh" path="res://Main/Items/Crater.tscn" id="1_8ldml"]
+[ext_resource type="Script" uid="uid://buo4n5miby8sq" path="res://Components/ResourceTypes/ItemResource.cs" id="1_64unp"]
+
+[resource]
+script = ExtResource("1_64unp")
+itemScene = ExtResource("1_8ldml")
+Name = "Crater"
+AmountOfItem = 100
+metadata/_custom_type_script = "uid://buo4n5miby8sq"
