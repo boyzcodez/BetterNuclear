@@ -23,6 +23,7 @@ public partial class EnemyPool : Node2D
         PreparePool();
 
         Eventbus.SpawnEnemies += CalcRound;
+        Eventbus.Reset += ResetEnemies;
     }
 
 
@@ -127,7 +128,7 @@ public partial class EnemyPool : Node2D
 
         if (enemyCount <= 0)
         {
-            Eventbus.TriggerEnemiesKilled();
+            Eventbus.TriggerGenerateMap();
         }
     }
     private void ResetEnemies()

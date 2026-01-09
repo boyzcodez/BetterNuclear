@@ -186,6 +186,8 @@ public partial class Enemy : Entity
 
     public void Activate()
     {
+        hurtbox.ResetHealth();
+        
         active = true;
         Visible = true;
 

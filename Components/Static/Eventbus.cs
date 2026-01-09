@@ -14,12 +14,20 @@ public static class Eventbus
 
     // Game stuff
     public static event Action Reset;
+    public static event Action GenerateMap;
 
 
     // Stats tracking
     public static int activeBullets = 0;
     public static int dangerValue = 0;
     public static bool gameOn = false;
+
+    public static void ResetGame()
+    {
+        dangerValue = 0;
+        gameOn = false;
+        TriggerReset();
+    }
 
 
     // enemy stuff
@@ -40,4 +48,6 @@ public static class Eventbus
     // Game stuff
     public static void TriggerReset() =>
         Reset?.Invoke();
+    public static void TriggerGenerateMap() =>
+        GenerateMap?.Invoke();
 }

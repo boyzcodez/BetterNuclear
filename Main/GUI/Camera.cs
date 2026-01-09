@@ -3,6 +3,11 @@ using System;
 
 public partial class Camera : Camera2D
 {
+
+    [Export] private TextureRect crack1;
+    [Export] private TextureRect crack2;
+    [Export] private TextureRect crack3;
+
     [Export] private float MouseLookMaxDistance = 450f;
     [Export] private float MouseLookStrength = 0.2f; // 0–1 feel
     [Export] private float MouseLookSmoothing = 10f;
@@ -34,6 +39,8 @@ public partial class Camera : Camera2D
             return;
 
         float d = (float)delta;
+
+        UpdateCrackVisuals();
 
         if (_isShaking)
         {
@@ -89,6 +96,15 @@ public partial class Camera : Camera2D
         _shakeIntensity = intensity;
         _shakeDuration = duration;
         _shakeTime = duration;
+    }
+
+    private void UpdateCrackVisuals()
+    {
+        float healthPercent = player.hurtbox.Health / player.hurtbox.MaxHealth;
+
+        crack1.Visible = healthPercent < 0.7f;
+        crack2.Visible = healthPercent < 0.5f;
+        crack3.Visible = healthPercent < 0.3f;
     }
 
 

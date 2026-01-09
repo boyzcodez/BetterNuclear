@@ -10,7 +10,8 @@ public partial class Crater : Sprite2D, ICollectable
         _Name = Name;
         _Pool = pool;
 
-        Eventbus.EnemiesKilled += OnDeactivation;
+        Eventbus.GenerateMap += OnDeactivation;
+        Eventbus.Reset += OnDeactivation;
 
         //Rotation = (float)GD.Randf() * (float)Math.PI / 6f - (float)Math.PI / 12f;
         Rotation = (float)GD.Randf() * (float)Math.PI / 3f - (float)Math.PI / 6f;

@@ -12,7 +12,8 @@ public partial class Hurtbox : Node2D, ICollidable
     public Entity parent;
 
     public bool active => parent.active;
-    public int Health = 5;
+    public float Health = 5;
+    [Export] public float MaxHealth = 5;
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
@@ -24,6 +25,8 @@ public partial class Hurtbox : Node2D, ICollidable
     {
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         main.hurtboxes.Add(this);
+
+        Health = MaxHealth;
 
         if (GetParent() is Entity _parent)
         {
@@ -44,5 +47,10 @@ public partial class Hurtbox : Node2D, ICollidable
             EmitSignal("Death");
         }
             
+    }
+
+    public void ResetHealth()
+    {
+        Health = MaxHealth;
     }
 }

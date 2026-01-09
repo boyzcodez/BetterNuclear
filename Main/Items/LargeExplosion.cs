@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class LargeExplosion : AnimatedSprite2D, ICollectable
 {
-    public DamageData damageData = new DamageData(0, 200f, "Explosion", "Explosion");
+    public DamageData damageData = new DamageData(5f, 200f, "Explosion", "Explosion");
     public string _Name;
     public Items _Pool;
 
@@ -19,8 +19,8 @@ public partial class LargeExplosion : AnimatedSprite2D, ICollectable
         Play("default");
         Eventbus.TriggerSpawnItem("DustExplosion", GlobalPosition);
         Eventbus.TriggerSpawnItem("Crater", GlobalPosition);
-        Eventbus.TriggerExplosion(50f, GlobalPosition, damageData);
-        Eventbus.TriggerScreenShake(5f, 0.3f);
+        Eventbus.TriggerExplosion(60f, GlobalPosition, damageData);
+        Eventbus.TriggerScreenShake(10f, 0.4f);
     }
     public void OnDeactivation()
     {

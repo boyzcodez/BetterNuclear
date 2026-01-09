@@ -30,6 +30,7 @@ public partial class Player : Entity
         active = true;
 
         hurtbox.Hit += Knockback;
+        hurtbox.Death += OnDeath;
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -139,6 +140,12 @@ public partial class Player : Entity
 
         KnockbackTime = 0.2f;
         KnockbackVelocity = knockback;
+    }
+
+    public void OnDeath()
+    {
+        Eventbus.ResetGame();
+        hurtbox.ResetHealth();
     }
 
     private void DodgeRoll(Vector2 direction)

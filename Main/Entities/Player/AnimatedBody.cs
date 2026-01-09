@@ -48,7 +48,7 @@ public partial class AnimatedBody : AnimatedSprite2D
 
     public void _on_hurtbox_hit(Vector2 direction, float force)
     {
-        Eventbus.TriggerScreenShake(5.0f, 0.2f);
+        Eventbus.TriggerScreenShake(8.0f, 0.2f);
         PlayAnimation(currentDirection + "Hit", 2);
     }
 

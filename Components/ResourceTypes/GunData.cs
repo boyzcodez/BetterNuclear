@@ -34,7 +34,7 @@ public partial class GunData : Resource
     [Export] public Texture2D icon { get; set; }
 
     [Export] public int CollisionLayer {get; set;} = 2; //1 Player, 2 Enemy, 3 ???
-    [Export] public int Damage { get; set; } = 1;
+    [Export] public float Damage { get; set; } = 1f;
     [Export] public float Knockback { get; set; } = 0f;
     [Export] public float BulletRaidus {get; set;} = 5f;
     [Export] public float BulletSpeed { get; set; } = 140f;

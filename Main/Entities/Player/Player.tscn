@@ -480,6 +480,7 @@ script = ExtResource("1_1skx3")
 position = Vector2(0, -9)
 SetCollisionLayer = 1
 Radius = 10.0
+MaxHealth = 1.0
 
 [node name="AnimatedBody" type="AnimatedSprite2D" parent="."]
 material = ExtResource("3_0qxmk")
