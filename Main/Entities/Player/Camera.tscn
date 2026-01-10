@@ -9,7 +9,7 @@
 shader = ExtResource("3_2dgwf")
 shader_parameter/refraction_offset = Vector2(25, 25)
 shader_parameter/reflection_offset = Vector2(1, 1)
-shader_parameter/reflection_color = Color(0.35357884, 0.9941744, 0.99999994, 0.8)
+shader_parameter/reflection_color = Color(0.3529412, 0.99607843, 1, 0.39215687)
 
 [node name="Camera" type="Camera2D" node_paths=PackedStringArray("crack1", "crack2", "crack3")]
 script = ExtResource("1_3q388")
