@@ -69,10 +69,10 @@ public partial class BulletPool : Node2D
 
     private static int CalculatePoolSize(float lifetime, float fireRate, int maxAmmo, int bulletCount)
     {
-        if (lifetime <= 0f || fireRate <= 0f || maxAmmo <= 0 || bulletCount <= 0)
+        if (lifetime <= 0f || fireRate <= 0f || bulletCount <= 0)
             return 0;
 
-        float shotsAlive = Mathf.Min(lifetime / fireRate, maxAmmo);
-        return Mathf.CeilToInt(shotsAlive * bulletCount);
+        int concurrentShots = Mathf.FloorToInt(lifetime / fireRate) + 1;
+        return concurrentShots * bulletCount;
     }
 }

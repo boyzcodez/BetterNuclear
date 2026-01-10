@@ -64,12 +64,12 @@ public partial class Guns : Node2D
                     gunData.GunId
                 );
 
-            pool?.PreparePool(initData, bulletAmount);
+            pool?.PreparePool(initData, (int)(gunData.MaxAmmo * gunData.BulletCount * gunData.FireRate * gunData.BulletLifeTime));
             if (gunData.NeedsCopies)
             {
                 initData.key = gunData.GunId + "Copy";
                 initData.Behaviors = gunData.CopyBehaviors.Length > 0 ? gunData.CopyBehaviors : [new Normal()];
-                pool?.PreparePool(initData, bulletAmount);
+                pool?.PreparePool(initData, (int)(gunData.MaxAmmo * gunData.BulletCount * gunData.FireRate * gunData.BulletLifeTime));
             }
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
@@ -93,7 +93,7 @@ public partial class Guns : Node2D
             return 0;
 
         float shotsAlive = Mathf.Min(lifetime / fireRate, maxAmmo);
-        return Mathf.CeilToInt(shotsAlive * bulletCount);
+        return Mathf.CeilToInt(shotsAlive * bulletCount * 1.2f);
     }
 
     public void SwitchGuns(int direction)
