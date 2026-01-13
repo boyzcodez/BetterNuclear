@@ -4,28 +4,24 @@ using System;
 [GlobalClass]
 public partial class Normal : BehaviorResource, IBulletBehavior
 {
-    public override void OnInit(Bullet b)
-    {
-        GD.Print(b.damageData.Damage);
-    }
-    public override void OnSpawn(Bullet b)
+    public override void OnSpawn(ModularBullet b)
     {
     }
 
-    public override void OnUpdate(Bullet b, float delta)
+    public override void OnUpdate(ModularBullet b, float delta)
     {
         b.AddDisplacement(b.Velocity * b.Speed * delta);
     }
 
-    public override void OnHit(Bullet b, ICollidable collidable)
+    public override void OnHit(ModularBullet b, ICollidable collidable)
     {
         b.Deactivate();
     }
-    public override void OnKill(Bullet b, ICollidable collidable)
+    public override void OnKill(ModularBullet b, ICollidable collidable)
     {
     }
 
-    public override void OnWallHit(Bullet b, Vector2 normal)
+    public override void OnWallHit(ModularBullet b, Vector2 normal)
     {
         b.Deactivate();
     }

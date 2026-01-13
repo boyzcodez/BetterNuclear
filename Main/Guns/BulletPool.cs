@@ -3,76 +3,118 @@ using System.Collections.Generic;
 
 public partial class BulletPool : Node2D
 {
+    public static BulletPool Instance { get; private set; }
+
     [Export] public PackedScene BulletScene;
+    [Export] public int MaxBullets = 20000;
 
     private sealed class Pool
     {
-        public readonly Stack<Bullet> Free = new();
-        public int CreatedCount = 0;
+        public readonly Stack<ModularBullet> Free = new();
+        public readonly List<ModularBullet> Active = new();
     }
 
     private readonly Dictionary<StringName, Pool> _pools = new();
-    private int _totalCreated = 0;
+    private readonly List<ModularBullet> _allActive = new();
 
-    public void PreparePool(IBulletInitData initData, int bulletAmount)
+    public override void _Ready()
     {
-        var key = initData.key;
+        Instance = this;
+    }
 
+    // --- Pool prep ---
+    public void PreparePool(StringName key, int amount)
+    {
         if (!_pools.TryGetValue(key, out var pool))
         {
             pool = new Pool();
             _pools[key] = pool;
         }
 
-        for (int i = 0; i < bulletAmount; i++)
+        for (int i = 0; i < amount; i++)
         {
-            var bullet = BulletScene.Instantiate<Bullet>();
-
-            bullet.Behaviors.Clear();
-            bullet.Init(initData);
-
+            var bullet = BulletScene.Instantiate<ModularBullet>();
+            bullet.Visible = false;
             AddChild(bullet);
-
-            // IMPORTANT: pooled bullets should not be "doing stuff"
-
             pool.Free.Push(bullet);
-            pool.CreatedCount++;
-            _totalCreated++;
         }
     }
 
-    public Bullet GetBullet(StringName key)
+    // --- Spawn ---
+    public ModularBullet Spawn(
+        StringName key,
+        Vector2 position,
+        Vector2 velocity,
+        float lifetime,
+        float damage,
+        int CollisionLayer,
+        BulletPriority priority,
+        IEnumerable<IBulletBehavior> behaviors
+    )
     {
+        if (_allActive.Count >= MaxBullets)
+            CullLowestPriority(priority);
+
         if (!_pools.TryGetValue(key, out var pool) || pool.Free.Count == 0)
         {
-            GD.Print("No bullets to use " + key);
+            GD.Print("Returned no bullet here");
             return null;
         }
             
 
         var bullet = pool.Free.Pop();
+        pool.Active.Add(bullet);
+        _allActive.Add(bullet);
 
-        Eventbus.activeBullets += 1;
+        bullet.Activate(
+            position,
+            velocity,
+            lifetime,
+            damage,
+            key,
+            CollisionLayer,
+            priority,
+            behaviors
+        );
+
         return bullet;
     }
 
-    public void ReturnBullet(StringName key, Bullet bullet)
+    // --- Release ---
+    public void Release(ModularBullet bullet)
     {
-        if (!IsInstanceValid(bullet)) return;
+        if (!IsInstanceValid(bullet))
+            return;
 
-        if (_pools.TryGetValue(key, out var pool))
+        bullet.Visible = false;
+
+        if (_pools.TryGetValue(bullet.PoolKey, out var pool))
+        {
+            pool.Active.Remove(bullet);
             pool.Free.Push(bullet);
-        // else: unknown key, ignore or push into a "misc" pool
+        }
 
-        Eventbus.activeBullets -= 1;
+        _allActive.Remove(bullet);
     }
 
-    private static int CalculatePoolSize(float lifetime, float fireRate, int maxAmmo, int bulletCount)
+    // --- Priority culling ---
+    private void CullLowestPriority(BulletPriority incomingPriority)
     {
-        if (lifetime <= 0f || fireRate <= 0f || bulletCount <= 0)
-            return 0;
-
-        int concurrentShots = Mathf.FloorToInt(lifetime / fireRate) + 1;
-        return concurrentShots * bulletCount;
+        for (int i = 0; i < _allActive.Count; i++)
+        {
+            if (_allActive[i].Priority < incomingPriority)
+            {
+                _allActive[i].Deactivate();
+                return;
+            }
+        }
     }
+}
+
+public enum BulletPriority
+{
+    Trash,
+    Normal,
+    Important,
+    Critical
 }

@@ -7,28 +7,25 @@ public partial class Bounce : BehaviorResource, IBulletBehavior
     [Export] public int bouncesTotal = 3;
     public int bouncesLeft = 3;
 
-    public override void OnInit(Bullet b)
-    {
-    }
-    public override void OnSpawn(Bullet b)
+    public override void OnSpawn(ModularBullet b)
     {
         bouncesLeft = bouncesTotal;
     }
 
-    public override void OnUpdate(Bullet b, float delta)
+    public override void OnUpdate(ModularBullet b, float delta)
     {
         b.AddDisplacement(b.Velocity * b.Speed * delta);
     }
 
-    public override void OnHit(Bullet b, ICollidable collidable)
+    public override void OnHit(ModularBullet b, ICollidable collidable)
     {
         b.Deactivate();
     }
-    public override void OnKill(Bullet b, ICollidable collidable)
+    public override void OnKill(ModularBullet b, ICollidable collidable)
     {
     }
 
-    public override void OnWallHit(Bullet b, Vector2 normal)
+    public override void OnWallHit(ModularBullet b, Vector2 normal)
     {
         if (bouncesLeft-- <= 0)
         {

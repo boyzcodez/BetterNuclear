@@ -22,6 +22,10 @@ public partial class Guns : Node2D
     private int _currentGunIndex = 0;
     private float _cooldown = 0f;
     public string id;
+
+    public float BulletSpeed = 600f;
+    public float BulletLifetime = 3f;
+    public int Damage = 1;
     
     public override void _Ready()
     {
@@ -40,37 +44,7 @@ public partial class Guns : Node2D
             gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
             gunData.HitAnimation.Name = gunData.GunId + "OnHit";
 
-            var bulletAmount = CalculateNeededBullets(
-                gunData.BulletLifeTime,
-                gunData.FireRate,
-                gunData.MaxAmmo,
-                gunData.BulletCount
-            );
-
-            var initData = new IBulletInitData(
-                    new DamageData(
-                        gunData.Damage,
-                        gunData.Knockback,
-                        gunData.GunId,
-                        gunData.DamageType
-                    ),
-                    gunData.Behaviors,
-                    gunData.ShootAnimation,
-                    gunData.HitAnimation,
-                    gunData.BulletRaidus,
-                    gunData.BulletSpeed,
-                    gunData.BulletLifeTime,
-                    gunData.CollisionLayer,
-                    gunData.GunId
-                );
-
-            pool?.PreparePool(initData, (int)(gunData.MaxAmmo * gunData.BulletCount * gunData.FireRate * gunData.BulletLifeTime));
-            if (gunData.NeedsCopies)
-            {
-                initData.key = gunData.GunId + "Copy";
-                initData.Behaviors = gunData.CopyBehaviors.Length > 0 ? gunData.CopyBehaviors : [new Normal()];
-                pool?.PreparePool(initData, (int)(gunData.MaxAmmo * gunData.BulletCount * gunData.FireRate * gunData.BulletLifeTime));
-            }
+            pool?.PreparePool(gunData.GunId, 300);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
@@ -160,15 +134,16 @@ public partial class Guns : Node2D
         {
             float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
 
-            Bullet bullet = pool.GetBullet(id);
-            if (bullet == null)
-                break;
-
-            bullet.GlobalPosition = muzzlePos;
-            bullet.Rotation = angle;
-            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
-
-            bullet.Activate();
+            BulletPool.Instance.Spawn(
+                key: currentGun.GunId,
+                position: muzzlePos,
+                velocity: new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized(),
+                lifetime: currentGun.BulletLifeTime,
+                damage: currentGun.Damage,
+                CollisionLayer: currentGun.CollisionLayer,
+                priority: BulletPriority.Normal,
+                behaviors: currentGun.Behaviors
+            );
         }
 
         _cooldown = currentGun.FireRate;

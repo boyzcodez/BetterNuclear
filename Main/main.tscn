@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://wtqj1t7hpe8p" path="res://Main/Entities/Player/Player.tscn" id="3_qvhan"]
 [ext_resource type="PackedScene" uid="uid://c78gs38bkpe7c" path="res://Main/Entities/Player/Camera.tscn" id="4_liyct"]
+[ext_resource type="PackedScene" uid="uid://50et3mcpgeue" path="res://Main/Guns/Bullets/NewBullet/ModularBullet.tscn" id="6_ib3t1"]
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
-[ext_resource type="PackedScene" uid="uid://dkmygg16bwx4r" path="res://Main/Guns/Bullet.tscn" id="7_f6fdm"]
 
 [node name="Main" type="Node2D" groups=["Main"]]
 y_sort_enabled = true
@@ -20,4 +20,4 @@ script = ExtResource("1_yh5la")
 [node name="BulletPool" type="Node2D" parent="." groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
-BulletScene = ExtResource("7_f6fdm")
+BulletScene = ExtResource("6_ib3t1")

@@ -3,10 +3,9 @@ using System;
 
 public interface IBulletBehavior
 {
-    void OnInit(Bullet b);
-    void OnSpawn(Bullet b);
-    void OnUpdate(Bullet b, float delta);
-    void OnHit(Bullet b, ICollidable target);
-    void OnKill(Bullet b, ICollidable target);
-    void OnWallHit(Bullet b, Vector2 normal);
+    void OnSpawn(ModularBullet b);
+    void OnUpdate(ModularBullet b, float delta);
+    void OnHit(ModularBullet b, ICollidable target);
+    void OnKill(ModularBullet b, ICollidable target);
+    void OnWallHit(ModularBullet b, Vector2 normal);
 }

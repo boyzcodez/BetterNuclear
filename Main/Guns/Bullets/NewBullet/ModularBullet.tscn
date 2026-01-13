@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://50et3mcpgeue"]
+
+[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_1k35n"]
+[ext_resource type="Script" uid="uid://ctkjnt1th4gy0" path="res://Main/Guns/Bullets/NewBullet/ModularBullet.cs" id="2_67j31"]
+
+[node name="ModularBullet" type="Sprite2D"]
+texture = ExtResource("1_1k35n")
+hframes = 8
+vframes = 9
+script = ExtResource("2_67j31")

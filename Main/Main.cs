@@ -11,7 +11,7 @@ public partial class Main : Node2D
 
     public WallGrid wallGrid {get;private set;} = new WallGrid();
 
-    public List<Bullet> bullets = new();
+    public List<ModularBullet> bullets = new();
     public List<Hurtbox> hurtboxes = new();
 
     public override void _Ready()
@@ -71,7 +71,7 @@ public partial class Main : Node2D
 
                 if (hurtbox.Health > 0)
                 {
-                    hurtbox.TakeDamage(damageData, direction);
+                    hurtbox.TakeDamage(damageData.Damage, damageData.Knockback, direction);
                 }
             }
         }
@@ -108,14 +108,14 @@ public partial class Main : Node2D
             {
                 if (obj is not Hurtbox hurtbox) continue;
 
-                if (bullet.CollisionLayer != obj.CollisionLayer) continue;
+                if (bullet.Layer != obj.CollisionLayer) continue;
 
                 float r = bullet.Radius + hurtbox.Radius;
                 if (bullet.GlobalPosition.DistanceSquaredTo(hurtbox.GlobalPosition) <= r * r)
                 {
                     if (hurtbox.Health > 0)
                     {
-                        hurtbox.TakeDamage(bullet.damageData, bullet.Velocity);
+                        hurtbox.TakeDamage(bullet.Damage, bullet.Knockback, bullet.Velocity);
                         foreach (var behavior in bullet.Behaviors)
                         {
                             behavior.OnHit(bullet, hurtbox);

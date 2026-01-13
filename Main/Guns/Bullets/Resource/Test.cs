@@ -5,45 +5,48 @@ using System;
 public partial class Test : BehaviorResource, IBulletBehavior
 {
     [Export] private int bulletAmount = 10;
-    public override void OnInit(Bullet b)
-    {
-    }
-    public override void OnSpawn(Bullet b)
+    public override void OnSpawn(ModularBullet b)
     {
     }
 
-    public override void OnUpdate(Bullet b, float delta)
+    public override void OnUpdate(ModularBullet b, float delta)
     {
         b.AddDisplacement(b.Velocity * b.Speed * delta);
     }
 
-    public override void OnHit(Bullet b, ICollidable collidable)
+    public override void OnHit(ModularBullet b, ICollidable collidable)
     {
         b.Deactivate();
     }
-    public override void OnKill(Bullet b, ICollidable collidable)
+    public override void OnKill(ModularBullet b, ICollidable collidable)
     {
-        // Spawn `bulletAmount` bullets evenly around 360 degrees
-        var spawnPos = b.GlobalPosition;
-
-        for (int i = 0; i < bulletAmount; i++)
+        Vector2[] dirs =
         {
-            Bullet bullet = b.pool.GetBullet(b.key + "Copy");
-            if (bullet == null)
-                continue;
+            Vector2.Up,
+            Vector2.Right,
+            Vector2.Down,
+            Vector2.Left
+        };
 
-            float angle = i * (2f * Mathf.Pi / bulletAmount);
-            bullet.GlobalPosition = spawnPos;
-            bullet.Rotation = angle;
-            bullet.Velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
-            bullet.Activate();
+        foreach (var dir in dirs)
+        {
+            BulletPool.Instance.Spawn(
+                key: b.PoolKey,
+                position: b.GlobalPosition,
+                velocity: dir,
+                lifetime: 2f,
+                damage: b.Damage,
+                CollisionLayer: b.Layer,
+                priority: BulletPriority.Trash,
+                behaviors: new BehaviorResource[] {new Normal()}
+            );
         }
     }
 
-    public override void OnWallHit(Bullet b, Vector2 normal)
+    public override void OnWallHit(ModularBullet b, Vector2 normal)
     {
         b.Deactivate();
 
-        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+        //Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
     }
 }

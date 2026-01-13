@@ -4,25 +4,22 @@ using System;
 [GlobalClass]
 public abstract partial class BehaviorResource : Resource, IBulletBehavior
 {
-    public virtual void OnInit(Bullet b)
-    {
-    }
-    public virtual void OnSpawn(Bullet b)
+    public virtual void OnSpawn(ModularBullet b)
     {
     }
 
-    public virtual void OnUpdate(Bullet b, float delta)
+    public virtual void OnUpdate(ModularBullet b, float delta)
     {
     }
 
-    public virtual void OnHit(Bullet b, ICollidable collidable)
+    public virtual void OnHit(ModularBullet b, ICollidable collidable)
     {
     }
-    public virtual void OnKill(Bullet b, ICollidable collidable)
+    public virtual void OnKill(ModularBullet b, ICollidable collidable)
     {
     }
 
-    public virtual void OnWallHit(Bullet b, Vector2 normal)
+    public virtual void OnWallHit(ModularBullet b, Vector2 normal)
     {
     }
 }
