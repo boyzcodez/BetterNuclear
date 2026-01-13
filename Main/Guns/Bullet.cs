@@ -9,6 +9,7 @@ public partial class Bullet : AnimatedSprite2D, ICollidable
     public float LifeTime = 5f;
     public float _lifeTime = 5f;
     public int CollisionLayer = 2; // 2 PlayerBullet, 1 EnemyBullet, etc
+    // this is a test comment for a new branch
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
