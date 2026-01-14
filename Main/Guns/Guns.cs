@@ -43,8 +43,6 @@ public partial class Guns : Node2D
         {
             gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
             gunData.HitAnimation.Name = gunData.GunId + "OnHit";
-
-            pool?.PreparePool(gunData.GunId, 300);
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
 
@@ -134,13 +132,13 @@ public partial class Guns : Node2D
         {
             float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
 
-            BulletPool.Instance.Spawn(
+            BulletPool.Spawn(
                 key: currentGun.GunId,
                 position: muzzlePos,
                 velocity: new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized(),
                 lifetime: currentGun.BulletLifeTime,
                 damage: currentGun.Damage,
-                CollisionLayer: currentGun.CollisionLayer,
+                collisionLayer: currentGun.CollisionLayer,
                 priority: BulletPriority.Normal,
                 behaviors: currentGun.Behaviors
             );

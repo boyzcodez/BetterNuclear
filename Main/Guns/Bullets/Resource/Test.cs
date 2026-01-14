@@ -30,13 +30,13 @@ public partial class Test : BehaviorResource, IBulletBehavior
 
         foreach (var dir in dirs)
         {
-            BulletPool.Instance.Spawn(
+            BulletPool.Spawn(
                 key: b.PoolKey,
                 position: b.GlobalPosition,
                 velocity: dir,
                 lifetime: 2f,
                 damage: b.Damage,
-                CollisionLayer: b.Layer,
+                collisionLayer: b.Layer,
                 priority: BulletPriority.Trash,
                 behaviors: new BehaviorResource[] {new Normal()}
             );

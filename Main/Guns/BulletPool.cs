@@ -6,73 +6,93 @@ public partial class BulletPool : Node2D
     public static BulletPool Instance { get; private set; }
 
     [Export] public PackedScene BulletScene;
-    [Export] public int MaxBullets = 20000;
+    [Export] public int MaxBullets = 5000;
+    [Export] public int Prewarm = 2000;
 
-    private sealed class Pool
+    // Free bullets ready to use
+    private readonly Stack<ModularBullet> _free = new();
+
+
+    public readonly List<ModularBullet> _activeAll = new();
+    private readonly Dictionary<ModularBullet, int> _activeAllIndex = new();
+    
+    private readonly List<ModularBullet> _activeSnapshot = new();
+
+    // Active bullets by priority (for fast culling)
+    private readonly List<ModularBullet>[] _activeByPriority =
     {
-        public readonly Stack<ModularBullet> Free = new();
-        public readonly List<ModularBullet> Active = new();
-    }
+        new List<ModularBullet>(256), // Trash
+        new List<ModularBullet>(256), // Normal
+        new List<ModularBullet>(256), // Important
+        new List<ModularBullet>(256), // Critical
+    };
 
-    private readonly Dictionary<StringName, Pool> _pools = new();
-    private readonly List<ModularBullet> _allActive = new();
+    private readonly Dictionary<ModularBullet, int> _priorityIndex = new();
+
+    private int _created;
 
     public override void _Ready()
     {
         Instance = this;
+        AddToGroup("BulletPool");
+
+        int toPrewarm = Mathf.Clamp(Prewarm, 0, MaxBullets);
+        for (int i = 0; i < toPrewarm; i++)
+            CreateOne();
     }
 
-    // --- Pool prep ---
-    public void PreparePool(StringName key, int amount)
+    public IReadOnlyList<ModularBullet> GetActiveSnapshot()
     {
-        if (!_pools.TryGetValue(key, out var pool))
-        {
-            pool = new Pool();
-            _pools[key] = pool;
-        }
-
-        for (int i = 0; i < amount; i++)
-        {
-            var bullet = BulletScene.Instantiate<ModularBullet>();
-            bullet.Visible = false;
-            AddChild(bullet);
-            pool.Free.Push(bullet);
-        }
+        _activeSnapshot.Clear();
+        _activeSnapshot.AddRange(_activeAll); // copy references only (cheap)
+        return _activeSnapshot;
     }
-
-    // --- Spawn ---
-    public ModularBullet Spawn(
+    
+    public static ModularBullet Spawn(
         StringName key,
         Vector2 position,
         Vector2 velocity,
         float lifetime,
         float damage,
-        int CollisionLayer,
+        int collisionLayer,
         BulletPriority priority,
         IEnumerable<IBulletBehavior> behaviors
     )
     {
-        if (_allActive.Count >= MaxBullets)
-            CullLowestPriority(priority);
+        return Instance?.SpawnInternal(key, position, velocity, lifetime, damage, collisionLayer, priority, behaviors);
+    }
 
-        if (!_pools.TryGetValue(key, out var pool) || pool.Free.Count == 0)
-        {
-            GD.Print("Returned no bullet here");
+    public ModularBullet SpawnInternal(
+        StringName key,
+        Vector2 position,
+        Vector2 velocity,
+        float lifetime,
+        float damage,
+        int collisionLayer,
+        BulletPriority priority,
+        IEnumerable<IBulletBehavior> behaviors
+    )
+    {
+        // Reclaim any bullets that have been Deactivated() by their own logic
+        // (lifetime ended, hit something, etc.)
+        ReclaimInactiveBullets();
+
+        if (!EnsureFree(priority))
             return null;
-        }
-            
 
-        var bullet = pool.Free.Pop();
-        pool.Active.Add(bullet);
-        _allActive.Add(bullet);
+        var bullet = _free.Pop();
 
+        // Track as active
+        AddActive(bullet, priority);
+
+        // Activate with YOUR exact signature/fields
         bullet.Activate(
             position,
             velocity,
             lifetime,
             damage,
             key,
-            CollisionLayer,
+            collisionLayer,
             priority,
             behaviors
         );
@@ -80,34 +100,163 @@ public partial class BulletPool : Node2D
         return bullet;
     }
 
-    // --- Release ---
+    /// <summary>
+    /// Manual release if you ever want to call it directly.
+    /// (Not required for your current bullet, since we auto-reclaim.)
+    /// </summary>
     public void Release(ModularBullet bullet)
     {
         if (!IsInstanceValid(bullet))
             return;
 
+        if (!_activeAllIndex.ContainsKey(bullet))
+            return; // already free / not tracked
+
+        // Ensure it's visually/logic inactive
         bullet.Visible = false;
+        bullet.Active = false; // your bullet uses a public bool
 
-        if (_pools.TryGetValue(bullet.PoolKey, out var pool))
-        {
-            pool.Active.Remove(bullet);
-            pool.Free.Push(bullet);
-        }
-
-        _allActive.Remove(bullet);
+        RemoveActive(bullet);
+        _free.Push(bullet);
     }
 
-    // --- Priority culling ---
-    private void CullLowestPriority(BulletPriority incomingPriority)
+    public override void _Process(double delta)
     {
-        for (int i = 0; i < _allActive.Count; i++)
+        // Continuous reclaim so you never leak active bullets even if they deactivate in their own Update().
+        ReclaimInactiveBullets();
+    }
+
+    // ----------------------------
+    // Internals
+    // ----------------------------
+
+    private void ReclaimInactiveBullets()
+    {
+        // Scan active list; swap-remove safe loop
+        for (int i = _activeAll.Count - 1; i >= 0; i--)
         {
-            if (_allActive[i].Priority < incomingPriority)
+            var b = _activeAll[i];
+            if (!IsInstanceValid(b) || !b.Active)
             {
-                _allActive[i].Deactivate();
-                return;
+                // If invalid or deactivated, return it to pool
+                if (IsInstanceValid(b))
+                {
+                    b.Visible = false;
+                    // optional: clear behaviors to avoid holding references
+                    b.Behaviors.Clear();
+                }
+
+                RemoveActiveAt(i, b);
+                if (IsInstanceValid(b))
+                    _free.Push(b);
             }
         }
+    }
+
+    private bool EnsureFree(BulletPriority incomingPriority)
+    {
+        if (_free.Count > 0)
+            return true;
+
+        if (_created < MaxBullets)
+        {
+            CreateOne();
+            return _free.Count > 0;
+        }
+
+        // Max reached: try to cull something lower than incoming
+        if (CullLowerThan(incomingPriority))
+            return _free.Count > 0;
+
+        // No room possible (e.g., incoming Trash and everything active is Trash/Critical)
+        return false;
+    }
+
+    private void CreateOne()
+    {
+        if (_created >= MaxBullets || BulletScene == null)
+            return;
+
+        var bullet = BulletScene.Instantiate<ModularBullet>();
+        bullet.Visible = false;
+
+        // Important: add under BulletPool so _Ready() runs and finds Main/BulletPool via group
+        AddChild(bullet);
+
+        _created++;
+        _free.Push(bullet);
+    }
+
+    private bool CullLowerThan(BulletPriority incoming)
+    {
+        for (int p = 0; p < (int)incoming; p++)
+        {
+            var list = _activeByPriority[p];
+            if (list.Count == 0)
+                continue;
+
+            // Take last for O(1)
+            var b = list[list.Count - 1];
+
+            // Deactivate it (your bullet will set Active=false)
+            b.Deactivate();
+
+            // Immediately reclaim it now (so Spawn can proceed without waiting a frame)
+            // (RemoveActive will yank it out of all tracking lists)
+            RemoveActive(b);
+            _free.Push(b);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void AddActive(ModularBullet bullet, BulletPriority priority)
+    {
+        // activeAll
+        _activeAllIndex[bullet] = _activeAll.Count;
+        _activeAll.Add(bullet);
+
+        // activeByPriority
+        var plist = _activeByPriority[(int)priority];
+        _priorityIndex[bullet] = plist.Count;
+        plist.Add(bullet);
+    }
+
+    private void RemoveActive(ModularBullet bullet)
+    {
+        if (!_activeAllIndex.TryGetValue(bullet, out int allIdx))
+            return;
+
+        RemoveActiveAt(allIdx, bullet);
+    }
+
+    private void RemoveActiveAt(int allIdx, ModularBullet bullet)
+    {
+        // Remove from priority bucket (swap-remove)
+        int p = (int)bullet.Priority;
+        var plist = _activeByPriority[p];
+
+        if (_priorityIndex.TryGetValue(bullet, out int pIdx))
+        {
+            int pLast = plist.Count - 1;
+            var pSwap = plist[pLast];
+            plist[pIdx] = pSwap;
+            _priorityIndex[pSwap] = pIdx;
+
+            plist.RemoveAt(pLast);
+            _priorityIndex.Remove(bullet);
+        }
+
+        // Remove from activeAll (swap-remove)
+        int allLast = _activeAll.Count - 1;
+        var allSwap = _activeAll[allLast];
+        _activeAll[allIdx] = allSwap;
+        _activeAllIndex[allSwap] = allIdx;
+
+        _activeAll.RemoveAt(allLast);
+        _activeAllIndex.Remove(bullet);
     }
 }
 

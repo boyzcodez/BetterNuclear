@@ -11,7 +11,7 @@ public partial class Main : Node2D
 
     public WallGrid wallGrid {get;private set;} = new WallGrid();
 
-    public List<ModularBullet> bullets = new();
+    //public List<ModularBullet> bullets = new();
     public List<Hurtbox> hurtboxes = new();
 
     public override void _Ready()
@@ -82,32 +82,37 @@ public partial class Main : Node2D
     {
         grid.Clear();
 
-        foreach (var hurtbox in hurtboxes)
+        for (int i = 0; i < hurtboxes.Count; i++)
         {
+            var hurtbox = hurtboxes[i];
             if (!hurtbox.active) continue;
             grid.Insert(hurtbox);
-        } 
-        foreach (var bullet in bullets)
+        }
+
+        var activeBullets = BulletPool.Instance.GetActiveSnapshot();
+
+        for (int i = 0; i < activeBullets.Count; i++)
         {
-            if (!bullet.Active) continue;
+            var bullet = activeBullets[i];
+            if (!bullet.Active) continue; // optional if pool only returns active
             grid.Insert(bullet);
             bullet.Update(delta);
-        } 
+        }
 
-        HandleBulletCollision();
+        HandleBulletCollision(activeBullets);
     }
 
 
-    private void HandleBulletCollision()
+    private void HandleBulletCollision(IReadOnlyList<ModularBullet> activeBullets)
     {
-        foreach (var bullet in bullets)
+        for (int i = 0; i < activeBullets.Count; i++)
         {
+            var bullet = activeBullets[i];
             if (!bullet.Active) continue;
 
             foreach (var obj in grid.QueryNearby(bullet.GlobalPosition))
             {
                 if (obj is not Hurtbox hurtbox) continue;
-
                 if (bullet.Layer != obj.CollisionLayer) continue;
 
                 float r = bullet.Radius + hurtbox.Radius;
@@ -116,20 +121,16 @@ public partial class Main : Node2D
                     if (hurtbox.Health > 0)
                     {
                         hurtbox.TakeDamage(bullet.Damage, bullet.Knockback, bullet.Velocity);
-                        foreach (var behavior in bullet.Behaviors)
-                        {
-                            behavior.OnHit(bullet, hurtbox);
-                        }
+
+                        for (int b = 0; b < bullet.Behaviors.Count; b++)
+                            bullet.Behaviors[b].OnHit(bullet, hurtbox);
 
                         if (hurtbox.Health <= 0)
                         {
-                            foreach (var behavior in bullet.Behaviors)
-                            {
-                                behavior.OnKill(bullet, hurtbox);
-                            }
+                            for (int b = 0; b < bullet.Behaviors.Count; b++)
+                                bullet.Behaviors[b].OnKill(bullet, hurtbox);
                         }
                     }
-                    
                     break;
                 }
             }

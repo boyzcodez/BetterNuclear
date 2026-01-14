@@ -32,7 +32,6 @@ public partial class ModularBullet : Sprite2D, ICollidable
     {
         pool = GetTree().GetFirstNodeInGroup("BulletPool") as BulletPool;
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
-        main.bullets.Add(this);
 
         Visible = false;
     }
