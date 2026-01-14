@@ -10,8 +10,6 @@ public partial class Main : Node2D
     public TileMapLayer ground;
 
     public WallGrid wallGrid {get;private set;} = new WallGrid();
-
-    //public List<ModularBullet> bullets = new();
     public List<Hurtbox> hurtboxes = new();
 
     public override void _Ready()
@@ -30,7 +28,8 @@ public partial class Main : Node2D
 
         wallGrid.RebuildFrom(walls);
     }
-    // this is for bounce logic
+
+    // this is pretty much for bounce logic
     public bool IsWallAt(Vector2 worldpos)
     {
         Vector2I cell = walls.LocalToMap(walls.ToLocal(worldpos));

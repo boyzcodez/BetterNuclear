@@ -472,6 +472,7 @@ animations = [{
 script = ExtResource("1_4prcw")
 gun = NodePath("GunRotator/Guns")
 Speed = 45.0
+Radius = 17.0
 
 [node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
 position = Vector2(0, -9)
