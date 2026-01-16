@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgemyfw2ii4mp"]
+[gd_scene load_steps=4 format=3 uid="uid://dgemyfw2ii4mp"]
 
 [ext_resource type="Script" uid="uid://bohg8mim83s6x" path="res://Main/GUI/WeaponWheel/WeaponWheel.cs" id="1_b4jfq"]
 [ext_resource type="PackedScene" uid="uid://difri6ketaqku" path="res://Main/GUI/WeaponWheel/WeaponSlotUI.tscn" id="2_ndas0"]
+[ext_resource type="Script" uid="uid://v1ba4vs0mlv0" path="res://Main/GUI/WeaponWheel/WheelDraw.cs" id="3_wep05"]
 
-[node name="WeaponWheel" type="Control" node_paths=PackedStringArray("SlotsContainer") groups=["WeaponWheel"]]
+[node name="WeaponWheel" type="Control" node_paths=PackedStringArray("SlotsContainer", "WheelViewport", "WheelDisplay", "WheelDraw") groups=["WeaponWheel"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,18 +14,31 @@ grow_vertical = 2
 script = ExtResource("1_b4jfq")
 WeaponSlotScene = ExtResource("2_ndas0")
 SlotsContainer = NodePath("Slots")
-InnerRadius = 40.0
-OuterRadius = 140.0
+WheelViewport = NodePath("WheelViewport")
+WheelDisplay = NodePath("WheelDisplay")
+WheelDraw = NodePath("WheelViewport/WheelDraw")
+InnerRadius = 20.0
+OuterRadius = 120.0
+OutlineWidth = 4.0
 SegmentColor = Color(0, 0, 0, 0.21568628)
 SegmentHoverColor = Color(0, 0, 0, 0.39215687)
 OutlineColor = Color(1, 1, 1, 0.39215687)
 OutlineHoverColor = Color(1, 1, 1, 1)
 DrawOutlineAlways = false
 
+[node name="WheelViewport" type="SubViewport" parent="."]
+transparent_bg = true
+render_target_update_mode = 4
+
+[node name="WheelDraw" type="Control" parent="WheelViewport"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_wep05")
+
+[node name="WheelDisplay" type="TextureRect" parent="."]
+layout_mode = 1
+expand_mode = 1
+
 [node name="Slots" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0

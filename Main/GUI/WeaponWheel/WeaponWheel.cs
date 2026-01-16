@@ -1,21 +1,37 @@
 using Godot;
 using System.Collections.Generic;
 
-
 public partial class WeaponWheel : Control
 {
+    // --- External assignment ---
     [Export] public PackedScene WeaponSlotScene;
     [Export] public Control SlotsContainer;
 
+    // SubViewport bits
+    [Export] public SubViewport WheelViewport;
+    [Export] public TextureRect WheelDisplay;
+    [Export] public WheelDraw WheelDraw;
+
+    // --- Wheel state exposed for WheelDraw.cs ---
+    public bool IsOpen => _open;
+    public int HoverIndex => _hoverIndex;
+    public int GunCount => _guns.Count;
+
+    // --- Shape ---
     [ExportGroup("Wheel Shape")]
-    [Export] public float InnerRadius = 60f;   // deadzone/inner circle
-    [Export] public float OuterRadius = 300f;  // outside of wheel ring
-    [Export] public float SlotRadialBias = 0.5f; // 0 = inner edge, 1 = outer edge
+    [Export] public float InnerRadius = 60f;
+    [Export] public float OuterRadius = 300f;
+    [Export(PropertyHint.Range, "0,1,0.01")]
+    public float SlotRadialBias = 0.6f;
+    [Export] public float Deadzone = 60f;
+    [Export] public float StartAngle = -Mathf.Pi * 0.5f;
 
+    // --- Hover ---
     [ExportGroup("Hover")]
-    [Export] public float HoverPush = 10f;         // how far the wedge+icon move out
-    [Export] public float OutlineWidth = 3f; 
+    [Export] public float HoverPush = 10f;
+    [Export] public float OutlineWidth = 3f;
 
+    // --- Colors ---
     [ExportGroup("Colors")]
     [Export] public Color SegmentColor = new Color(1, 1, 1, 0.10f);
     [Export] public Color SegmentHoverColor = new Color(1, 1, 1, 0.22f);
@@ -26,15 +42,20 @@ public partial class WeaponWheel : Control
     [ExportGroup("Rendering")]
     [Export(PropertyHint.Range, "4,64,1")]
     public int WedgeSegments = 24;
+    [Export] public bool DrawOutlineAlways = true;
 
-    [Export] public bool DrawOutlineAlways = true; // if false, outlines only on hover
+    // --- Pixelation ---
+    [ExportGroup("Pixelation")]
+    [Export] public bool Pixelate = true;
+    [Export(PropertyHint.Range, "1,16,1")]
+    public int PixelScale = 4;   // bigger => chunkier pixels
+    [Export] public int WheelPaddingPx = 8; // extra space around wheel (in screen pixels)
 
-    [Export] public float StartAngle = -Mathf.Pi * 0.5f; // top
-
-    public IReadOnlyList<GunData> Guns => _guns;
+    // Guns + slots
     private readonly List<GunData> _guns = new();
-
     private readonly List<WeaponSlotUI> _slotUis = new();
+
+    public int DrawPixelScale => Pixelate ? Mathf.Max(1, PixelScale) : 1;
 
     private bool _open;
     private int _hoverIndex = -1;
@@ -43,21 +64,87 @@ public partial class WeaponWheel : Control
     {
         Visible = false;
         MouseFilter = MouseFilterEnum.Ignore;
+
+        // Link draw node to this controller
+        if (WheelDraw != null)
+            WheelDraw.Wheel = this;
+
+        // Make sure the wheel texture scales with nearest
+        // (This property exists on CanvasItem in Godot 4)
+        if (WheelDisplay != null)
+            WheelDisplay.TextureFilter = CanvasItem.TextureFilterEnum.Nearest;
+
+        if (WheelViewport != null)
+        {
+            WheelViewport.TransparentBg = true;
+            WheelViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.WhenVisible;
+        }
+
+        UpdateWheelRects();
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationResized)
+            UpdateWheelRects();
+    }
+
+    // Call this whenever you change radii/pixel settings at runtime
+    private void UpdateWheelRects()
+    {
+        if (WheelViewport == null || WheelDraw == null || WheelDisplay == null || SlotsContainer == null)
+            return;
+
+        float displayRadius = OuterRadius + HoverPush + OutlineWidth + WheelPaddingPx;
+        Vector2 displaySize = new Vector2(displayRadius * 2f, displayRadius * 2f);
+        Vector2 topLeft = (Size - displaySize) * 0.5f;
+
+        // Place the on-screen display
+        WheelDisplay.Position = topLeft;
+        WheelDisplay.Size = displaySize;
+
+        // Match slots to the same area
+        SlotsContainer.Position = topLeft;
+        SlotsContainer.Size = displaySize;
+
+        // Set the low-res viewport size
+        Vector2 low = Pixelate ? (displaySize / Mathf.Max(1, PixelScale)) : displaySize;
+        Vector2I vpSize = new Vector2I(
+            Mathf.Max(1, Mathf.RoundToInt(low.X)),
+            Mathf.Max(1, Mathf.RoundToInt(low.Y))
+        );
+
+        WheelViewport.Size = vpSize;
+        WheelDraw.Size = vpSize;
+
+        // Ensure display is showing the viewport texture
+        WheelDisplay.Texture = WheelViewport.GetTexture();
+
+        WheelDraw.QueueRedraw();
+        UpdateSlotPositions();
     }
 
     public void SetGuns(List<GunData> guns)
     {
         _guns.Clear();
         _guns.AddRange(guns);
-        Rebuild();
+        if (_open) RebuildSlots();
     }
 
     public void Open()
     {
-        if (_guns.Count < 2) return; // “can’t open with 0–1 gun”
+        if (_guns.Count < 2)
+        {
+            GD.Print($"Open() guns={_guns.Count}");
+            return;
+        } 
         _open = true;
         Visible = true;
-        Rebuild();
+
+        UpdateWheelRects();
+        RebuildSlots();
+
+        WheelDraw.QueueRedraw();        
     }
 
     public void Close()
@@ -65,38 +152,30 @@ public partial class WeaponWheel : Control
         _open = false;
         Visible = false;
         _hoverIndex = -1;
-        QueueRedraw();
+        WheelDraw.QueueRedraw();
     }
 
     public override void _Process(double delta)
     {
         if (!_open) return;
-
         UpdateHover();
     }
 
     private void UpdateHover()
     {
-        if (_guns.Count < 2)
-        {
-            if (_hoverIndex != -1)
-            {
-                _hoverIndex = -1;
-                QueueRedraw();
-            }
-            return;
-        }
+        if (_guns.Count < 2) return;
 
-        Vector2 center = GetWheelCenterGlobal();
+        // Mouse in global; wheel center is the center of WheelViewportContainer in global space
+        Vector2 centerGlobal = WheelDisplay.GlobalPosition + WheelDisplay.Size * 0.5f;
         Vector2 mouse = GetGlobalMousePosition();
-        Vector2 toMouse = mouse - center;
-        float dist = toMouse.Length();
+        Vector2 toMouse = mouse - centerGlobal;
 
+        float dist = toMouse.Length();
         int newHover = -1;
 
-        if (dist >= InnerRadius)
+        if (dist >= Deadzone)
         {
-            float ang = Mathf.Atan2(toMouse.Y, toMouse.X);     // -π..π
+            float ang = Mathf.Atan2(toMouse.Y, toMouse.X); // -π..π
             float t = ((ang - StartAngle) + Mathf.Tau) % Mathf.Tau;
 
             float step = Mathf.Tau / _guns.Count;
@@ -108,165 +187,39 @@ public partial class WeaponWheel : Control
         {
             _hoverIndex = newHover;
             UpdateSlotPositions();
-            QueueRedraw();
+            WheelDraw.QueueRedraw();
         }
     }
 
-    private Vector2 GetWheelCenterGlobal()
+    private void RebuildSlots()
     {
-        // Center of this Control in global space
-        // If wheel is full-screen, this is viewport center; otherwise it’s your control’s center
-        return GlobalPosition + Size * 0.5f;
-    }
+        if (WeaponSlotScene == null || SlotsContainer == null) return;
 
-    private async void Rebuild()
-    {
-        // Clear old UI
         foreach (var ui in _slotUis)
             ui.QueueFree();
         _slotUis.Clear();
 
-        if (SlotsContainer == null || WeaponSlotScene == null)
-        {
-            QueueRedraw();
-            return;
-        }
-
-        if (_guns.Count < 2)
-        {
-            QueueRedraw();
-            return;
-        }
-
-        float step = Mathf.Tau / _guns.Count;
-
         for (int i = 0; i < _guns.Count; i++)
         {
-            var ui = WeaponSlotScene.Instantiate() as WeaponSlotUI;
+            var node = WeaponSlotScene.Instantiate();
+            var ui = node as WeaponSlotUI;
+            if (ui == null)
+            {
+                GD.PushError("WeaponSlotScene root is not WeaponSlotUI.");
+                node.QueueFree();
+                continue;
+            }
+
             SlotsContainer.AddChild(ui);
-            ui.Add(_guns[i]);
+
             //ui._gun = _guns[i];
-
-            // Place at mid-angle on the ring
-            float slotR = Mathf.Lerp(InnerRadius, OuterRadius, SlotRadialBias);
-
-            float mid = StartAngle + step * (i + 0.5f);
-            Vector2 offset = new Vector2(Mathf.Cos(mid), Mathf.Sin(mid)) * slotR;
-
-            // Size/position: give each slot a rect and center it at the target point
-            ui.Size = new Vector2(96, 96);
-            ui.Position = (SlotsContainer.Size * 0.5f) + offset - ui.Size * 0.5f;
+            ui.Add(_guns[i]);
+            ui.Size = new Vector2(96, 96); // or set in the scene and remove this
 
             _slotUis.Add(ui);
         }
 
         UpdateSlotPositions();
-        QueueRedraw();
-    }
-
-    public override void _Draw()
-    {
-        if (!_open) return;
-        if (_guns.Count < 2) return;
-
-        Vector2 center = Size * 0.5f;
-        float step = Mathf.Tau / _guns.Count;
-
-        for (int i = 0; i < _guns.Count; i++)
-        {
-            float a0 = StartAngle + step * i;
-            float a1 = a0 + step;
-            float mid = (a0 + a1) * 0.5f;
-
-            bool hovered = (i == _hoverIndex);
-
-            Vector2 push = hovered
-                ? new Vector2(Mathf.Cos(mid), Mathf.Sin(mid)) * HoverPush
-                : Vector2.Zero;
-
-            // Fill
-            var poly = BuildWedgePolygon(center + push, InnerRadius, OuterRadius, a0, a1, segments: WedgeSegments);
-            DrawColoredPolygon(poly, hovered ? SegmentHoverColor : SegmentColor);
-
-            // Outline
-            if (DrawOutlineAlways || hovered)
-            {
-                DrawWedgeOutline(
-                    center + push,
-                    InnerRadius,
-                    OuterRadius,
-                    a0,
-                    a1,
-                    hovered ? OutlineHoverColor : OutlineColor,
-                    OutlineWidth,
-                    segments: WedgeSegments
-                );
-            }
-        }
-
-        // Center/deadzone visual
-        DrawCircle(center, InnerRadius, CenterColor);
-    }
-
-    private void DrawWedgeOutline(
-        Vector2 center,
-        float innerR,
-        float outerR,
-        float a0,
-        float a1,
-        Color color,
-        float width,
-        int segments)
-    {
-        // Build border points: outer arc a0->a1 then inner arc a1->a0
-        var pts = new List<Vector2>(segments * 2 + 3);
-
-        for (int s = 0; s <= segments; s++)
-        {
-            float t = (float)s / segments;
-            float a = Mathf.Lerp(a0, a1, t);
-            pts.Add(center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * outerR);
-        }
-
-        for (int s = 0; s <= segments; s++)
-        {
-            float t = (float)s / segments;
-            float a = Mathf.Lerp(a1, a0, t);
-            pts.Add(center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * innerR);
-        }
-
-        // Close the loop
-        pts.Add(pts[0]);
-
-        DrawPolyline(pts.ToArray(), color, width, true);
-    }
-
-    private static Vector2[] BuildWedgePolygon(
-        Vector2 center,
-        float innerR,
-        float outerR,
-        float a0,
-        float a1,
-        int segments)
-    {
-        // polygon goes along outer arc from a0->a1 then inner arc back a1->a0
-        var points = new List<Vector2>(segments * 2 + 2);
-
-        for (int s = 0; s <= segments; s++)
-        {
-            float t = (float)s / segments;
-            float a = Mathf.Lerp(a0, a1, t);
-            points.Add(center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * outerR);
-        }
-
-        for (int s = segments; s >= 0; s--)
-        {
-            float t = (float)s / segments;
-            float a = Mathf.Lerp(a0, a1, t);
-            points.Add(center + new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * innerR);
-        }
-
-        return points.ToArray();
     }
 
     private void UpdateSlotPositions()
@@ -274,7 +227,7 @@ public partial class WeaponWheel : Control
         if (SlotsContainer == null) return;
         if (_guns.Count < 2) return;
 
-        Vector2 containerCenter = SlotsContainer.Size * 0.5f;
+        Vector2 center = SlotsContainer.Size * 0.5f;
         float step = Mathf.Tau / _guns.Count;
 
         float baseSlotR = Mathf.Lerp(InnerRadius, OuterRadius, SlotRadialBias);
@@ -287,9 +240,10 @@ public partial class WeaponWheel : Control
             float r = baseSlotR + ((i == _hoverIndex) ? HoverPush : 0f);
 
             Vector2 offset = new Vector2(Mathf.Cos(mid), Mathf.Sin(mid)) * r;
-            ui.Position = containerCenter + offset - ui.Size * 0.5f;
+            ui.Position = center + offset - ui.Size * 0.5f;
         }
     }
+
 
     public override void _EnterTree()
     {
@@ -314,7 +268,7 @@ public partial class WeaponWheel : Control
         _guns.Add(gun);
 
         // if wheel is open, rebuild immediately
-        if (_open) Rebuild();
+        if (_open) RebuildSlots();
         else QueueRedraw(); // optional
     }
 
@@ -328,7 +282,7 @@ public partial class WeaponWheel : Control
 
         _guns.RemoveAt(idx);
 
-        if (_open) Rebuild();
+        if (_open) RebuildSlots();
         else QueueRedraw();
     }
 }
