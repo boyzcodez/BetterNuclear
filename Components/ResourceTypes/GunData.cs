@@ -26,6 +26,7 @@ public partial class GunData : Resource
     [Export] public GunData NextLevelData { get; set; }
 
     [ExportGroup("Bullet")]
+    
     [Export] public Animation ShootAnimation {get; set;}
     [Export] public Animation HitAnimation {get; set;}
     
@@ -44,6 +45,7 @@ public partial class GunData : Resource
     [Export] public BehaviorResource[] CopyBehaviors {get;set;} = [];
 
     [ExportGroup("Animations")]
+    [Export] public Texture2D Icon;
     [Export] public AnimationData NormalAnimationData {get;set;}
     [Export] public AnimationData ShootAnimationData {get;set;}
     [Export] public bool UsesAnimations {get;set;} = true;

@@ -9,11 +9,19 @@ public partial class GunHandler : Node
     private bool locked = false;
     private bool canSwitch = true;
 
+    private WeaponWheel weaponWheel;
+
     public override void _Ready()
     {
-        //ui = GetTree().GetFirstNodeInGroup("UIManager") as UiManager;
+        weaponWheel = GetTree().GetFirstNodeInGroup("WeaponWheel") as WeaponWheel;
         timer = GetNode<Timer>("Timer");
         timer.Timeout += CanSwitch;
+
+        if (weaponWheel != null)
+            foreach (var gun in guns.guns)
+            {
+                Eventbus.TriggerAddGun(gun);
+            }
     }
 
     public override void _UnhandledInput(InputEvent button)
@@ -52,6 +60,11 @@ public partial class GunHandler : Node
                 }
             }
         
+        if (Input.IsActionJustPressed("weapon_wheel"))
+            weaponWheel.Open();
+
+        if (Input.IsActionJustReleased("weapon_wheel"))
+            weaponWheel.Close();
     }
     public override void _Input(InputEvent @event)
     {

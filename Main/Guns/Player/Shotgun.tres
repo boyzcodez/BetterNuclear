@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://dti7bbgbg8ss"]
+[gd_resource type="Resource" script_class="GunData" load_steps=13 format=3 uid="uid://dti7bbgbg8ss"]
 
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_2nr4r"]
 [ext_resource type="Script" uid="uid://cki27a5abvk3n" path="res://Main/Guns/Bullets/Resource/Bounce.cs" id="1_b5tvg"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_b5tvg"]
 [ext_resource type="Texture2D" uid="uid://b80k0l6upad0d" path="res://Assets/Guns/Player/Shotgun.png" id="3_l0a1k"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_1kbbo"]
+[ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_l0a1k"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="5_miae0"]
 
 [sub_resource type="Resource" id="Resource_b5tvg"]
@@ -67,6 +68,7 @@ BulletSpeed = 350.0
 BulletLifeTime = 0.5
 Behaviors = Array[Object]([SubResource("Resource_b5tvg")])
 CopyBehaviors = null
+Icon = ExtResource("4_l0a1k")
 NormalAnimationData = SubResource("Resource_ospub")
 ShootAnimationData = SubResource("Resource_jgy2k")
 ShakeIntensity = 1.7

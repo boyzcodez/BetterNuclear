@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://difri6ketaqku"]
+
+[ext_resource type="Script" uid="uid://bb38fn3t6nj53" path="res://Main/GUI/WeaponWheel/WeaponSlotUI.cs" id="1_m8pc1"]
+
+[node name="WeaponSlotUI" type="Control" node_paths=PackedStringArray("_icon", "_ammo")]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_m8pc1")
+_icon = NodePath("Center/Icon")
+_ammo = NodePath("Center/Ammo")
+
+[node name="Center" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Center"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ammo" type="Label" parent="Center"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -31.5
+offset_right = 46.5
+offset_bottom = -8.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

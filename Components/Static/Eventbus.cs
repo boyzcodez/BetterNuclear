@@ -15,6 +15,8 @@ public static class Eventbus
     // Game stuff
     public static event Action Reset;
     public static event Action GenerateMap;
+    public static Action<GunData> GunAdded;
+    public static Action<string> GunRemovedById;
 
 
     // Stats tracking
@@ -50,4 +52,8 @@ public static class Eventbus
         Reset?.Invoke();
     public static void TriggerGenerateMap() =>
         GenerateMap?.Invoke();
+    public static void TriggerAddGun(GunData data) =>
+        GunAdded?.Invoke(data);
+    public static void TriggerRemoveGun(String name) =>
+        GunRemovedById?.Invoke(name);
 }

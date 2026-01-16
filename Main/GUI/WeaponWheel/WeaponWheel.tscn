@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgemyfw2ii4mp"]
+
+[ext_resource type="Script" uid="uid://bohg8mim83s6x" path="res://Main/GUI/WeaponWheel/WeaponWheel.cs" id="1_b4jfq"]
+[ext_resource type="PackedScene" uid="uid://difri6ketaqku" path="res://Main/GUI/WeaponWheel/WeaponSlotUI.tscn" id="2_ndas0"]
+
+[node name="WeaponWheel" type="Control" node_paths=PackedStringArray("SlotsContainer") groups=["WeaponWheel"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b4jfq")
+WeaponSlotScene = ExtResource("2_ndas0")
+SlotsContainer = NodePath("Slots")
+InnerRadius = 40.0
+OuterRadius = 140.0
+
+[node name="Slots" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

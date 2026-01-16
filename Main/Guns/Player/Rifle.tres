@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=11 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://vfqgjerlv601"]
 
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
 [ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_jlw6v"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
 [ext_resource type="Script" uid="uid://chvqavh0y20t8" path="res://Main/Guns/Bullets/Resource/Test.cs" id="1_pbbwr"]
 [ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_pbbwr"]
+[ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_pbbwr"]
 
 [sub_resource type="Resource" id="Resource_ulg0x"]
 script = ExtResource("1_pbbwr")
@@ -58,6 +59,7 @@ BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
 NeedsCopies = true
 CopyBehaviors = null
+Icon = ExtResource("4_pbbwr")
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 ShakeIntensity = 1.3

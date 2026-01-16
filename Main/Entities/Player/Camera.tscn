@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c78gs38bkpe7c"]
+[gd_scene load_steps=7 format=3 uid="uid://c78gs38bkpe7c"]
 
 [ext_resource type="Script" uid="uid://caoawx78mp4aa" path="res://Main/GUI/Camera.cs" id="1_3q388"]
 [ext_resource type="Script" uid="uid://e7a24qw1bk2m" path="res://Main/GUI/Fps.cs" id="2_lp24j"]
 [ext_resource type="Shader" uid="uid://nlivjsru7y5y" path="res://Components/Shaders/Crack.gdshader" id="3_2dgwf"]
 [ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="4_jd7fp"]
+[ext_resource type="PackedScene" uid="uid://dgemyfw2ii4mp" path="res://Main/GUI/WeaponWheel/WeaponWheel.tscn" id="5_lp24j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qac2q"]
 shader = ExtResource("3_2dgwf")
@@ -71,6 +72,10 @@ offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("4_jd7fp")
+
+[node name="WeaponWheel" parent="GUI" instance=ExtResource("5_lp24j")]
+visible = false
+mouse_filter = 2
 
 [node name="Bg" type="CanvasLayer" parent="."]
 layer = -100
