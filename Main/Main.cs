@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public partial class Main : Node2D
 {
+    // name: into dimension death
     public static Main Instance {get; private set;}
 
     public SpatialGrid grid;
