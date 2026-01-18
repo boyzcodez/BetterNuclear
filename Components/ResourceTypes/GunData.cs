@@ -5,9 +5,6 @@ using System;
 public partial class GunData : Resource
 {
     [Export] public StringName GunId {get; set; } = "";
-    [Export(PropertyHint.Enum, "LV1_,LV2_,LV3_,LV4_,LV5_")]
-    public string LVL { get; set; } = "LV1_";
-    
     [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
     public string DamageType { get; set; } = "Impact";
     
@@ -18,17 +15,11 @@ public partial class GunData : Resource
     [Export] public int BulletCount { get; set; } = 1;
     [Export] public float SpreadAngle { get; set; } = 0f;
     [Export] public float RandomFactor { get; set; } = 0f;
-    
-
-    [ExportGroup("XP")]
-    [Export] public int currentXP { get; set; } = 0;
-    [Export] public int maxXP { get; set; } = 10;
-    [Export] public GunData NextLevelData { get; set; }
 
     [ExportGroup("Bullet")]
     
-    [Export] public Animation ShootAnimation {get; set;}
-    [Export] public Animation HitAnimation {get; set;}
+    // [Export] public Animation ShootAnimation {get; set;}
+    // [Export] public Animation HitAnimation {get; set;}
     
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public Vector2 GunSpot { get; set; } = new Vector2 (6, 0);
@@ -38,19 +29,22 @@ public partial class GunData : Resource
     [Export] public float Damage { get; set; } = 1f;
     [Export] public float Knockback { get; set; } = 0f;
     [Export] public float BulletRaidus {get; set;} = 5f;
+    [Export] public Shape2D Shape { get; set;}
     [Export] public float BulletSpeed { get; set; } = 140f;
     [Export] public float BulletLifeTime {get;set;} = 4f;
+    [Export] public BulletPriority priority = BulletPriority.Normal;
     [Export] public BehaviorResource[] Behaviors {get;set;} = [];
-    [Export] public bool NeedsCopies {get;set;} = false;
-    [Export] public BehaviorResource[] CopyBehaviors {get;set;} = [];
+    [Export] public BehaviorResource[] OriginalBehavior {get; set;} = [];
+    public IBulletData BulletData {get; set;}
 
-    [ExportGroup("Animations")]
+    [ExportGroup("Animations ETC")]
     [Export] public Texture2D Icon;
     [Export] public AnimationData NormalAnimationData {get;set;}
     [Export] public AnimationData ShootAnimationData {get;set;}
     [Export] public bool UsesAnimations {get;set;} = true;
     [Export] public float ShakeIntensity {get; set;} = 0f;
     [Export] public float ShakeDuration {get; set;} = 0f;
+    [Export] public bool AlwaysBehindParent {get; set;} = false;
     
     // [ExportGroup("Gun Parts")]
     // [Export] public bool isEnemy { get; set; } = false;

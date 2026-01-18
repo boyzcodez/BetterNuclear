@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
 
 public partial class ModularBullet : Sprite2D, ICollidable
 {
@@ -7,13 +8,23 @@ public partial class ModularBullet : Sprite2D, ICollidable
     public float Radius = 5f;
     public float LifeTime = 5f;
     public int Layer = 2; // 2 PlayerBullet, 1 EnemyBullet, etc
+    public Shape2D Shape;
+    public Vector2 ShapeOffset = Vector2.Zero;
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => Layer;
+    Shape2D ICollidable.CollisionShape => Shape;
+    Transform2D ICollidable.CollisionXform
+    {
+        get
+        {
+            Vector2 off = ShapeOffset.Rotated(GlobalRotation);
+            return new Transform2D(GlobalRotation, GlobalPosition + off);
+        }
+    }
 
-    public float Damage;
-    public float Knockback = 200f;
+    public DamageData damageData;
     public StringName PoolKey;
     public BulletPriority Priority;
     public float Speed = 400f;
@@ -57,24 +68,21 @@ public partial class ModularBullet : Sprite2D, ICollidable
     public void Activate(
         Vector2 position,
         Vector2 velocity,
-        float lifetime,
-        float damage,
-        StringName poolKey,
-        int ColLayer,
-        BulletPriority priority,
-        IEnumerable<IBulletBehavior> behaviors
+        IBulletData data
     )
     {
         GlobalPosition = position;
         Velocity = velocity;
-        LifeTime = lifetime;
-        Damage = damage;
-        Layer = ColLayer;
-        PoolKey = poolKey;
-        Priority = priority;
+        Shape = data.Shape;
+        Radius = data.Radius;
+        LifeTime = data.LifeTime;
+        damageData = data.damageData;
+        Layer = data.CollisionLayer;
+        PoolKey = data.key;
+        Priority = data.priority;
 
         Behaviors.Clear();
-        Behaviors.AddRange(behaviors);
+        Behaviors.AddRange(data.Behaviors);
 
         Rotation = Velocity.Angle();
         Visible = true;

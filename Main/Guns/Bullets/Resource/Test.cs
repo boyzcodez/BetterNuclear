@@ -31,14 +31,19 @@ public partial class Test : BehaviorResource, IBulletBehavior
         foreach (var dir in dirs)
         {
             BulletPool.Spawn(
-                key: b.PoolKey,
                 position: b.GlobalPosition,
                 velocity: dir,
-                lifetime: 2f,
-                damage: b.Damage,
-                collisionLayer: b.Layer,
-                priority: BulletPriority.Trash,
-                behaviors: new BehaviorResource[] {new Normal()}
+                bulletData: new IBulletData(
+                    b.Priority,
+                    b.Shape,
+                    b.damageData,
+                    new BehaviorResource[] {new Normal()},
+                    b.Radius,
+                    b.Speed,
+                    b.LifeTime,
+                    b.Layer,
+                    b.PoolKey
+                )
             );
         }
     }

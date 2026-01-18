@@ -490,8 +490,8 @@ sprite_frames = SubResource("SpriteFrames_8ydey")
 animation = &"BackHit"
 script = ExtResource("2_0atn1")
 
-[node name="Direction" parent="AnimatedBody" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("4_a3eui")]
-lookAt = NodePath("../../Look")
+[node name="Direction" parent="AnimatedBody" node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("4_a3eui")]
+gun = NodePath("../../Look/Guns")
 animatedSprite = NodePath("..")
 
 [node name="HitFlash" parent="AnimatedBody" instance=ExtResource("7_0qxmk")]

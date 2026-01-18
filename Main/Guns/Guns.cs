@@ -13,8 +13,9 @@ public partial class Guns : Node2D
     private Dictionary<string, AudioStreamRandomizer> AudioLibrary = new ();
     private AudioStreamPlayer audioSystem;
 
+    private Marker2D parent;
     private BulletPool pool;
-    private GunData currentGun;
+    public GunData currentGun;
     private AnimatedSprite2D muzzleFlash;
     private ShaderMaterial shaderMaterial;
 
@@ -34,6 +35,7 @@ public partial class Guns : Node2D
         muzzleFlash = GetNode<AnimatedSprite2D>("MuzzleFlash");
         shaderMaterial = sprite.Material as ShaderMaterial;
         audioSystem = GetNode<AudioStreamPlayer>("GunAudio");
+        parent = GetParent<Marker2D>();
 
         rng.Randomize();
 
@@ -41,10 +43,22 @@ public partial class Guns : Node2D
 
         foreach (var gunData in guns)
         {
-            gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
-            gunData.HitAnimation.Name = gunData.GunId + "OnHit";
+            // gunData.ShootAnimation.Name = gunData.GunId + "OnShoot";
+            // gunData.HitAnimation.Name = gunData.GunId + "OnHit";
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
+
+            gunData.BulletData = new IBulletData(
+                gunData.priority,
+                gunData.Shape,
+                new DamageData (gunData.Damage, gunData.Knockback, gunData.GunId, gunData.DamageType),
+                gunData.Behaviors,
+                gunData.BulletRaidus,
+                gunData.BulletSpeed,
+                gunData.BulletLifeTime,
+                gunData.CollisionLayer,
+                gunData.GunId
+            );
 
             if (gunData.UsesAnimations)
             {
@@ -84,6 +98,11 @@ public partial class Guns : Node2D
         muzzleFlash.Position = currentGun.ShootPosition;
         Position = currentGun.GunSpot;
         if (AudioLibrary.ContainsKey(currentGun.GunId)) audioSystem.Stream = AudioLibrary[currentGun.GunId];
+    }
+    public void SetGunBehindParent(bool bl)
+    {
+        if (currentGun.AlwaysBehindParent) parent?.ShowBehindParent = true;
+        else parent?.ShowBehindParent = bl;
     }
 
     public override void _Process(double delta)
@@ -133,14 +152,9 @@ public partial class Guns : Node2D
             float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
 
             BulletPool.Spawn(
-                key: currentGun.GunId,
                 position: muzzlePos,
                 velocity: new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized(),
-                lifetime: currentGun.BulletLifeTime,
-                damage: currentGun.Damage,
-                collisionLayer: currentGun.CollisionLayer,
-                priority: BulletPriority.Normal,
-                behaviors: currentGun.Behaviors
+                currentGun.BulletData
             );
         }
 

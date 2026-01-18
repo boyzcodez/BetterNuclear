@@ -486,8 +486,8 @@ animation = &"FrontRightHit"
 script = ExtResource("4_bqycu")
 look = NodePath("../EnemyLook")
 
-[node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("lookAt", "animatedSprite") instance=ExtResource("5_we2vw")]
-lookAt = NodePath("../../GunRotator")
+[node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("5_we2vw")]
+gun = NodePath("../../GunRotator/Guns")
 animatedSprite = NodePath("..")
 
 [node name="HitFlash" parent="EnemyAnimations" instance=ExtResource("6_rrfo4")]

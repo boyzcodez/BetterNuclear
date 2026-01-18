@@ -1,28 +1,15 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=12 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" load_steps=9 format=3 uid="uid://vfqgjerlv601"]
 
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
-[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_jlw6v"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
 [ext_resource type="Script" uid="uid://chvqavh0y20t8" path="res://Main/Guns/Bullets/Resource/Test.cs" id="1_pbbwr"]
-[ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_pbbwr"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_pbbwr"]
 
 [sub_resource type="Resource" id="Resource_ulg0x"]
 script = ExtResource("1_pbbwr")
 bulletAmount = 8
 metadata/_custom_type_script = "uid://chvqavh0y20t8"
-
-[sub_resource type="Resource" id="Resource_jlw6v"]
-script = ExtResource("2_pbbwr")
-SpriteSheet = ExtResource("1_jlw6v")
-Vertical = 9
-Horizontal = 8
-FrameRate = 14
-Loops = false
-WhichRow = 6
-FrameCount = 4
-metadata/_custom_type_script = "uid://p701hspbelqp"
 
 [sub_resource type="Resource" id="Resource_lbm6o"]
 script = ExtResource("1_dmcvw")
@@ -32,16 +19,8 @@ VerticalFrames = 1
 Looping = true
 metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
-[sub_resource type="Resource" id="Resource_pbbwr"]
-script = ExtResource("2_pbbwr")
-SpriteSheet = ExtResource("1_jlw6v")
-Vertical = 9
-Horizontal = 8
-FrameRate = 0
-Loops = false
-WhichRow = 6
-FrameCount = 1
-metadata/_custom_type_script = "uid://p701hspbelqp"
+[sub_resource type="CircleShape2D" id="CircleShape2D_xa0j0"]
+radius = 5.0
 
 [resource]
 script = ExtResource("1_npjdg")
@@ -49,16 +28,14 @@ GunId = &"Rifle"
 CurrentAmmo = 60
 MaxAmmo = 60
 FireRate = 0.15
-ShootAnimation = SubResource("Resource_pbbwr")
-HitAnimation = SubResource("Resource_jlw6v")
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
 Knockback = 100.0
 BulletRaidus = 6.0
+Shape = SubResource("CircleShape2D_xa0j0")
 BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
-NeedsCopies = true
-CopyBehaviors = null
+OriginalBehavior = null
 Icon = ExtResource("4_pbbwr")
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")

@@ -8,6 +8,8 @@ public partial class Hurtbox : Node2D, ICollidable
 
     [Export] public int SetCollisionLayer = 2;
     [Export] public float Radius = 15f;
+    [Export] public Shape2D Shape;
+    [Export] public Vector2 ShapeOffset = Vector2.Zero;
 
     public Entity parent;
 
@@ -18,6 +20,18 @@ public partial class Hurtbox : Node2D, ICollidable
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => SetCollisionLayer; // Enemy
+    Shape2D ICollidable.CollisionShape => Shape;
+    Transform2D ICollidable.CollisionXform
+    {
+        get
+        {
+            Vector2 off = ShapeOffset.Rotated(GlobalRotation);
+            return new Transform2D(GlobalRotation, GlobalPosition + off);
+        }
+    }
+
+
+
 
     private Main main;
 
@@ -36,10 +50,10 @@ public partial class Hurtbox : Node2D, ICollidable
     }
 
 
-    public void TakeDamage(float damage, float Knockback, Vector2 knockbackDir)
+    public void TakeDamage(DamageData damageData, Vector2 knockbackDir)
     {
-        Health -= damage;
-        EmitSignal("Hit", knockbackDir, Knockback);
+        Health -= damageData.Damage;
+        EmitSignal("Hit", knockbackDir, damageData.Knockback);
         GD.Print("took damage");
 
         if (Health <= 0)

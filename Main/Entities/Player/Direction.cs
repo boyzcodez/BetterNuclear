@@ -4,7 +4,7 @@ using System;
 public partial class Direction : Node
 {
     private string currentDirection = "Front";
-    [Export] private Marker2D lookAt;
+    [Export] private Guns gun;
     [Export] private AnimatedSprite2D animatedSprite;
 
     private readonly (bool showBehind, bool flipH, string dir)[] sectionMap =
@@ -24,7 +24,7 @@ public partial class Direction : Node
         if (section >= 0 && section < sectionMap.Length)
         {
             var settings = sectionMap[section];
-            lookAt.ShowBehindParent = settings.showBehind;
+            gun.SetGunBehindParent(settings.showBehind);
             animatedSprite.FlipH = settings.flipH;
             return settings.dir;
         }

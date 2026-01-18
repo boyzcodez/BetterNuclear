@@ -1,8 +1,6 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=13 format=3 uid="uid://dti7bbgbg8ss"]
+[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://dti7bbgbg8ss"]
 
-[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_2nr4r"]
 [ext_resource type="Script" uid="uid://cki27a5abvk3n" path="res://Main/Guns/Bullets/Resource/Bounce.cs" id="1_b5tvg"]
-[ext_resource type="Script" uid="uid://p701hspbelqp" path="res://Components/ResourceTypes/Animation.cs" id="2_b5tvg"]
 [ext_resource type="Texture2D" uid="uid://b80k0l6upad0d" path="res://Assets/Guns/Player/Shotgun.png" id="3_l0a1k"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_1kbbo"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_l0a1k"]
@@ -12,17 +10,6 @@
 script = ExtResource("1_b5tvg")
 metadata/_custom_type_script = "uid://cki27a5abvk3n"
 
-[sub_resource type="Resource" id="Resource_0qxmk"]
-script = ExtResource("2_b5tvg")
-SpriteSheet = ExtResource("1_2nr4r")
-Vertical = 9
-Horizontal = 8
-FrameRate = 14
-Loops = false
-WhichRow = 6
-FrameCount = 4
-metadata/_custom_type_script = "uid://p701hspbelqp"
-
 [sub_resource type="Resource" id="Resource_ospub"]
 script = ExtResource("4_1kbbo")
 SpriteSheet = ExtResource("3_l0a1k")
@@ -31,16 +18,8 @@ VerticalFrames = 1
 FrameRate = 0
 metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
-[sub_resource type="Resource" id="Resource_htxjm"]
-script = ExtResource("2_b5tvg")
-SpriteSheet = ExtResource("1_2nr4r")
-Vertical = 9
-Horizontal = 8
-FrameRate = 0
-Loops = false
-WhichRow = 6
-FrameCount = 1
-metadata/_custom_type_script = "uid://p701hspbelqp"
+[sub_resource type="CircleShape2D" id="CircleShape2D_2nr4r"]
+radius = 5.0
 
 [sub_resource type="Resource" id="Resource_jgy2k"]
 script = ExtResource("4_1kbbo")
@@ -59,15 +38,14 @@ MaxAmmo = 50
 FireRate = 0.3
 BulletCount = 6
 SpreadAngle = 20.0
-ShootAnimation = SubResource("Resource_htxjm")
-HitAnimation = SubResource("Resource_0qxmk")
 ShootPosition = Vector2(16, 0)
 GunSpot = Vector2(8, 0)
 Knockback = 50.0
+Shape = SubResource("CircleShape2D_2nr4r")
 BulletSpeed = 350.0
 BulletLifeTime = 0.5
 Behaviors = Array[Object]([SubResource("Resource_b5tvg")])
-CopyBehaviors = null
+OriginalBehavior = null
 Icon = ExtResource("4_l0a1k")
 NormalAnimationData = SubResource("Resource_ospub")
 ShootAnimationData = SubResource("Resource_jgy2k")

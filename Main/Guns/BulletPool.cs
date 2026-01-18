@@ -49,52 +49,37 @@ public partial class BulletPool : Node2D
     }
     
     public static ModularBullet Spawn(
-        StringName key,
         Vector2 position,
         Vector2 velocity,
-        float lifetime,
-        float damage,
-        int collisionLayer,
-        BulletPriority priority,
-        IEnumerable<IBulletBehavior> behaviors
+        IBulletData bulletData
     )
     {
-        return Instance?.SpawnInternal(key, position, velocity, lifetime, damage, collisionLayer, priority, behaviors);
+        return Instance?.SpawnInternal(position, velocity, bulletData);
     }
 
     public ModularBullet SpawnInternal(
-        StringName key,
         Vector2 position,
         Vector2 velocity,
-        float lifetime,
-        float damage,
-        int collisionLayer,
-        BulletPriority priority,
-        IEnumerable<IBulletBehavior> behaviors
+        IBulletData bulletData
     )
     {
         // Reclaim any bullets that have been Deactivated() by their own logic
         // (lifetime ended, hit something, etc.)
         ReclaimInactiveBullets();
 
-        if (!EnsureFree(priority))
+        if (!EnsureFree(bulletData.priority))
             return null;
 
         var bullet = _free.Pop();
 
         // Track as active
-        AddActive(bullet, priority);
+        AddActive(bullet, bulletData.priority);
 
         // Activate with YOUR exact signature/fields
         bullet.Activate(
             position,
             velocity,
-            lifetime,
-            damage,
-            key,
-            collisionLayer,
-            priority,
-            behaviors
+            bulletData
         );
 
         return bullet;

@@ -71,7 +71,7 @@ public partial class Main : Node2D
 
                 if (hurtbox.Health > 0)
                 {
-                    hurtbox.TakeDamage(damageData.Damage, damageData.Knockback, direction);
+                    hurtbox.TakeDamage(damageData, direction);
                 }
             }
         }
@@ -115,24 +115,43 @@ public partial class Main : Node2D
                 if (obj is not Hurtbox hurtbox) continue;
                 if (bullet.Layer != obj.CollisionLayer) continue;
 
+                // 1) Broadphase (same as now)
                 float r = bullet.Radius + hurtbox.Radius;
-                if (bullet.GlobalPosition.DistanceSquaredTo(hurtbox.GlobalPosition) <= r * r)
+                if (bullet.GlobalPosition.DistanceSquaredTo(hurtbox.GlobalPosition) > r * r)
+                    continue;
+
+                // 2) Narrowphase (real shape collision)
+                // You’ll add these to ModularBullet too: CollisionShape + CollisionXform
+                var bcol = (ICollidable)bullet;
+                var hcol = (ICollidable)hurtbox;
+
+                if (bcol.CollisionShape != null && hcol.CollisionShape != null)
                 {
-                    if (hurtbox.Health > 0)
-                    {
-                        hurtbox.TakeDamage(bullet.Damage, bullet.Knockback, bullet.Velocity);
+                    bool hit = bcol.CollisionShape.Collide(
+                        bcol.CollisionXform,
+                        hcol.CollisionShape,
+                        hcol.CollisionXform
+                    );
 
-                        for (int b = 0; b < bullet.Behaviors.Count; b++)
-                            bullet.Behaviors[b].OnHit(bullet, hurtbox);
-
-                        if (hurtbox.Health <= 0)
-                        {
-                            for (int b = 0; b < bullet.Behaviors.Count; b++)
-                                bullet.Behaviors[b].OnKill(bullet, hurtbox);
-                        }
-                    }
-                    break;
+                    if (!hit) continue;
                 }
+                // If either shape is null, you can fall back to circles (optional)
+
+                // HIT!
+                if (hurtbox.Health > 0)
+                {
+                    hurtbox.TakeDamage(bullet.damageData, bullet.Velocity);
+
+                    for (int b = 0; b < bullet.Behaviors.Count; b++)
+                        bullet.Behaviors[b].OnHit(bullet, hurtbox);
+
+                    if (hurtbox.Health <= 0)
+                    {
+                        for (int b = 0; b < bullet.Behaviors.Count; b++)
+                            bullet.Behaviors[b].OnKill(bullet, hurtbox);
+                    }
+                }
+                break;
             }
         }
     }
