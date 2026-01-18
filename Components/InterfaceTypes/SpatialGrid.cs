@@ -28,15 +28,24 @@ public class SpatialGrid
 
     public void Insert(ICollidable obj)
     {
-        Vector2I cell = WorldToCell(obj._Position);
+        float r = obj.CollisionRadius;
+        Vector2 p = obj._Position;
 
-        if (!cells.TryGetValue(cell, out var list))
+        Vector2I min = WorldToCell(p - new Vector2(r, r));
+        Vector2I max = WorldToCell(p + new Vector2(r, r));
+
+        for (int y = min.Y; y <= max.Y; y++)
+        for (int x = min.X; x <= max.X; x++)
         {
-            list = new List<ICollidable>();
-            cells[cell] = list;
-        }
+            Vector2I cell = new Vector2I(x, y);
 
-        list.Add(obj);
+            if (!cells.TryGetValue(cell, out var list))
+            {
+                list = new List<ICollidable>();
+                cells[cell] = list;
+            }
+            list.Add(obj);
+        }
     }
 
     public IEnumerable<ICollidable> QueryNearby(Vector2 pos)
