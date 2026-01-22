@@ -41,6 +41,9 @@ public partial class WalkerHead : Node2D
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
 
+        main.walls = WallMap;
+        main.ground = GroundMap;
+
         Eventbus.GenerateMap += GenerateMap;
         Eventbus.Explosion += Explosion;
         Eventbus.Reset += GenerateMap;
@@ -141,7 +144,7 @@ public partial class WalkerHead : Node2D
 
         player.GlobalPosition = spawnPos;
 
-        main.UpdateMap(WallMap, GroundMap);
+        main.UpdateMap();
 
         if (Eventbus.gameOn)
             Eventbus.TriggerSpawnEnemies(GroundMap);

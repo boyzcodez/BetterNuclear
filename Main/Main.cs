@@ -13,6 +13,8 @@ public partial class Main : Node2D
     public WallGrid wallGrid {get;private set;} = new WallGrid();
     public List<Hurtbox> hurtboxes = new();
 
+    private readonly HashSet<Vector2I> _wallCells = new();
+
     public override void _Ready()
     {
         Instance = this;
@@ -22,11 +24,8 @@ public partial class Main : Node2D
         Eventbus.Explosion += DamageHurtboxesInArea;
     }
 
-    public void UpdateMap(TileMapLayer wal, TileMapLayer grou)
+    public void UpdateMap()
     {
-        walls = wal;
-        ground = grou;
-
         wallGrid.RebuildFrom(walls);
     }
 

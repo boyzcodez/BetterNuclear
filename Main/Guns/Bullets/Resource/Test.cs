@@ -52,6 +52,6 @@ public partial class Test : BehaviorResource, IBulletBehavior
     {
         b.Deactivate();
 
-        //Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
     }
 }
