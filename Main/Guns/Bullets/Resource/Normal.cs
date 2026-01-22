@@ -1,28 +1,30 @@
 using Godot;
-using System;
 
 [GlobalClass]
-public partial class Normal : BehaviorResource, IBulletBehavior
+public partial class Normal : BehaviorResource
 {
-    public override void OnSpawn(ModularBullet b)
-    {
-    }
+    public override IBulletBehaviorRuntime CreateRuntime()
+        => new Runtime();
 
-    public override void OnUpdate(ModularBullet b, float delta)
+    private sealed class Runtime : IBulletBehaviorRuntime
     {
-        b.AddDisplacement(b.Velocity * b.Speed * delta);
-    }
+        public void OnSpawn(ModularBullet b) { }
 
-    public override void OnHit(ModularBullet b, ICollidable collidable)
-    {
-        b.Deactivate();
-    }
-    public override void OnKill(ModularBullet b, ICollidable collidable)
-    {
-    }
+        public void OnUpdate(ModularBullet b, float delta)
+        {
+            b.AddDisplacement(b.Velocity * b.Speed * delta);
+        }
 
-    public override void OnWallHit(ModularBullet b, Vector2 normal)
-    {
-        b.Deactivate();
+        public void OnHit(ModularBullet b, ICollidable collidable)
+        {
+            b.Deactivate();
+        }
+
+        public void OnKill(ModularBullet b, ICollidable collidable) { }
+
+        public void OnWallHit(ModularBullet b, Vector2 normal)
+        {
+            b.Deactivate();
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 public struct IBulletData
 {
@@ -11,13 +12,13 @@ public struct IBulletData
     public int CollisionLayer {get;set;}
     public BulletPriority priority;
     
-    public BehaviorResource[] Behaviors {get; set;}
+    public IReadOnlyList<BehaviorResource> Behaviors;
 
     public IBulletData(
         BulletPriority newPrior,
         Shape2D newShape,
         DamageData newDMG, 
-        BehaviorResource[] newBehaviors,
+        IReadOnlyList<BehaviorResource> newBehaviors,
         float newRadius, 
         float newSpeed, 
         float newLifeTime, 

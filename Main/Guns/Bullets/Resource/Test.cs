@@ -1,57 +1,74 @@
 using Godot;
-using System;
 
 [GlobalClass]
-public partial class Test : BehaviorResource, IBulletBehavior
+public partial class Test : BehaviorResource
 {
     [Export] private int bulletAmount = 10;
-    public override void OnSpawn(ModularBullet b)
-    {
-    }
 
-    public override void OnUpdate(ModularBullet b, float delta)
-    {
-        b.AddDisplacement(b.Velocity * b.Speed * delta);
-    }
+    // Reuse one definition resource (stateless config).
+    // Each spawned bullet will call CreateRuntime() and get its own runtime.
+    // Might need to make an export here if you want to add different behaviors
+    private static readonly Normal NormalDef = new Normal();
 
-    public override void OnHit(ModularBullet b, ICollidable collidable)
+    public override IBulletBehaviorRuntime CreateRuntime()
+        => new Runtime(this);
+
+    private sealed class Runtime : IBulletBehaviorRuntime
     {
-        b.Deactivate();
-    }
-    public override void OnKill(ModularBullet b, ICollidable collidable)
-    {
-        Vector2[] dirs =
+        private readonly Test def;
+
+        public Runtime(Test def) => this.def = def;
+
+        public void OnSpawn(ModularBullet b) { }
+
+        public void OnUpdate(ModularBullet b, float delta)
         {
-            Vector2.Up,
-            Vector2.Right,
-            Vector2.Down,
-            Vector2.Left
-        };
-
-        foreach (var dir in dirs)
-        {
-            BulletPool.Spawn(
-                position: b.GlobalPosition,
-                velocity: dir,
-                bulletData: new IBulletData(
-                    b.Priority,
-                    b.Shape,
-                    b.damageData,
-                    new BehaviorResource[] {new Normal()},
-                    b.Radius,
-                    b.Speed,
-                    b.LifeTime,
-                    b.Layer,
-                    b.PoolKey
-                )
-            );
+            b.AddDisplacement(b.Velocity * b.Speed * delta);
         }
-    }
 
-    public override void OnWallHit(ModularBullet b, Vector2 normal)
-    {
-        b.Deactivate();
+        public void OnHit(ModularBullet b, ICollidable collidable)
+        {
+            b.Deactivate();
+        }
 
-        Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+        public void OnKill(ModularBullet b, ICollidable collidable)
+        {
+            int count = Mathf.Max(1, def.bulletAmount);
+
+            // Build child bullet data once; reuse for all spawned bullets.
+            // IMPORTANT: behaviors here are *definition resources*, not runtime.
+            var childData = new IBulletData(
+                b.Priority,
+                b.Shape,
+                b.damageData,
+                new BehaviorResource[] { NormalDef },
+                b.Radius,
+                b.Speed,
+                b.LifeTime,
+                b.Layer,
+                b.PoolKey
+            );
+
+            float step = Mathf.Tau / count;
+            float start = 0f; // you could randomize if you want
+
+            for (int i = 0; i < count; i++)
+            {
+                float ang = start + step * i;
+                Vector2 dir = new Vector2(Mathf.Cos(ang), Mathf.Sin(ang)).Normalized();
+
+                BulletPool.Spawn(
+                    position: b.GlobalPosition,
+                    velocity: dir,
+                    bulletData: childData
+                );
+            }
+        }
+
+        public void OnWallHit(ModularBullet b, Vector2 normal)
+        {
+            b.Deactivate();
+            Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+        }
     }
 }

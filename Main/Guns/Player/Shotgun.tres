@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_b5tvg"]
 script = ExtResource("1_b5tvg")
-bouncesTotal = 5
+BouncesTotal = 5
 metadata/_custom_type_script = "uid://cki27a5abvk3n"
 
 [sub_resource type="Resource" id="Resource_ospub"]

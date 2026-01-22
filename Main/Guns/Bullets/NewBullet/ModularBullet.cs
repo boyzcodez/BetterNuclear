@@ -29,7 +29,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
     public BulletPriority Priority;
     public float Speed = 400f;
 
-    public readonly List<IBulletBehavior> Behaviors = new();
+    public readonly List<IBulletBehaviorRuntime> Behaviors = new();
 
     
     public Vector2 PendingDisplacement { get; private set; }
@@ -82,9 +82,13 @@ public partial class ModularBullet : Sprite2D, ICollidable
         Priority = data.priority;
 
         Behaviors.Clear();
-        Behaviors.AddRange(data.Behaviors);
-
-        foreach (var b in Behaviors) b.OnSpawn(this);
+        foreach (var def in data.Behaviors)
+        {
+            if (def == null) continue;
+            var runtime = def.CreateRuntime();
+            Behaviors.Add(runtime);
+            runtime.OnSpawn(this);
+        }
 
         Rotation = Velocity.Angle();
         Visible = true;
