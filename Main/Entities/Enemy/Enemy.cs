@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Enemy : Entity
 {
@@ -26,7 +25,7 @@ public partial class Enemy : Entity
     // Stats data
     [Export] public float Speed = 30f;
     [Export] public float DashSpeed = 200f;
-    [Export] public float Radius = 15f;
+    [Export] public float Radius = 10f;
 
     public bool InSight;
     public Vector2 nextPos;
@@ -70,52 +69,16 @@ public partial class Enemy : Entity
         Velocity = (GlobalPosition - lastPosition) / (float)delta;
     }
 
-    public bool CanMoveTo(Vector2 targetPos)
-    {
-        //float r = Radius; 
-
-        // this i think fixes corners
-        float padding = 0.5f;
-        float r = Radius - padding;
-
-        Vector2[] offsets =
-        {
-            new Vector2( r, 0),
-            new Vector2(-r, 0),
-            new Vector2(0,  r),
-            new Vector2(0, -r)
-        };
-
-        foreach (var off in offsets)
-        {
-            if (Main.Instance.IsWallAt(targetPos + off))
-                return false;
-        }
-
-        return true;
-    }
     public void Move(Vector2 velocity, float delta)
     {
         Vector2 pos = GlobalPosition;
-        Vector2 desiredMove = velocity * delta;
+        Vector2 vel = velocity;
 
-        // Try X movement
-        if (desiredMove.X != 0)
-        {
-            Vector2 xMovePos = pos + new Vector2(desiredMove.X, 0);
-            if (CanMoveTo(xMovePos))
-                pos.X = xMovePos.X;
-        }
-
-        // Try Y movement
-        if (desiredMove.Y != 0)
-        {
-            Vector2 yMovePos = pos + new Vector2(0, desiredMove.Y);
-            if (CanMoveTo(yMovePos))
-                pos.Y = yMovePos.Y;
-        }
+        MathCollision.MoveCircle(ref pos, ref vel, Radius, delta);
 
         GlobalPosition = pos;
+        // If you want enemy AI to keep its original intended velocity (not the slid one),
+        // don't write vel back anywhere.
     }
     public Vector2 DirectionToPlayer()
     {

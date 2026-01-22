@@ -53,69 +53,15 @@ public partial class Player : Entity
 
         ApplyMovement((float)delta);
     }
-
-    private bool CanMoveTo(Vector2 targetPos)
-    {
-        float skin = 0.4f; // try 0.0f to start, then 0.02..0.1
-        float r = Radius - skin;
-
-        // 45° point on a circle is (r/√2, r/√2)
-        float d = r * 0.70710678f;
-
-        Vector2[] offsets =
-        {
-            new Vector2( r, 0),
-            new Vector2(-r, 0),
-            new Vector2(0,  r),
-            new Vector2(0, -r),
-
-            new Vector2( d,  d),
-            new Vector2(-d,  d),
-            new Vector2( d, -d),
-            new Vector2(-d, -d),
-        };
-
-        foreach (var off in offsets)
-        {
-            if (Main.Instance.IsWallAt(targetPos + off))
-                return false;
-        }
-
-        return true;
-    }
     private void ApplyMovement(float delta)
     {
         Vector2 pos = GlobalPosition;
-        Vector2 move = Velocity * delta;
+        Vector2 vel = Velocity;
 
-        if (CanMoveTo(pos + move))
-        {
-            GlobalPosition = pos + move;
-            return;
-        }
-
-        bool xFirst = Mathf.Abs(move.X) > Mathf.Abs(move.Y);
-
-        TryAxis(ref pos, move, xFirst);
-        TryAxis(ref pos, move, !xFirst);
+        MathCollision.MoveCircle(ref pos, ref vel, Radius, delta);
 
         GlobalPosition = pos;
-    }
-
-    private void TryAxis(ref Vector2 pos, Vector2 move, bool xAxis)
-    {
-        if (xAxis && move.X != 0)
-        {
-            Vector2 xPos = pos + new Vector2(move.X, 0);
-            if (CanMoveTo(xPos))
-                pos.X = xPos.X;
-        }
-        else if (!xAxis && move.Y != 0)
-        {
-            Vector2 yPos = pos + new Vector2(0, move.Y);
-            if (CanMoveTo(yPos))
-                pos.Y = yPos.Y;
-        }
+        Velocity = vel; // optional: keeps sliding clean if you reuse Velocity elsewhere
     }
 
     private void Movement(float delta)

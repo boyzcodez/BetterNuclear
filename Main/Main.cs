@@ -47,11 +47,21 @@ public partial class Main : Node2D
     {
         return walls.GetCellSourceId(cell) != -1;
     }
-    public Vector2 CellToWorldCenter(Vector2I cell)
+    public Rect2 WallCellWorldRect(Vector2I cell)
     {
-        Vector2 localPos = ground.MapToLocal(cell);
-        Vector2 tileSize = ground.TileSet.TileSize;
-        return ground.ToGlobal(localPos + tileSize * 0.5f);
+        Vector2 tileSize = walls.TileSet.TileSize;
+
+        // In Godot 4, MapToLocal returns the cell's local position (typically the cell center).
+        // We convert that to global, then build a rect around it.
+        Vector2 localCellPos = walls.MapToLocal(cell);
+        Vector2 worldCenter = walls.ToGlobal(localCellPos);
+
+        Vector2 topLeft = worldCenter - tileSize * 0.5f;
+        return new Rect2(topLeft, tileSize);
+    }
+    public Vector2 WallTileSize()
+    {
+        return walls.TileSet.TileSize;
     }
 
 
