@@ -21,6 +21,5 @@ script = ExtResource("6_liyct")
 BulletScene = ExtResource("6_ib3t1")
 
 [node name="Player" parent="YSort" instance=ExtResource("3_qvhan")]
-y_sort_enabled = true
 
 [node name="Camera" parent="." instance=ExtResource("4_liyct")]

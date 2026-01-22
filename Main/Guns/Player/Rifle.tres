@@ -31,7 +31,6 @@ FireRate = 0.15
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
 Knockback = 100.0
-BulletRaidus = 6.0
 Shape = SubResource("CircleShape2D_xa0j0")
 BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])

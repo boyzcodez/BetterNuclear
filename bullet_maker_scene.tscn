@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgyj8yswjj8q1"]
+
+[ext_resource type="Texture2D" uid="uid://bqgjtishedoio" path="res://Assets/Guns/Bullets/NewBullets.png" id="1_f5e4j"]
+
+[node name="BulletMakerScene" type="Node2D"]
+
+[node name="buls" type="Sprite2D" parent="."]
+texture = ExtResource("1_f5e4j")
+hframes = 8
+vframes = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
