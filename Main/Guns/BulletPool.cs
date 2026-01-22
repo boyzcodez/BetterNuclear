@@ -207,6 +207,9 @@ public partial class BulletPool : Node2D
         var plist = _activeByPriority[(int)priority];
         _priorityIndex[bullet] = plist.Count;
         plist.Add(bullet);
+
+        // Track active bullet count
+        Eventbus.activeBullets++;
     }
 
     private void RemoveActive(ModularBullet bullet)
@@ -242,6 +245,9 @@ public partial class BulletPool : Node2D
 
         _activeAll.RemoveAt(allLast);
         _activeAllIndex.Remove(bullet);
+
+        // Track active bullet count
+        Eventbus.activeBullets--;
     }
 }
 

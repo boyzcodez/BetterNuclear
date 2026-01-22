@@ -19,33 +19,41 @@ public partial class Main : Node2D
     {
         Instance = this;
         grid = new SpatialGrid(96f);
-        wallGrid.RebuildFrom(walls);
 
         Eventbus.Explosion += DamageHurtboxesInArea;
     }
 
-    public void UpdateMap()
+    public void RebuildWallCacheFromTilemap()
     {
-        wallGrid.RebuildFrom(walls);
+        _wallCells.Clear();
+
+        foreach (var cell in walls.GetUsedCells())
+            _wallCells.Add(cell);
+    }
+    public void NotifyWallRemoved(Vector2I cell) => _wallCells.Remove(cell);
+    public void NotifyWallPlaced(Vector2I cell)  => _wallCells.Add(cell);
+    
+    // IMPORTANT: route all wall edits through these so the cache stays correct
+    public void SetWallCell(Vector2I cell, int sourceId, Vector2I atlas = default, int alt = 0)
+    {
+        walls.SetCell(cell, sourceId, atlas, alt);
+        if (sourceId == -1) _wallCells.Remove(cell);
+        else _wallCells.Add(cell);
     }
 
-    // this is pretty much for bounce logic
-    public bool IsWallAt(Vector2 worldpos)
-    {
-        Vector2I cell = walls.LocalToMap(walls.ToLocal(worldpos));
+    // Used everywhere in gameplay code
+    public bool IsWallCell(Vector2I cell) => _wallCells.Contains(cell);
 
-        // SourceId == -1 means empty
-        return walls.GetCellSourceId(cell) != -1;
+    public bool IsWallAt(Vector2 worldPos)
+    {
+        Vector2I cell = walls.LocalToMap(walls.ToLocal(worldPos));
+        return _wallCells.Contains(cell);
     }
 
     public Vector2I WorldToCell(Vector2 worldPos)
     {
         return walls.LocalToMap(walls.ToLocal(worldPos));
-    }
-    public bool IsWallCell(Vector2I cell)
-    {
-        return walls.GetCellSourceId(cell) != -1;
-    }
+    }    
     public Rect2 WallCellWorldRect(Vector2I cell)
     {
         Vector2 tileSize = walls.TileSet.TileSize;

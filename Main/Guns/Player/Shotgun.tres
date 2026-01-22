@@ -8,6 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_b5tvg"]
 script = ExtResource("1_b5tvg")
+bouncesTotal = 5
 metadata/_custom_type_script = "uid://cki27a5abvk3n"
 
 [sub_resource type="Resource" id="Resource_ospub"]
@@ -19,7 +20,7 @@ FrameRate = 0
 metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2nr4r"]
-radius = 5.0
+radius = 50.0
 
 [sub_resource type="Resource" id="Resource_jgy2k"]
 script = ExtResource("4_1kbbo")
@@ -35,7 +36,7 @@ GunId = &"Shotgun"
 UsesAmmo = false
 CurrentAmmo = 50
 MaxAmmo = 50
-FireRate = 0.3
+FireRate = 0.01
 BulletCount = 6
 SpreadAngle = 20.0
 ShootPosition = Vector2(16, 0)
@@ -43,7 +44,7 @@ GunSpot = Vector2(8, 0)
 Knockback = 50.0
 Shape = SubResource("CircleShape2D_2nr4r")
 BulletSpeed = 350.0
-BulletLifeTime = 0.5
+BulletLifeTime = 60.0
 Behaviors = Array[Object]([SubResource("Resource_b5tvg")])
 OriginalBehavior = null
 Icon = ExtResource("4_l0a1k")

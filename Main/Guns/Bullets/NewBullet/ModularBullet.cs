@@ -84,6 +84,8 @@ public partial class ModularBullet : Sprite2D, ICollidable
         Behaviors.Clear();
         Behaviors.AddRange(data.Behaviors);
 
+        foreach (var b in Behaviors) b.OnSpawn(this);
+
         Rotation = Velocity.Angle();
         Visible = true;
         Active = true;
