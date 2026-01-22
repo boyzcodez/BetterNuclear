@@ -8,16 +8,19 @@
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
 
 [node name="Main" type="Node2D" groups=["Main"]]
-y_sort_enabled = true
 script = ExtResource("1_yh5la")
 
-[node name="MapGenerator" parent="." instance=ExtResource("2_2w1kt")]
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("3_qvhan")]
+[node name="MapGenerator" parent="YSort" instance=ExtResource("2_2w1kt")]
 
-[node name="Camera" parent="." instance=ExtResource("4_liyct")]
-
-[node name="BulletPool" type="Node2D" parent="." groups=["BulletPool"]]
+[node name="BulletPool" type="Node2D" parent="YSort" groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
 BulletScene = ExtResource("6_ib3t1")
+
+[node name="Player" parent="YSort" instance=ExtResource("3_qvhan")]
+y_sort_enabled = true
+
+[node name="Camera" parent="." instance=ExtResource("4_liyct")]

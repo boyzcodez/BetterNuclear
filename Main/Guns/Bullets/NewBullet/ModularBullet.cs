@@ -75,6 +75,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
         Velocity = velocity;
         Shape = data.Shape;
         Radius = data.Radius;
+        Speed = data.Speed;
         LifeTime = data.LifeTime;
         damageData = data.damageData;
         Layer = data.CollisionLayer;
