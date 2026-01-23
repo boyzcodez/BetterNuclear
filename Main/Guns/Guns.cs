@@ -67,8 +67,11 @@ public partial class Guns : Node2D
             }
         }
 
-        EquipGun(0);
-        sprite?.Play(currentGun.GunId);
+        if (guns.Length > 0) 
+        {
+            EquipGun(0);
+            sprite?.Play(currentGun.GunId);
+        }
 
         // add to exp list so that when an enemy dies the correct gun will the the exp
         //if (!guns[_currentGunIndex].isEnemy) XpHandler.AddGun(guns[_currentGunIndex].GunName, this);
@@ -102,12 +105,16 @@ public partial class Guns : Node2D
     }
     public void SetGunBehindParent(bool bl)
     {
+        if (guns.Length <= 0) return;
+
         if (currentGun.AlwaysBehindParent) parent?.ShowBehindParent = true;
         else parent?.ShowBehindParent = bl;
     }
 
     public override void _Process(double delta)
     {
+        if (currentGun == null) return;
+
         if (shooting && _cooldown <= 0) Shoot();
         else if (_cooldown > 0) _cooldown -= (float)delta;
 
