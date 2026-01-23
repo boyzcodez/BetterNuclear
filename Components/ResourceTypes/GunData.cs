@@ -45,6 +45,7 @@ public partial class GunData : Resource
     [Export] public float ShakeIntensity {get; set;} = 0f;
     [Export] public float ShakeDuration {get; set;} = 0f;
     [Export] public bool AlwaysBehindParent {get; set;} = false;
+    [Export] public bool DoesntRotate {get; set;} = false;
     
     // [ExportGroup("Gun Parts")]
     // [Export] public bool isEnemy { get; set; } = false;

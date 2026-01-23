@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=71 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="8_26qsg"]
 [ext_resource type="Resource" uid="uid://bk0kb7lw036hw" path="res://Main/Guns/Enemy/EnemyRifle.tres" id="9_r7fjr"]
 [ext_resource type="PackedScene" uid="uid://cy0fl3is3qri" path="res://Main/Entities/Components/Shadow.tscn" id="10_wbxch"]
+[ext_resource type="PackedScene" uid="uid://neorycm12xqs" path="res://Main/Entities/Components/Look.tscn" id="12_1eabv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oiihr"]
 atlas = ExtResource("3_4prcw")
@@ -470,7 +471,7 @@ animations = [{
 
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("gun")]
 script = ExtResource("1_4prcw")
-gun = NodePath("GunRotator/Guns")
+gun = NodePath("Look/Guns")
 Speed = 45.0
 Radius = 17.0
 
@@ -487,7 +488,7 @@ script = ExtResource("4_bqycu")
 look = NodePath("../EnemyLook")
 
 [node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("5_we2vw")]
-gun = NodePath("../../GunRotator/Guns")
+gun = NodePath("../../Look/Guns")
 animatedSprite = NodePath("..")
 
 [node name="HitFlash" parent="EnemyAnimations" instance=ExtResource("6_rrfo4")]
@@ -501,14 +502,17 @@ target_position = Vector2(200, 0)
 collide_with_areas = true
 collide_with_bodies = false
 
-[node name="GunRotator" type="Marker2D" parent="." node_paths=PackedStringArray("look")]
+[node name="GunRotator" type="Node2D" parent="." node_paths=PackedStringArray("look", "guns")]
 position = Vector2(0, -8)
 script = ExtResource("7_352va")
-look = NodePath("../EnemyLook")
-SnapDegrees = 10.0
+look = NodePath("../Look")
+guns = NodePath("../Look/Guns")
 
-[node name="Guns" parent="GunRotator" instance=ExtResource("8_26qsg")]
-position = Vector2(6, 0)
+[node name="Look" parent="." instance=ExtResource("12_1eabv")]
+position = Vector2(0, -8)
+
+[node name="Guns" parent="Look" instance=ExtResource("8_26qsg")]
+position = Vector2(6, -8)
 guns = Array[Object]([ExtResource("9_r7fjr")])
 
 [node name="Shadow" parent="." instance=ExtResource("10_wbxch")]

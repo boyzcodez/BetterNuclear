@@ -13,7 +13,7 @@ public partial class Guns : Node2D
     private Dictionary<string, AudioStreamRandomizer> AudioLibrary = new ();
     private AudioStreamPlayer audioSystem;
 
-    private Marker2D parent;
+    private Look parent;
     private BulletPool pool;
     public GunData currentGun;
     private AnimatedSprite2D muzzleFlash;
@@ -35,7 +35,7 @@ public partial class Guns : Node2D
         muzzleFlash = GetNode<AnimatedSprite2D>("MuzzleFlash");
         shaderMaterial = sprite.Material as ShaderMaterial;
         audioSystem = GetNode<AudioStreamPlayer>("GunAudio");
-        parent = GetParent<Marker2D>();
+        parent = GetParent<Look>();
 
         rng.Randomize();
 
@@ -97,6 +97,7 @@ public partial class Guns : Node2D
         sprite?.Play(currentGun.GunId);
         muzzleFlash.Position = currentGun.ShootPosition;
         Position = currentGun.GunSpot;
+        parent.Lock(currentGun.DoesntRotate);
         if (AudioLibrary.ContainsKey(currentGun.GunId)) audioSystem.Stream = AudioLibrary[currentGun.GunId];
     }
     public void SetGunBehindParent(bool bl)

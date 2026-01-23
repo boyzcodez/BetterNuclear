@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://neorycm12xqs"]
+
+[ext_resource type="Script" uid="uid://cl7bshfygfold" path="res://Main/Entities/Player/Look.cs" id="1_2wu3s"]
+
+[node name="Look" type="Marker2D"]
+script = ExtResource("1_2wu3s")
+SnapDegrees = 10.0

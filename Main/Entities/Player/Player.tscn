@@ -1,15 +1,16 @@
-[gd_scene load_steps=74 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=75 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
 [ext_resource type="Script" uid="uid://dat11fw722oki" path="res://Main/Entities/Player/AnimatedBody.cs" id="2_0atn1"]
 [ext_resource type="Material" uid="uid://dicctmxaa1dwu" path="res://Components/Shaders/HitFlash.tres" id="3_0qxmk"]
 [ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="4_a3eui"]
-[ext_resource type="Script" uid="uid://cl7bshfygfold" path="res://Main/Entities/Player/Look.cs" id="4_d1ek6"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="6_jujs3"]
 [ext_resource type="Resource" uid="uid://vfqgjerlv601" path="res://Main/Guns/Player/Rifle.tres" id="7_0j4od"]
 [ext_resource type="PackedScene" uid="uid://brhsqj15bd123" path="res://Main/Entities/Components/HitFlash.tscn" id="7_0qxmk"]
 [ext_resource type="Script" uid="uid://bcue2ep2kxlrd" path="res://Main/Entities/Player/GunHandler.cs" id="7_a3eui"]
+[ext_resource type="Script" uid="uid://c04mvbkieatjs" path="res://Main/Entities/Player/GetDirection.cs" id="8_ospub"]
+[ext_resource type="PackedScene" uid="uid://neorycm12xqs" path="res://Main/Entities/Components/Look.tscn" id="9_ospub"]
 [ext_resource type="Resource" uid="uid://dti7bbgbg8ss" path="res://Main/Guns/Player/Shotgun.tres" id="10_ovqya"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
@@ -499,10 +500,12 @@ animatedSprite = NodePath("..")
 [node name="DashCooldown" type="Timer" parent="."]
 one_shot = true
 
-[node name="Look" type="Marker2D" parent="."]
+[node name="GetDirection" type="Node2D" parent="." node_paths=PackedStringArray("look")]
+script = ExtResource("8_ospub")
+look = NodePath("../Look")
+
+[node name="Look" parent="." instance=ExtResource("9_ospub")]
 position = Vector2(0, -8)
-script = ExtResource("4_d1ek6")
-SnapDegrees = 10.0
 
 [node name="GunHandler" type="Node" parent="Look" node_paths=PackedStringArray("guns")]
 script = ExtResource("7_a3eui")

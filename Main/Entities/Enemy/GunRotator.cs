@@ -1,24 +1,19 @@
 using Godot;
 using System;
 
-public partial class GunRotator : Marker2D
+public partial class GunRotator : Node2D
 {
-    [Export] private Marker2D look;
-    [Export] private float SnapDegrees = 5f;
-    [Export] private float BaseOffset = 14f;
-    [Export] private float MinOffset = 7f;
-
-    public float angle;
-    private float lastFacingAngle = 0f;
+    [Export] private Look look;
+    [Export] private Guns guns;
+    private Vector2 lastFacingDirection = Vector2.Right;
     
     private Player player;
     private Enemy owner;
-    private Guns guns;
+    
 
     public override void _Ready()
     {
         owner = GetParent<Enemy>();
-        guns = GetNodeOrNull<Guns>("Guns");
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
 
         owner.Connect(Enemy.SignalName.Activation, new Callable(this, nameof(Activate)));
@@ -30,33 +25,28 @@ public partial class GunRotator : Marker2D
 
     public override void _PhysicsProcess(double delta)
     {
-        Vector2 vel = owner.Velocity;
+        if (look == null)
+            return;
 
-        if (owner.InSight)
+        Vector2 aimDirection;
+
+        if (owner.InSight && player != null)
         {
-            angle = look.Rotation;
-            lastFacingAngle = angle;
+            aimDirection =
+                (player.GlobalPosition - look.GlobalPosition).Normalized();
         }
-        else if (vel != Vector2.Zero)
+        else if (owner.Velocity != Vector2.Zero)
         {
-            angle = vel.Angle();
-            lastFacingAngle = angle;
+            aimDirection = owner.Velocity.Normalized();
         }
         else
         {
-            angle = lastFacingAngle;
+            aimDirection = lastFacingDirection;
         }
 
-        float angleDegrees = Mathf.RadToDeg(angle);
+        lastFacingDirection = aimDirection;
 
-        // Snap to nearest increment (e.g., 10°)
-        float snappedDegrees = Mathf.Round(angleDegrees / SnapDegrees) * SnapDegrees;
-
-        // Convert back to radians
-        float snappedAngle = Mathf.DegToRad(snappedDegrees);
-
-
-        Rotation = snappedAngle;
+        look.SetRotation(aimDirection);
     }
 
     public void Activate()

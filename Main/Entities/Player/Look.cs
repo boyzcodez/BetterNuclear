@@ -1,28 +1,24 @@
-using Godot;
 using System;
+using Godot;
 
+[GlobalClass]
 public partial class Look : Marker2D
 {
-    // not even sure why this is here
-    //[Export] public PackedScene bul;
     [Export] public float SnapDegrees = 5f;
     [Export] private float BaseOffset = 14f;
     [Export] private float MinOffset = 7f;
 
-    // honest to god i have no idea why the code below is here
-    // but im too scared to deleted it
+    private bool Locked = false;
 
-    // private Node2D main;
-    // public override void _Ready()
-    // {
-    //     main = GetTree().GetFirstNodeInGroup("Main") as Node2D;
-    // }
-
-    public override void _Process(double delta)
+    public void SetRotation(Vector2 direction)
     {
-        Vector2 toMouse = GetGlobalMousePosition() - GlobalPosition;
+        if (Locked)
+        {
+            Rotation = direction.X > 0 ? Vector2.Right.Angle() : Vector2.Left.Angle();
+            return;
+        }
 
-        float angle = toMouse.Angle();
+        float angle = direction.Angle();
 
         // Convert to degrees
         float angleDegrees = Mathf.RadToDeg(angle);
@@ -35,5 +31,11 @@ public partial class Look : Marker2D
 
 
         Rotation = snappedAngle;
+    }
+
+    public void Lock(bool bl)
+    {
+        SetRotation(Vector2.Right);
+        Locked = bl;
     }
 }
