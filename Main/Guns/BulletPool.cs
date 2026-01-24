@@ -1,6 +1,14 @@
 using Godot;
 using System.Collections.Generic;
 
+public enum BulletPriority
+{
+    Trash,
+    Normal,
+    Important,
+    Critical
+}
+
 public partial class BulletPool : Node2D
 {
     public static BulletPool Instance { get; private set; }
@@ -251,10 +259,4 @@ public partial class BulletPool : Node2D
     }
 }
 
-public enum BulletPriority
-{
-    Trash,
-    Normal,
-    Important,
-    Critical
-}
+

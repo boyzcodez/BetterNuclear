@@ -1,12 +1,19 @@
 using Godot;
 using System;
 
+public enum DamageTypes
+{
+    Impact,
+    Obliterate,
+    Disintegrate,
+    Unkown
+}
+
 [GlobalClass]
 public partial class GunData : Resource
 {
     [Export] public StringName GunId {get; set; } = "";
-    [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
-    public string DamageType { get; set; } = "Impact";
+    [Export] public DamageTypes DamageType { get; set; } = DamageTypes.Impact;
     [Export] public Texture2D Icon {get; set;}
     
     [Export] public bool UsesAmmo { get; set; } = true;

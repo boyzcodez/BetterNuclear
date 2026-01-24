@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class LargeExplosion : AnimatedSprite2D, ICollectable
 {
-    public DamageData damageData = new DamageData(5f, 200f, "Explosion", "Explosion");
+    public DamageData damageData = new DamageData(5f, 200f, "Explosion", DamageTypes.Impact);
     public string _Name;
     public Items _Pool;
 

@@ -31,8 +31,6 @@ public partial class Hurtbox : Node2D, ICollidable
     }
 
 
-
-
     private Main main;
 
     public override void _Ready()

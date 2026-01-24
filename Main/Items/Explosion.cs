@@ -2,7 +2,7 @@ using Godot;
 
 public partial class Explosion : AnimatedSprite2D, ICollectable
 {
-    public DamageData damageData = new DamageData(5, 100f, "Explosion", "Explosion");
+    public DamageData damageData = new DamageData(5, 100f, "Explosion", DamageTypes.Impact);
     public string _Name;
     public Items _Pool;
     
