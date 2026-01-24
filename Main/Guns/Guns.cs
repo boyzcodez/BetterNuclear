@@ -51,6 +51,8 @@ public partial class Guns : Node2D
             gunData.BulletData = new IBulletData(
                 gunData.priority,
                 gunData.Shape,
+                gunData.Bounces,
+                gunData.Pierces,
                 new DamageData (gunData.Damage, gunData.Knockback, gunData.GunId, gunData.DamageType),
                 gunData.Behaviors,
                 gunData.BulletRaidus,

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public struct IBulletData
 {
     public Shape2D Shape;
+    public int Bounces {get; set;}
+    public int Pierces {get; set;}
     public float Radius {get; set;}
     public float LifeTime {get;set;}
     public float Speed { get; set; }
@@ -17,6 +19,8 @@ public struct IBulletData
     public IBulletData(
         BulletPriority newPrior,
         Shape2D newShape,
+        int newBounces,
+        int newPierces,
         DamageData newDMG, 
         IReadOnlyList<BehaviorResource> newBehaviors,
         float newRadius, 
@@ -27,6 +31,8 @@ public struct IBulletData
     {
         priority = newPrior;
         Shape = newShape;
+        Bounces = newBounces;
+        Pierces = newPierces;
         damageData = newDMG;
         Behaviors = newBehaviors;
         Radius = newRadius;

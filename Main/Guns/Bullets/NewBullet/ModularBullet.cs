@@ -5,16 +5,36 @@ using System.Runtime.Intrinsics.X86;
 public partial class ModularBullet : Sprite2D, ICollidable
 {
     public Vector2 Velocity;
+    public float Speed = 400f;
     public float Radius = 5f;
     public float LifeTime = 5f;
-    public int Layer = 2; // 2 PlayerBullet, 1 EnemyBullet, etc
+
+    public int Layer = 2;
+    public int Bounces;
+    public int Pierces;
+
+    public DamageData damageData;
+    public StringName PoolKey;
+    public BulletPriority Priority;
+
     public Shape2D Shape;
     public Vector2 ShapeOffset = Vector2.Zero;
 
+    public readonly List<IBulletBehaviorRuntime> Behaviors = new();
+
+    public Vector2 PendingDisplacement { get; private set; }
+
+    public Main main;
+    public BulletPool pool;
+
+    public bool Active = false;
+
+    // ICollidable stuff here
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => Layer;
     Shape2D ICollidable.CollisionShape => Shape;
+
     Transform2D ICollidable.CollisionXform
     {
         get
@@ -23,21 +43,6 @@ public partial class ModularBullet : Sprite2D, ICollidable
             return new Transform2D(GlobalRotation, GlobalPosition + off);
         }
     }
-
-    public DamageData damageData;
-    public StringName PoolKey;
-    public BulletPriority Priority;
-    public float Speed = 400f;
-
-    public readonly List<IBulletBehaviorRuntime> Behaviors = new();
-
-    
-    public Vector2 PendingDisplacement { get; private set; }
-
-    public Main main;
-    public BulletPool pool;
-
-    public bool Active = false;
 
     public override void _Ready()
     {
@@ -54,15 +59,12 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
         MoveWithGridRay(displacement);
 
-        foreach (var behavior in Behaviors) behavior.OnUpdate(this, (float)delta);
+        foreach (var behavior in Behaviors)
+            behavior.OnUpdate(this, (float)delta);
 
         LifeTime -= (float)delta;
-        if (LifeTime <= 0) Deactivate();   
-    }
-
-    private void NotifyWallHit(Vector2 normal)
-    {
-        foreach (var b in Behaviors) b.OnWallHit(this, normal);
+        if (LifeTime <= 0)
+            Deactivate();
     }
 
     public void Activate(
@@ -73,10 +75,15 @@ public partial class ModularBullet : Sprite2D, ICollidable
     {
         GlobalPosition = position;
         Velocity = velocity;
+
         Shape = data.Shape;
         Radius = data.Radius;
         Speed = data.Speed;
         LifeTime = data.LifeTime;
+
+        Bounces = data.Bounces;
+        Pierces = data.Pierces;
+
         damageData = data.damageData;
         Layer = data.CollisionLayer;
         PoolKey = data.key;
@@ -85,7 +92,9 @@ public partial class ModularBullet : Sprite2D, ICollidable
         Behaviors.Clear();
         foreach (var def in data.Behaviors)
         {
-            if (def == null) continue;
+            if (def == null)
+                continue;
+
             var runtime = def.CreateRuntime();
             Behaviors.Add(runtime);
             runtime.OnSpawn(this);
@@ -95,6 +104,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
         Visible = true;
         Active = true;
     }
+
     public void Deactivate()
     {
         Visible = false;
@@ -104,6 +114,37 @@ public partial class ModularBullet : Sprite2D, ICollidable
     public void AddDisplacement(Vector2 deltaMove)
     {
         PendingDisplacement += deltaMove;
+    }
+
+    public void NotifyWallHit(Vector2 normal)
+    {
+        foreach (var b in Behaviors)
+            b.OnWallHit(this, normal);
+
+        if (Bounces > 0)
+        {
+            Velocity = Velocity.Bounce(normal);
+            Rotation = Velocity.Angle();
+        }
+        else
+        {
+            Deactivate();
+        }
+    }
+
+    public void NotifyOnHit(ICollidable hurtbox)
+    {
+        foreach (var b in Behaviors)
+            b.OnHit(this, hurtbox);
+
+        if (Pierces <= 0)
+            Deactivate();
+    }
+
+    public void NotifyEnemyKilled(ICollidable hurtbox)
+    {
+        foreach (var b in Behaviors)
+            b.OnKill(this, hurtbox);
     }
 
     private void MoveWithGridRay(Vector2 displacement)
@@ -138,13 +179,11 @@ public partial class ModularBullet : Sprite2D, ICollidable
                 ? (nextY - pos.Y) / dir.Y
                 : float.PositiveInfinity;
 
-            // Ensure positive distances
             if (distX < 0f) distX = float.PositiveInfinity;
             if (distY < 0f) distY = float.PositiveInfinity;
 
             float travel = Mathf.Min(distX, distY);
 
-            // Guarantee forward progress
             if (travel <= 0f)
                 travel = 0.0001f;
 
@@ -175,7 +214,6 @@ public partial class ModularBullet : Sprite2D, ICollidable
                 return;
             }
 
-            // Nudge into the next cell to avoid precision issues
             pos += hitX
                 ? new Vector2(stepX * 0.001f, 0f)
                 : new Vector2(0f, stepY * 0.001f);
@@ -183,6 +221,4 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
         GlobalPosition = pos;
     }
-
-
 }

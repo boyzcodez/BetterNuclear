@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://dti7bbgbg8ss"]
 
-[ext_resource type="Script" uid="uid://cki27a5abvk3n" path="res://Main/Guns/Bullets/Resource/Bounce.cs" id="1_b5tvg"]
+[ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_2nr4r"]
 [ext_resource type="Texture2D" uid="uid://b80k0l6upad0d" path="res://Assets/Guns/Player/Shotgun.png" id="3_l0a1k"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_1kbbo"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_l0a1k"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="5_miae0"]
 
 [sub_resource type="Resource" id="Resource_b5tvg"]
-script = ExtResource("1_b5tvg")
-metadata/_custom_type_script = "uid://cki27a5abvk3n"
+script = ExtResource("1_2nr4r")
+metadata/_custom_type_script = "uid://4rjjvn6s1kor"
 
 [sub_resource type="Resource" id="Resource_ospub"]
 script = ExtResource("4_1kbbo")
@@ -39,6 +39,7 @@ BulletCount = 6
 SpreadAngle = 20.0
 ShootPosition = Vector2(16, 0)
 GunSpot = Vector2(8, 0)
+Bounces = 3
 Knockback = 50.0
 Shape = SubResource("CircleShape2D_2nr4r")
 BulletSpeed = 350.0

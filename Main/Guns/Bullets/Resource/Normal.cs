@@ -17,14 +17,12 @@ public partial class Normal : BehaviorResource
 
         public void OnHit(ModularBullet b, ICollidable collidable)
         {
-            b.Deactivate();
         }
 
         public void OnKill(ModularBullet b, ICollidable collidable) { }
 
         public void OnWallHit(ModularBullet b, Vector2 normal)
         {
-            b.Deactivate();
         }
     }
 }

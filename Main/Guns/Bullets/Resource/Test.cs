@@ -28,7 +28,6 @@ public partial class Test : BehaviorResource
 
         public void OnHit(ModularBullet b, ICollidable collidable)
         {
-            b.Deactivate();
         }
 
         public void OnKill(ModularBullet b, ICollidable collidable)
@@ -40,6 +39,8 @@ public partial class Test : BehaviorResource
             var childData = new IBulletData(
                 b.Priority,
                 b.Shape,
+                0,
+                0,
                 b.damageData,
                 new BehaviorResource[] { NormalDef },
                 b.Radius,
@@ -50,7 +51,7 @@ public partial class Test : BehaviorResource
             );
 
             float step = Mathf.Tau / count;
-            float start = 0f; // you could randomize if you want
+            float start = 0f; // randomize if you want
 
             for (int i = 0; i < count; i++)
             {
@@ -67,7 +68,6 @@ public partial class Test : BehaviorResource
 
         public void OnWallHit(ModularBullet b, Vector2 normal)
         {
-            b.Deactivate();
             Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
         }
     }
