@@ -5,6 +5,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class Guns : Node2D
 {
+    [Export] public AnimatedSprite2D ChargeAnimation;
     [Export] public GunData[] guns { get; set; } = [];
     [Export] public bool active = false;
     public GunAnimation sprite { get; set; }

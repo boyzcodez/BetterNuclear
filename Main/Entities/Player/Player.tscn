@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene load_steps=80 format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
 [ext_resource type="PackedScene" uid="uid://cy0fl3is3qri" path="res://Main/Entities/Components/Shadow.tscn" id="12_m26o7"]
+[ext_resource type="Resource" uid="uid://xwkoi1c5rtmc" path="res://Main/Guns/Player/GrenadeRifle.tres" id="15_jgy2k"]
+[ext_resource type="Texture2D" uid="uid://du6kepdjypvhh" path="res://Assets/SFX/Charged.png" id="16_ospub"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx6cj"]
 atlas = ExtResource("1_iov3m")
@@ -474,6 +476,35 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_ovqya"]
 radius = 7.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_qiaq8"]
+atlas = ExtResource("16_ospub")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_virsk"]
+atlas = ExtResource("16_ospub")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7iwkh"]
+atlas = ExtResource("16_ospub")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t4h0r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qiaq8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_virsk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7iwkh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
 [node name="Player" type="Node2D" groups=["Player"]]
 script = ExtResource("1_1skx3")
 
@@ -515,7 +546,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
-guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya")])
+guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya"), ExtResource("15_jgy2k")])
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_mask = 0
@@ -525,6 +556,15 @@ monitoring = false
 shape = SubResource("CircleShape2D_ovqya")
 
 [node name="Shadow" parent="." instance=ExtResource("12_m26o7")]
+
+[node name="Charge" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = -1
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_t4h0r")
+autoplay = "default"
+frame = 1
+frame_progress = 0.891642
 
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody" method="_on_hurtbox_hit"]
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody/HitFlash" method="_on_hurtbox_hit"]

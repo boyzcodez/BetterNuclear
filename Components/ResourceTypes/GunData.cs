@@ -52,6 +52,7 @@ public partial class GunData : Resource
     
     [Export] public AnimationData NormalAnimationData {get;set;}
     [Export] public AnimationData ShootAnimationData {get;set;}
+    [Export] public AnimationData ChargeAnimationData {get; set;}
     [Export] public bool UsesAnimations {get;set;} = true;
     [Export] public float ShakeIntensity {get; set;} = 0f;
     [Export] public float ShakeDuration {get; set;} = 0f;

@@ -30,6 +30,7 @@ script = ExtResource("5_12j7w")
 GunId = &"EnemyRifle"
 UsesAmmo = false
 SpreadAngle = 25.0
+items = null
 ShootPosition = Vector2(10, 0)
 GunSpot = Vector2(8, 1)
 CollisionLayer = 1
