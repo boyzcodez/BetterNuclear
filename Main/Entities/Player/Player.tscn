@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
 [ext_resource type="PackedScene" uid="uid://cy0fl3is3qri" path="res://Main/Entities/Components/Shadow.tscn" id="12_m26o7"]
-[ext_resource type="Resource" uid="uid://xwkoi1c5rtmc" path="res://Main/Guns/Player/GrenadeRifle.tres" id="15_jgy2k"]
+[ext_resource type="Resource" uid="uid://xwkoi1c5rtmc" path="res://Main/Guns/Player/Excalibur.tres" id="15_jgy2k"]
 [ext_resource type="Texture2D" uid="uid://du6kepdjypvhh" path="res://Assets/SFX/Charged.png" id="16_ospub"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx6cj"]
@@ -545,7 +545,8 @@ guns = NodePath("../Guns")
 wait_time = 0.1
 one_shot = true
 
-[node name="Guns" parent="Look" instance=ExtResource("6_jujs3")]
+[node name="Guns" parent="Look" node_paths=PackedStringArray("ChargeAnimation") instance=ExtResource("6_jujs3")]
+ChargeAnimation = NodePath("../../Charge")
 guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya"), ExtResource("15_jgy2k")])
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -562,7 +563,6 @@ visible = false
 z_index = -1
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_t4h0r")
-autoplay = "default"
 frame = 1
 frame_progress = 0.891642
 

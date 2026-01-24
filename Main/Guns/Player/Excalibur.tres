@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="GunData" load_steps=13 format=3 uid="uid://xwkoi1c5rtmc"]
+
+[ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_klb7e"]
+[ext_resource type="Texture2D" uid="uid://slyu064h03g7" path="res://Assets/Guns/Player/ExcaliburCharge.png" id="2_x7y5h"]
+[ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="2_yf7po"]
+[ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_pn2tq"]
+[ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="5_3i0td"]
+[ext_resource type="Texture2D" uid="uid://hfe4cc5gfy38" path="res://Assets/Guns/Player/Excalibur.png" id="5_pn2tq"]
+[ext_resource type="Texture2D" uid="uid://ccfd61cqp6wfs" path="res://Assets/Guns/Player/ExcaliburAttack.png" id="6_3i0td"]
+
+[sub_resource type="Resource" id="Resource_bogcq"]
+script = ExtResource("1_klb7e")
+metadata/_custom_type_script = "uid://4rjjvn6s1kor"
+
+[sub_resource type="Resource" id="Resource_l7xpl"]
+script = ExtResource("4_pn2tq")
+SpriteSheet = ExtResource("2_x7y5h")
+HorizontalFrames = 4
+VerticalFrames = 1
+FrameRate = 2
+metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
+
+[sub_resource type="Resource" id="Resource_yahgw"]
+script = ExtResource("4_pn2tq")
+SpriteSheet = ExtResource("5_pn2tq")
+HorizontalFrames = 3
+VerticalFrames = 1
+FrameRate = 0
+metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r27xg"]
+radius = 5.0
+
+[sub_resource type="Resource" id="Resource_ha5ri"]
+script = ExtResource("4_pn2tq")
+SpriteSheet = ExtResource("6_3i0td")
+HorizontalFrames = 4
+VerticalFrames = 1
+FrameRate = 14
+metadata/_custom_type_script = "uid://dr2x1o2y6l4dd"
+
+[resource]
+script = ExtResource("5_3i0td")
+GunId = &"Excalibur"
+Icon = ExtResource("2_yf7po")
+CurrentAmmo = 60
+MaxAmmo = 60
+FireRate = 0.15
+items = null
+ShootPosition = Vector2(18, -1)
+GunSpot = Vector2(-6, -12)
+Knockback = 100.0
+BulletRaidus = 6.0
+Shape = SubResource("CircleShape2D_r27xg")
+BulletSpeed = 500.0
+Behaviors = Array[Object]([SubResource("Resource_bogcq")])
+OriginalBehavior = null
+NormalAnimationData = SubResource("Resource_yahgw")
+ShootAnimationData = SubResource("Resource_ha5ri")
+ChargeAnimationData = SubResource("Resource_l7xpl")
+ShakeIntensity = 1.3
+ShakeDuration = 0.09
+DoesntRotate = true
+metadata/_custom_type_script = "uid://batyimatw3rwc"
