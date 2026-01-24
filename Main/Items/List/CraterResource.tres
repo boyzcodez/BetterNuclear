@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_64unp")
 itemScene = ExtResource("1_8ldml")
-Name = "Crater"
+Id = "Crater"
 AmountOfItem = 100
 metadata/_custom_type_script = "uid://buo4n5miby8sq"

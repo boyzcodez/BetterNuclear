@@ -21,6 +21,8 @@ public partial class WalkerHead : Node2D
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
 
+    [Export] public ItemResource dust;
+
     private Rect2I mapBounds;
     private Rect2I destructionBounds;
     private HashSet<Vector2I> floorSet = new();
@@ -47,6 +49,10 @@ public partial class WalkerHead : Node2D
         Eventbus.GenerateMap += GenerateMap;
         Eventbus.Explosion += Explosion;
         Eventbus.Reset += GenerateMap;
+
+        var itemsPool = GetTree().GetFirstNodeInGroup("ItemsPool") as Items;
+        
+        itemsPool.PreparePool(dust);
 
         GenerateMap();
     }
@@ -189,7 +195,7 @@ public partial class WalkerHead : Node2D
             DestroyWall(wallPos);
 
             Vector2 dustPos = WallMap.ToGlobal(WallMap.MapToLocal(wallPos));
-            Eventbus.TriggerSpawnItem("DustExplosion", dustPos);
+            Eventbus.TriggerSpawnItem(dust.Id, dustPos);
         }
     }
 

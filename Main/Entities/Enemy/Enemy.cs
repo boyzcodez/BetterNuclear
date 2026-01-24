@@ -1,5 +1,12 @@
 using Godot;
 
+public enum EnemyActions
+{
+    Shoot,
+    Ability,
+    Nothing
+}
+
 public partial class Enemy : Entity
 {
     [Signal] public delegate void ActivationEventHandler();
@@ -12,10 +19,10 @@ public partial class Enemy : Entity
         Nothing
     }
 
-    [Export(PropertyHint.Enum, "Shoot,Ability,Nothing")]
-    public string Trigger { get; set; } = "Shoot";
+    [Export] public EnemyActions action = EnemyActions.Nothing;
     [Export] public Guns gun;
     [Export] public Node2D ability;
+    [Export] public ItemResource[] items = [];
 
     
     public string name;
@@ -99,17 +106,17 @@ public partial class Enemy : Entity
     }
 
 
-    public void TriggerAction(string trigger)
+    public void TriggerAction(EnemyActions trigger)
     {
         switch (trigger)
         {
-            case "Shoot":
+            case EnemyActions.Shoot:
                 gun?.Shoot();
                 break;
-            case "Ability":
+            case EnemyActions.Ability:
                 GD.Print("Fix ability dumbass");
                 break;
-            case "Nothing":
+            case EnemyActions.Nothing:
                 GD.Print("I will do nothing");
                 break;
         }
@@ -143,6 +150,9 @@ public partial class Enemy : Entity
     {
         if (active) behavior?.Death(this);
         EmitSignal("Deactivation");
+
+        if (items.Length > 0 ) Eventbus.TriggerSpawnItem(items[0].Id, GlobalPosition);
+        
         pool.Return();
     }
 

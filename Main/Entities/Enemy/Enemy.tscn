@@ -1,7 +1,8 @@
-[gd_scene load_steps=71 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene load_steps=72 format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
+[ext_resource type="Resource" uid="uid://wnkw22n0l7g0" path="res://Main/Items/List/CoinResource.tres" id="2_re15m"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="3_4prcw"]
 [ext_resource type="Material" uid="uid://dicctmxaa1dwu" path="res://Components/Shaders/HitFlash.tres" id="3_spb1j"]
 [ext_resource type="Script" uid="uid://82621pfnop8x" path="res://Main/Entities/Enemy/EnemyAnimations.cs" id="4_bqycu"]
@@ -472,6 +473,7 @@ animations = [{
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("gun")]
 script = ExtResource("1_4prcw")
 gun = NodePath("Look/Guns")
+items = [ExtResource("2_re15m")]
 Speed = 45.0
 Radius = 17.0
 

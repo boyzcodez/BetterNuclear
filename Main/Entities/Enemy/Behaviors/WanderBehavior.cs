@@ -34,7 +34,7 @@ public class WanderBehavior : IEnemyBehavior
         // -attack
         if (enemy.InSight && _attackCooldown <= 0f)
         {
-            enemy.TriggerAction("Shoot");
+            enemy.TriggerAction(EnemyActions.Shoot);
             ResetAttackCooldown();
         }
 
@@ -61,7 +61,6 @@ public class WanderBehavior : IEnemyBehavior
     public void Death(Enemy enemy)
     {
         ResetAttackCooldown();
-        Eventbus.TriggerSpawnItem("Coin", enemy.GlobalPosition);
     }
 
     

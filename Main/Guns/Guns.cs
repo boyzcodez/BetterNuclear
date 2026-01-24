@@ -47,6 +47,13 @@ public partial class Guns : Node2D
             // gunData.HitAnimation.Name = gunData.GunId + "OnHit";
             
             //if (gunData.Sound != null) AudioLibrary.Add(gunData.GunName, gunData.Sound);
+            var itemsPool = GetTree().GetFirstNodeInGroup("ItemsPool") as Items;
+
+            foreach (var item in gunData.items)
+            {
+                itemsPool.PreparePool(item);
+                //Items.Instance.PreparePool(item);
+            }
 
             gunData.BulletData = new IBulletData(
                 gunData.priority,

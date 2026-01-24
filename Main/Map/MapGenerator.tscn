@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bvj3rj3lgr7cn"]
+[gd_scene load_steps=11 format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
@@ -9,12 +9,7 @@
 [ext_resource type="Resource" uid="uid://cwb802hcofpcf" path="res://Main/Entities/Enemy/List/ShotgunDude.tres" id="9_ccqbt"]
 [ext_resource type="Resource" uid="uid://bytvm5rujp75h" path="res://Main/Entities/Enemy/List/Test.tres" id="10_vlute"]
 [ext_resource type="Script" uid="uid://8dgyvxwyg3ii" path="res://Main/Items/Items.cs" id="11_lpw80"]
-[ext_resource type="Resource" uid="uid://bbogxuusw4tku" path="res://Main/Items/List/AmmoResource.tres" id="12_ccqbt"]
-[ext_resource type="Resource" uid="uid://d1uwb30p506de" path="res://Main/Items/List/ExplosionResource.tres" id="12_vlute"]
-[ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="13_bttlk"]
-[ext_resource type="Resource" uid="uid://wnkw22n0l7g0" path="res://Main/Items/List/CoinResource.tres" id="13_vlute"]
 [ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="14_bttlk"]
-[ext_resource type="Resource" uid="uid://bnkv381ul6fs" path="res://Main/Items/List/CraterResource.tres" id="15_d41uc"]
 
 [node name="MapGenerator" type="Node2D"]
 y_sort_enabled = true
@@ -37,6 +32,7 @@ WallPadding = 5
 UnderGround = NodePath("../UnderGround")
 GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")
+dust = ExtResource("14_bttlk")
 
 [node name="Environment" type="Node2D" parent="."]
 
@@ -45,7 +41,6 @@ y_sort_enabled = true
 script = ExtResource("5_rvxhn")
 enemies = [ExtResource("6_8scsi"), ExtResource("7_uvev8"), ExtResource("8_lpw80"), ExtResource("9_ccqbt"), ExtResource("10_vlute")]
 
-[node name="Items" type="Node2D" parent="."]
+[node name="Items" type="Node2D" parent="." groups=["ItemsPool"]]
 y_sort_enabled = true
 script = ExtResource("11_lpw80")
-itemScenes = [ExtResource("12_ccqbt"), ExtResource("13_vlute"), ExtResource("12_vlute"), ExtResource("13_bttlk"), ExtResource("14_bttlk"), ExtResource("15_d41uc")]

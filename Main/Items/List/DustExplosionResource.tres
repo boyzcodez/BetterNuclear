@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_egf86")
 itemScene = ExtResource("1_wp2ka")
-Name = "DustExplosion"
-AmountOfItem = 100
+Id = "DustExplosion"
+AmountOfItem = 200
 metadata/_custom_type_script = "uid://buo4n5miby8sq"

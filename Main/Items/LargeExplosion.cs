@@ -1,15 +1,16 @@
 using Godot;
-using System.Collections.Generic;
 
 public partial class LargeExplosion : AnimatedSprite2D, ICollectable
 {
+    [Export] private ItemResource DustExplosion;
+    [Export] private ItemResource Crater;
     public DamageData damageData = new DamageData(5f, 200f, "Explosion", DamageTypes.Impact);
-    public string _Name;
+    public string id;
     public Items _Pool;
 
-    public void Init(string name, Items pool)
+    public void Init(string newId, Items pool)
     {
-        _Name = name;
+        id = newId;
         _Pool = pool;
 
         AnimationFinished += OnDeactivation;
@@ -17,14 +18,14 @@ public partial class LargeExplosion : AnimatedSprite2D, ICollectable
     public void OnActivation()
     {
         Play("default");
-        Eventbus.TriggerSpawnItem("DustExplosion", GlobalPosition);
-        Eventbus.TriggerSpawnItem("Crater", GlobalPosition);
+        // Eventbus.TriggerSpawnItem(DustExplosion.Name, GlobalPosition);
+        // Eventbus.TriggerSpawnItem(Crater.Name, GlobalPosition);
         Eventbus.TriggerExplosion(60f, GlobalPosition, damageData);
         Eventbus.TriggerScreenShake(10f, 0.4f);
     }
     public void OnDeactivation()
     {
         // return back to pool
-        _Pool.ReturnItem(_Name, this);
+        _Pool.ReturnItem(id, this);
     }
 }

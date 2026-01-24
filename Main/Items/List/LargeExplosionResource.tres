@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_hdr4v")
 itemScene = ExtResource("1_hmg72")
-Name = "LargeExplosion"
+Id = "LargeExplosion"
 AmountOfItem = 100
 metadata/_custom_type_script = "uid://buo4n5miby8sq"

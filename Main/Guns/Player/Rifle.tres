@@ -1,14 +1,16 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=9 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://vfqgjerlv601"]
 
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
 [ext_resource type="Script" uid="uid://batyimatw3rwc" path="res://Components/ResourceTypes/GunData.cs" id="1_npjdg"]
 [ext_resource type="Script" uid="uid://chvqavh0y20t8" path="res://Main/Guns/Bullets/Resource/Test.cs" id="1_pbbwr"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_pbbwr"]
+[ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="5_jlw6v"]
 
 [sub_resource type="Resource" id="Resource_ulg0x"]
 script = ExtResource("1_pbbwr")
 bulletAmount = 8
+NeededItem = ExtResource("5_jlw6v")
 metadata/_custom_type_script = "uid://chvqavh0y20t8"
 
 [sub_resource type="Resource" id="Resource_lbm6o"]
@@ -25,9 +27,11 @@ radius = 5.0
 [resource]
 script = ExtResource("1_npjdg")
 GunId = &"Rifle"
+Icon = ExtResource("4_pbbwr")
 CurrentAmmo = 60
 MaxAmmo = 60
 FireRate = 0.15
+items = Array[Object]([ExtResource("5_jlw6v")])
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
 Bounces = 1
@@ -36,7 +40,6 @@ Shape = SubResource("CircleShape2D_xa0j0")
 BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
 OriginalBehavior = null
-Icon = ExtResource("4_pbbwr")
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 ShakeIntensity = 1.3

@@ -44,6 +44,7 @@ Walls=""
 BulletPool=""
 Ground=""
 WeaponWheel=""
+ItemsPool=""
 
 [input]
 

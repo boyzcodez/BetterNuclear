@@ -24,6 +24,7 @@ public static class Eventbus
     public static int dangerValue = 0;
     public static bool gameOn = false;
 
+    // References
     public static void ResetGame()
     {
         dangerValue = 0;

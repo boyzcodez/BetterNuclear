@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_ipm8d")
 itemScene = ExtResource("1_g5x3v")
-Name = "Explosion"
+Id = "Explosion"
 AmountOfItem = 100
 metadata/_custom_type_script = "uid://buo4n5miby8sq"

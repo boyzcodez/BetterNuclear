@@ -1,9 +1,11 @@
+using System;
 using Godot;
 
 [GlobalClass]
 public partial class Test : BehaviorResource
 {
     [Export] private int bulletAmount = 10;
+    [Export] private ItemResource NeededItem;
 
     // Reuse one definition resource (stateless config).
     // Each spawned bullet will call CreateRuntime() and get its own runtime.
@@ -11,13 +13,18 @@ public partial class Test : BehaviorResource
     private static readonly Normal NormalDef = new Normal();
 
     public override IBulletBehaviorRuntime CreateRuntime()
-        => new Runtime(this);
+        => new Runtime(this, NeededItem.Id);
 
     private sealed class Runtime : IBulletBehaviorRuntime
     {
         private readonly Test def;
+        private readonly String itemId;
 
-        public Runtime(Test def) => this.def = def;
+        public Runtime(Test def, String id)
+        {
+            this.def = def;
+            itemId = id;
+        }
 
         public void OnSpawn(ModularBullet b) { }
 
@@ -68,7 +75,7 @@ public partial class Test : BehaviorResource
 
         public void OnWallHit(ModularBullet b, Vector2 normal)
         {
-            Eventbus.TriggerSpawnItem("LargeExplosion", b.GlobalPosition);
+            Eventbus.TriggerSpawnItem(itemId, b.GlobalPosition);
         }
     }
 }
