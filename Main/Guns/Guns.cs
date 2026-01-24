@@ -145,6 +145,8 @@ public partial class Guns : Node2D
     {
         if (currentGun == null || currentGun.CurrentAmmo <= 0)
             return;
+        
+        if (Main.Instance.IsWallAt(muzzleFlash.GlobalPosition)) return;
 
         currentGun.UseBullet();
 
