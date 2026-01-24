@@ -23,7 +23,6 @@ public partial class GunData : Resource
     
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public Vector2 GunSpot { get; set; } = new Vector2 (6, 0);
-    [Export] public Texture2D icon { get; set; }
 
     [Export] public int Bounces {get; set;} = 0;
     [Export] public int Pierces {get; set;} = 0;

@@ -30,6 +30,7 @@ MaxAmmo = 60
 FireRate = 0.15
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(8, 0)
+Bounces = 1
 Knockback = 100.0
 Shape = SubResource("CircleShape2D_xa0j0")
 BulletSpeed = 500.0

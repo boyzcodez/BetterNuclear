@@ -29,7 +29,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
     public bool Active = false;
 
-    // ICollidable stuff here
+    // ICollidable stuff
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
     int ICollidable.CollisionLayer => Layer;
@@ -121,14 +121,12 @@ public partial class ModularBullet : Sprite2D, ICollidable
         foreach (var b in Behaviors)
             b.OnWallHit(this, normal);
 
-        if (Bounces > 0)
-        {
-            Velocity = Velocity.Bounce(normal);
-            Rotation = Velocity.Angle();
-        }
+        if (Bounces <= 0)Deactivate();
         else
         {
-            Deactivate();
+            Bounces--;
+            Velocity = Velocity.Bounce(normal);
+            Rotation = Velocity.Angle();
         }
     }
 
@@ -139,6 +137,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
         if (Pierces <= 0)
             Deactivate();
+        else Pierces--;
     }
 
     public void NotifyEnemyKilled(ICollidable hurtbox)
