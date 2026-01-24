@@ -7,6 +7,7 @@ public partial class GunData : Resource
     [Export] public StringName GunId {get; set; } = "";
     [Export(PropertyHint.Enum, "Impact,Obliterate,Disintegrate")]
     public string DamageType { get; set; } = "Impact";
+    [Export] public Texture2D Icon {get; set;}
     
     [Export] public bool UsesAmmo { get; set; } = true;
     [Export] public int CurrentAmmo { get; set; } = 10;
@@ -40,7 +41,7 @@ public partial class GunData : Resource
     public IBulletData BulletData {get; set;}
 
     [ExportGroup("Animations ETC")]
-    [Export] public Texture2D Icon;
+    
     [Export] public AnimationData NormalAnimationData {get;set;}
     [Export] public AnimationData ShootAnimationData {get;set;}
     [Export] public bool UsesAnimations {get;set;} = true;
@@ -48,21 +49,18 @@ public partial class GunData : Resource
     [Export] public float ShakeDuration {get; set;} = 0f;
     [Export] public bool AlwaysBehindParent {get; set;} = false;
     [Export] public bool DoesntRotate {get; set;} = false;
-    
-    // [ExportGroup("Gun Parts")]
-    // [Export] public bool isEnemy { get; set; } = false;
-    // [Export] public bool rotate { get; set; } = false;
-    // [Export] public bool LaserSight { get; set; } = false;
-    // [Export] public AudioStreamRandomizer Sound {get;set;}
+
     
 
     public void UseBullet()
     {
         if (UsesAmmo) CurrentAmmo -= 1;
     }
-    public void ReFillAmmo(int ammoAmount)
+    public void ReFillAmmo(float ammoPer = 0.3f)
     {
-        CurrentAmmo += ammoAmount;
+        ammoPer = Math.Clamp(ammoPer, 0f,1f);
+        CurrentAmmo = (int)(MaxAmmo * ammoPer);
+
         CurrentAmmo = Math.Clamp(CurrentAmmo, 0, MaxAmmo);
     }
 }
