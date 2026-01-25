@@ -16,6 +16,7 @@ public partial class Hurtbox : Node2D, ICollidable
     public bool active => parent.active;
     public float Health = 5;
     [Export] public float MaxHealth = 5;
+    [Export] public float DamageCap = 0;
 
     public Vector2 _Position => GlobalPosition;
     float ICollidable.CollisionRadius => Radius;
@@ -50,7 +51,14 @@ public partial class Hurtbox : Node2D, ICollidable
 
     public void TakeDamage(DamageData damageData, Vector2 knockbackDir)
     {
-        Health -= damageData.Damage;
+        var dmg = damageData.Damage;
+
+        if (DamageCap > 0f)
+        {
+            dmg = Mathf.Min(dmg, DamageCap);
+        }
+
+        Health -= dmg;
         EmitSignal("Hit", knockbackDir, damageData.Knockback);
         GD.Print("took damage");
 

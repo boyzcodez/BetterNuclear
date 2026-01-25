@@ -66,7 +66,7 @@ public partial class Test : BehaviorResource
                 Vector2 dir = new Vector2(Mathf.Cos(ang), Mathf.Sin(ang)).Normalized();
 
                 BulletPool.Spawn(
-                    position: b.GlobalPosition,
+                    position: collidable._Position,
                     velocity: dir,
                     bulletData: childData
                 );

@@ -8,6 +8,10 @@ uniform bool flip_v = false;
 varying float theta;
 varying vec2 block_size;
 
+uniform bool harden_opaque_alpha = true;
+uniform float alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
+uniform float harden_start : hint_range(0.0, 1.0) = 0.85; // start hardening near-opaque pixels
+
 // Neighbor offsets in "pixel blocks" (up, down, right, left, diagonals...)
 const vec2 OFFS[8] = vec2[](
 	vec2( 0.0,  1.0), // 0 up
@@ -99,10 +103,19 @@ void fragment() {
 
 	// Your alpha rules, but applied after outside test
 	if (outside) {
-		color.a = 0.0;
-	} else {
-		color.a = step(0.5, color.a);
-	}
+    color.a = 0.0;
+} else {
+    if (harden_opaque_alpha) {
+        float a = color.a;
 
-	COLOR = color;
+        // t=0 for low alpha (keep glow soft), t->1 as alpha approaches 1 (make sprite crisp)
+        float t = smoothstep(harden_start, 1.0, a);
+
+        float hard = step(alpha_cutoff, a);
+        color.a = mix(a, hard, t);
+    }
+    // else keep alpha as-is
+}
+
+COLOR = color;
 }

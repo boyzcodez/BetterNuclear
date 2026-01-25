@@ -9,3 +9,6 @@ shader_parameter/pixel_size = 1.0
 shader_parameter/mix_sampling = 0
 shader_parameter/flip_h = false
 shader_parameter/flip_v = false
+shader_parameter/harden_opaque_alpha = true
+shader_parameter/alpha_cutoff = 0.5
+shader_parameter/harden_start = 0.85
