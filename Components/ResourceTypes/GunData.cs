@@ -8,6 +8,11 @@ public enum DamageTypes
     Disintegrate,
     Unkown
 }
+public enum BulletSpawnPoint
+{
+    Muzzle,
+    Mouse
+}
 
 [GlobalClass]
 public partial class GunData : Resource
@@ -29,7 +34,7 @@ public partial class GunData : Resource
     
     // [Export] public Animation ShootAnimation {get; set;}
     // [Export] public Animation HitAnimation {get; set;}
-    
+    [Export] public BulletSpawnPoint SpawnPoint { get; set; } = BulletSpawnPoint.Muzzle;
     [Export] public Vector2 ShootPosition { get; set; }
     [Export] public Vector2 GunSpot { get; set; } = new Vector2 (6, 0);
 

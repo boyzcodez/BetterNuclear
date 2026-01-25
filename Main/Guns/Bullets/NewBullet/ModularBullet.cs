@@ -97,12 +97,13 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
             var runtime = def.CreateRuntime();
             Behaviors.Add(runtime);
-            runtime.OnSpawn(this);
         }
 
         Rotation = Velocity.Angle();
         Visible = true;
         Active = true;
+
+        foreach (var b in Behaviors) b.OnSpawn(this);
     }
 
     public void Deactivate()
@@ -118,8 +119,7 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
     public void NotifyWallHit(Vector2 normal)
     {
-        foreach (var b in Behaviors)
-            b.OnWallHit(this, normal);
+        foreach (var b in Behaviors) b.OnWallHit(this, normal);
 
         if (Bounces <= 0)Deactivate();
         else

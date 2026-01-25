@@ -178,12 +178,14 @@ public partial class Guns : Node2D
         if (GlobalRotation > -1.5f && GlobalRotation < 1.5f)
         {
             shaderMaterial.SetShaderParameter("flip_v", false);
+
             muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, currentGun.ShootPosition.Y);
             Position = currentGun.GunSpot;
         }
         else
         {
             shaderMaterial.SetShaderParameter("flip_v", true);
+
             muzzleFlash.Position = new Vector2(currentGun.ShootPosition.X, -currentGun.ShootPosition.Y);
             Position = new Vector2(currentGun.GunSpot.X, -currentGun.GunSpot.Y);
         }
@@ -295,12 +297,27 @@ public partial class Guns : Node2D
             sprite?.Play(currentGun.GunId);
     }
 
+
+    private Vector2 GetBulletSpawnPosition()
+    {
+        if (currentGun == null) return muzzleFlash.GlobalPosition;
+
+        return currentGun.SpawnPoint switch
+        {
+            BulletSpawnPoint.Mouse => GetGlobalMousePosition(),
+            _ => muzzleFlash.GlobalPosition
+        };
+    }
+
     public void Shoot()
     {
         if (currentGun == null || currentGun.CurrentAmmo <= 0)
             return;
 
-        if (Main.Instance.IsWallAt(muzzleFlash.GlobalPosition)) return;
+        if (currentGun.SpawnPoint == BulletSpawnPoint.Muzzle && Main.Instance.IsWallAt(muzzleFlash.GlobalPosition)) return;
+
+        Vector2 spawnPos = GetBulletSpawnPosition();
+
 
         // If we were paused holding the charge pose, restore speed so shoot anim works
         if (sprite != null) sprite.SpeedScale = 1f;
@@ -325,7 +342,7 @@ public partial class Guns : Node2D
             float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
 
             BulletPool.Spawn(
-                position: muzzlePos,
+                position: spawnPos,
                 velocity: new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized(),
                 currentGun.BulletData
             );

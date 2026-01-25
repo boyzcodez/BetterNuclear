@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=13 format=3 uid="uid://xwkoi1c5rtmc"]
+[gd_resource type="Resource" script_class="GunData" load_steps=14 format=3 uid="uid://xwkoi1c5rtmc"]
 
-[ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_klb7e"]
+[ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="1_pn2tq"]
+[ext_resource type="Script" uid="uid://ynnswofijbet" path="res://Main/Guns/Bullets/Resource/ExplosionOnSpawn.cs" id="2_3i0td"]
 [ext_resource type="Texture2D" uid="uid://slyu064h03g7" path="res://Assets/Guns/Player/ExcaliburCharge.png" id="2_x7y5h"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="2_yf7po"]
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="4_pn2tq"]
@@ -9,8 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://ccfd61cqp6wfs" path="res://Assets/Guns/Player/ExcaliburAttack.png" id="6_3i0td"]
 
 [sub_resource type="Resource" id="Resource_bogcq"]
-script = ExtResource("1_klb7e")
-metadata/_custom_type_script = "uid://4rjjvn6s1kor"
+script = ExtResource("2_3i0td")
+NeededItem = ExtResource("1_pn2tq")
+metadata/_custom_type_script = "uid://ynnswofijbet"
 
 [sub_resource type="Resource" id="Resource_l7xpl"]
 script = ExtResource("4_pn2tq")
@@ -47,6 +49,7 @@ CurrentAmmo = 60
 MaxAmmo = 60
 FireRate = 0.15
 items = null
+SpawnPoint = 1
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(-6, -12)
 Knockback = 100.0
