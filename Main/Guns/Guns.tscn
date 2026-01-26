@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c4um521ghunku"]
+[gd_scene format=3 uid="uid://c4um521ghunku"]
 
 [ext_resource type="Script" uid="uid://cmwg72wklf4hn" path="res://Main/Guns/Guns.cs" id="1_2omop"]
 [ext_resource type="Script" uid="uid://drv1ygs6ex0tn" path="res://Main/Guns/GunAnimation.cs" id="1_5r443"]
@@ -49,18 +49,18 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Guns" type="Node2D"]
+[node name="Guns" type="Node2D" unique_id=1992152474]
 script = ExtResource("1_2omop")
 
-[node name="MuzzleFlash" type="AnimatedSprite2D" parent="."]
+[node name="MuzzleFlash" type="AnimatedSprite2D" parent="." unique_id=241901950]
 sprite_frames = SubResource("SpriteFrames_5r443")
 frame = 3
 frame_progress = 1.0
 
-[node name="GunAnimation" type="AnimatedSprite2D" parent="."]
+[node name="GunAnimation" type="AnimatedSprite2D" parent="." unique_id=983369725]
 material = ExtResource("3_5go37")
 sprite_frames = SubResource("SpriteFrames_gykxi")
 script = ExtResource("1_5r443")
 
-[node name="GunAudio" type="AudioStreamPlayer" parent="."]
+[node name="GunAudio" type="AudioStreamPlayer" parent="." unique_id=1648240357]
 bus = &"Guns"

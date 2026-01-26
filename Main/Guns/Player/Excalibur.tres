@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=14 format=3 uid="uid://xwkoi1c5rtmc"]
+[gd_resource type="Resource" script_class="GunData" format=3 uid="uid://xwkoi1c5rtmc"]
 
 [ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="1_pn2tq"]
 [ext_resource type="Script" uid="uid://ynnswofijbet" path="res://Main/Guns/Bullets/Resource/ExplosionOnSpawn.cs" id="2_3i0td"]
@@ -48,7 +48,6 @@ Icon = ExtResource("2_yf7po")
 CurrentAmmo = 60
 MaxAmmo = 60
 FireRate = 0.15
-items = null
 SpawnPoint = 1
 ShootPosition = Vector2(18, -1)
 GunSpot = Vector2(-6, -12)
@@ -57,7 +56,6 @@ BulletRaidus = 6.0
 Shape = SubResource("CircleShape2D_r27xg")
 BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_bogcq")])
-OriginalBehavior = null
 NormalAnimationData = SubResource("Resource_yahgw")
 ShootAnimationData = SubResource("Resource_ha5ri")
 ChargeAnimationData = SubResource("Resource_l7xpl")

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://vfqgjerlv601"]
+[gd_resource type="Resource" script_class="GunData" format=3 uid="uid://vfqgjerlv601"]
 
 [ext_resource type="Script" uid="uid://dr2x1o2y6l4dd" path="res://Components/ResourceTypes/AnimationData.cs" id="1_dmcvw"]
 [ext_resource type="Texture2D" uid="uid://dcxavyojuupna" path="res://Assets/Guns/Player/Rifle.png" id="1_lbm6o"]
@@ -40,7 +40,6 @@ Knockback = 100.0
 Shape = SubResource("CircleShape2D_xa0j0")
 BulletSpeed = 500.0
 Behaviors = Array[Object]([SubResource("Resource_ulg0x")])
-OriginalBehavior = null
 NormalAnimationData = SubResource("Resource_lbm6o")
 ShootAnimationData = SubResource("Resource_lbm6o")
 ShakeIntensity = 1.3

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://byv5fpmgrbf2n"]
+[gd_resource type="Resource" script_class="GunData" format=3 uid="uid://byv5fpmgrbf2n"]
 
 [ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_3bpje"]
 [ext_resource type="Texture2D" uid="uid://buedumhk4txxr" path="res://Assets/Particles/Ammo.png" id="4_814f2"]
@@ -37,14 +37,12 @@ CurrentAmmo = 300
 MaxAmmo = 300
 FireRate = 0.05
 SpreadAngle = 15.0
-items = null
 ShootPosition = Vector2(18, 1)
 GunSpot = Vector2(14, 6)
 BulletRaidus = 6.0
 Shape = SubResource("CircleShape2D_vmkuk")
 BulletSpeed = 450.0
 Behaviors = Array[Object]([SubResource("Resource_3bpje")])
-OriginalBehavior = null
 NormalAnimationData = SubResource("Resource_mpw66")
 ShootAnimationData = SubResource("Resource_dl5w8")
 ShakeIntensity = 1.3

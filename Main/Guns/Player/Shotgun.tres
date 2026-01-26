@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=10 format=3 uid="uid://dti7bbgbg8ss"]
+[gd_resource type="Resource" script_class="GunData" format=3 uid="uid://dti7bbgbg8ss"]
 
 [ext_resource type="Script" uid="uid://4rjjvn6s1kor" path="res://Main/Guns/Bullets/Resource/Normal.cs" id="1_2nr4r"]
 [ext_resource type="Texture2D" uid="uid://b80k0l6upad0d" path="res://Assets/Guns/Player/Shotgun.png" id="3_l0a1k"]
@@ -36,9 +36,8 @@ Icon = ExtResource("4_l0a1k")
 CurrentAmmo = 50
 MaxAmmo = 50
 FireRate = 0.4
-BulletCount = 6
+BulletCount = 30
 SpreadAngle = 20.0
-items = null
 ShootPosition = Vector2(16, 0)
 GunSpot = Vector2(8, 0)
 Bounces = 3
@@ -47,7 +46,6 @@ Shape = SubResource("CircleShape2D_2nr4r")
 BulletSpeed = 350.0
 BulletLifeTime = 0.5
 Behaviors = Array[Object]([SubResource("Resource_b5tvg")])
-OriginalBehavior = null
 NormalAnimationData = SubResource("Resource_ospub")
 ShootAnimationData = SubResource("Resource_jgy2k")
 ShakeIntensity = 1.7
