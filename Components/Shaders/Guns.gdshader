@@ -12,6 +12,19 @@ uniform bool harden_opaque_alpha = true;
 uniform float alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
 uniform float harden_start : hint_range(0.0, 1.0) = 0.85; // start hardening near-opaque pixels
 
+// --- OUTLINE ---
+uniform bool outline_enabled = true;
+uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+// Neighbors count as "weapon" only if alpha >= this (glow won't generate outline)
+uniform float outline_source_alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
+
+// Outline can be drawn on pixels with alpha < this (so it can draw ON glow too, but not on the weapon)
+uniform float outline_target_alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
+
+// Consider neighbor "solid" only if its alpha is above this (prevents glow from generating outline)
+uniform float outline_solid_alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
+
 // Neighbor offsets in "pixel blocks" (up, down, right, left, diagonals...)
 const vec2 OFFS[8] = vec2[](
 	vec2( 0.0,  1.0), // 0 up
@@ -24,11 +37,28 @@ const vec2 OFFS[8] = vec2[](
 	vec2(-1.0, -1.0)  // 7 down-left
 );
 
+float hardened_alpha(float a) {
+	if (!harden_opaque_alpha) return a;
+
+	float t = smoothstep(harden_start, 1.0, a);
+	float hard = step(alpha_cutoff, a);
+	return mix(a, hard, t);
+}
+
+vec2 snapped_neighbor_uv(vec2 snapped_r, mat2 inv_rot, vec2 cell, vec2 margin, vec2 offs) {
+	vec2 nr = snapped_r + offs * cell;
+	vec2 nuv = inv_rot * nr + vec2(0.5);
+
+	// Mirror AFTER snapping (in texture space)
+	if (flip_h) nuv.x = 1.0 - nuv.x;
+	if (flip_v) nuv.y = 1.0 - nuv.y;
+
+	return clamp(nuv, margin, vec2(1.0) - margin);
+}
+
 void vertex() {
-	// atan(y, x) == atan2(y, x)
 	theta = atan(MODEL_MATRIX[0][1], MODEL_MATRIX[0][0]);
 
-	// Approximate per-axis scale from MODEL_MATRIX (works well for rotate+scale).
 	float sx = length(MODEL_MATRIX[0].xy);
 	float sy = length(MODEL_MATRIX[1].xy);
 
@@ -39,32 +69,24 @@ void vertex() {
 }
 
 void fragment() {
-	// Compute trig once
 	float c = cos(theta);
 	float s = sin(theta);
 
-	// Rotation matrix and its inverse (transpose for pure rotations)
 	mat2 rot     = mat2(vec2(c, s), vec2(-s, c));
 	mat2 inv_rot = mat2(vec2(c,-s), vec2( s, c));
 
-	// Snap UV to rotated pixel grid (centered at 0.5)
 	vec2 uv_c = UV - vec2(0.5);
 	vec2 uv_r = rot * uv_c;
 
 	vec2 cell = block_size;
-	vec2 snapped_r = (floor(uv_r / cell) + vec2(0.5)) * cell;
+	vec2 snapped_r  = (floor(uv_r / cell) + vec2(0.5)) * cell;
 	vec2 snapped_uv = inv_rot * snapped_r + vec2(0.5);
 
-	// Mirror AFTER snapping (in texture space)
 	if (flip_h) snapped_uv.x = 1.0 - snapped_uv.x;
 	if (flip_v) snapped_uv.y = 1.0 - snapped_uv.y;
 
-	// --- Edge cutoff margin (project rotated half-cell extents back into UV axes) ---
-	// Half a cell in "rotated space"
 	vec2 half_cell = 0.5 * cell;
 
-	// Project half-cell extents onto UV axes.
-	// margin.x = |inv_rot row0| dot half_cell, margin.y = |inv_rot row1| dot half_cell
 	vec2 margin;
 	margin.x = abs(inv_rot[0][0]) * half_cell.x + abs(inv_rot[0][1]) * half_cell.y;
 	margin.y = abs(inv_rot[1][0]) * half_cell.x + abs(inv_rot[1][1]) * half_cell.y;
@@ -74,16 +96,15 @@ void fragment() {
 		snapped_uv.y < margin.y || snapped_uv.y > 1.0 - margin.y
 	);
 
-	// Clamp sample UV to avoid wrap/repeat bleed at edges (optional but usually good)
 	vec2 sample_uv = clamp(snapped_uv, margin, vec2(1.0) - margin);
 
-	vec4 color = texture(TEXTURE, sample_uv);
+	vec4 base = texture(TEXTURE, sample_uv);
 
-	// Mix sampling (nearest “most similar” neighbor)
+	// Mix sampling (your original behavior)
 	if (mix_sampling > 0) {
 		int count = 4 * mix_sampling; // 4 (cross) or 8 (cross + diagonals)
 
-		vec4 best = color;
+		vec4 best = base;
 		float best_d = 1e20;
 
 		for (int i = 0; i < 8; i++) {
@@ -91,31 +112,43 @@ void fragment() {
 
 			vec2 nuv = sample_uv + OFFS[i] * cell;
 			vec4 ncol = texture(TEXTURE, nuv);
-			float d = length(color - ncol);
+			float d = length(base - ncol);
 
 			if (d < best_d) {
 				best_d = d;
 				best = ncol;
 			}
 		}
-		color = best;
+		base = best;
 	}
 
-	// Your alpha rules, but applied after outside test
+	// Alpha rules
 	if (outside) {
-    color.a = 0.0;
-} else {
-    if (harden_opaque_alpha) {
-        float a = color.a;
+		base.a = 0.0;
+	} else {
+		base.a = hardened_alpha(base.a);
+	}
 
-        // t=0 for low alpha (keep glow soft), t->1 as alpha approaches 1 (make sprite crisp)
-        float t = smoothstep(harden_start, 1.0, a);
+	// Decide final color without early return
+	vec4 out_col = base;
 
-        float hard = step(alpha_cutoff, a);
-        color.a = mix(a, hard, t);
+	// Outline: only on (nearly) fully transparent pixels, sourced only from solid neighbors, cross only
+	if (outline_enabled && !outside && base.a < outline_target_alpha_cutoff) {
+    float solid = 0.0;
+
+    for (int i = 0; i < 4; i++) { // cross only -> no corner pixels
+        vec2 nuv = snapped_neighbor_uv(snapped_r, inv_rot, cell, margin, OFFS[i]);
+        vec4 ncol = texture(TEXTURE, nuv);
+        float na = hardened_alpha(ncol.a);
+
+        // weapon source only (ignores glow as a source)
+        solid = max(solid, step(outline_source_alpha_cutoff, na));
     }
-    // else keep alpha as-is
+
+    if (solid > 0.0) {
+        out_col = outline_color;
+    }
 }
 
-COLOR = color;
+	COLOR = out_col;
 }

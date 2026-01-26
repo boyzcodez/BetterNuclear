@@ -1,125 +1,121 @@
 shader_type canvas_item;
-render_mode unshaded;
 
 uniform float pixel_size : hint_range(1.0, 16.0) = 1.0;
+uniform int mix_sampling : hint_range(-1, 2) = 0; // -1 off, 0 off, 1 cross, 2 cross+diagonals
 uniform bool flip_h = false;
 uniform bool flip_v = false;
 
-/* Weapons snap harder than characters */
-uniform float rotation_steps = 24.0;
-
-/* Interior sampling only */
-uniform bool enable_sampling = true;
-
-/* How aggressive sampling is (lower = stronger correction) */
-uniform float sample_threshold : hint_range(0.005, 0.05) = 0.02;
-
+varying float theta;
 varying vec2 block_size;
-varying vec2 rot_x;
-varying vec2 rot_y;
 
-/* AXIS-ONLY neighbors */
-const vec2 AXIS_OFFSETS[4] = vec2[](
-	vec2( 0,  1),
-	vec2( 0, -1),
-	vec2( 1,  0),
-	vec2(-1,  0)
+uniform bool harden_opaque_alpha = true;
+uniform float alpha_cutoff : hint_range(0.0, 1.0) = 0.5;
+uniform float harden_start : hint_range(0.0, 1.0) = 0.85; // start hardening near-opaque pixels
+
+// Neighbor offsets in "pixel blocks" (up, down, right, left, diagonals...)
+const vec2 OFFS[8] = vec2[](
+	vec2( 0.0,  1.0), // 0 up
+	vec2( 0.0, -1.0), // 1 down
+	vec2( 1.0,  0.0), // 2 right
+	vec2(-1.0,  0.0), // 3 left
+	vec2( 1.0,  1.0), // 4 up-right
+	vec2( 1.0, -1.0), // 5 down-right
+	vec2(-1.0,  1.0), // 6 up-left
+	vec2(-1.0, -1.0)  // 7 down-left
 );
 
-/* 2x2 Bayer (rare transparency) */
-float bayer2(vec2 p) {
-	p = floor(p);
-	return mod(p.x + p.y * 2.0, 4.0) / 4.0;
-}
-
-/* Outline detection (near-black, opaque) */
-bool is_outline(vec4 c) {
-	return c.a > 0.5 && dot(c.rgb, vec3(0.333)) < 0.15;
-}
-
 void vertex() {
-	float theta = atan(MODEL_MATRIX[0][1], MODEL_MATRIX[0][0]);
+	// atan(y, x) == atan2(y, x)
+	theta = atan(MODEL_MATRIX[0][1], MODEL_MATRIX[0][0]);
 
-	/* Strong angle locking */
-	float step_angle = TAU / rotation_steps;
-	theta = round(theta / step_angle) * step_angle;
-
-	float c = cos(theta);
-	float s = sin(theta);
-
-	rot_x = vec2(c, s);
-	rot_y = vec2(-s, c);
+	// Approximate per-axis scale from MODEL_MATRIX (works well for rotate+scale).
+	float sx = length(MODEL_MATRIX[0].xy);
+	float sy = length(MODEL_MATRIX[1].xy);
 
 	block_size = vec2(
-		pixel_size * TEXTURE_PIXEL_SIZE.x / length(MODEL_MATRIX[0].xy),
-		pixel_size * TEXTURE_PIXEL_SIZE.y / length(MODEL_MATRIX[1].xy)
+		pixel_size * TEXTURE_PIXEL_SIZE.x / max(sx, 1e-6),
+		pixel_size * TEXTURE_PIXEL_SIZE.y / max(sy, 1e-6)
 	);
 }
 
 void fragment() {
-	mat2 rotation = mat2(rot_x, rot_y);
-	mat2 inverse_rotation = transpose(rotation);
+	// Compute trig once
+	float c = cos(theta);
+	float s = sin(theta);
 
-	/* --- Ultra-stable object-anchored grid --- */
-	vec2 local_uv = UV - 0.5;
-	vec2 rotated = rotation * local_uv;
-	rotated -= fract(rotation * vec2(0.0) / block_size) * block_size;
+	// Rotation matrix and its inverse (transpose for pure rotations)
+	mat2 rot     = mat2(vec2(c, s), vec2(-s, c));
+	mat2 inv_rot = mat2(vec2(c,-s), vec2( s, c));
 
-	vec2 snapped = (floor(rotated / block_size) + 0.5) * block_size;
-	vec2 snapped_uv = inverse_rotation * snapped + 0.5;
+	// Snap UV to rotated pixel grid (centered at 0.5)
+	vec2 uv_c = UV - vec2(0.5);
+	vec2 uv_r = rot * uv_c;
 
-	/* --- Post-snap mirroring --- */
-	vec2 flip = vec2(flip_h ? -1.0 : 1.0, flip_v ? -1.0 : 1.0);
-	snapped_uv = (snapped_uv - 0.5) * flip + 0.5;
+	vec2 cell = block_size;
+	vec2 snapped_r = (floor(uv_r / cell) + vec2(0.5)) * cell;
+	vec2 snapped_uv = inv_rot * snapped_r + vec2(0.5);
 
-	vec4 color = texture(TEXTURE, snapped_uv);
+	// Mirror AFTER snapping (in texture space)
+	if (flip_h) snapped_uv.x = 1.0 - snapped_uv.x;
+	if (flip_v) snapped_uv.y = 1.0 - snapped_uv.y;
 
-	/* --- OUTLINE-LOCKED, CONSERVATIVE SAMPLING --- */
-	bool outline = is_outline(color);
+	// --- Edge cutoff margin (project rotated half-cell extents back into UV axes) ---
+	// Half a cell in "rotated space"
+	vec2 half_cell = 0.5 * cell;
 
-	if (enable_sampling && !outline) {
-		vec4 best = color;
-		float best_diff = 1e20;
+	// Project half-cell extents onto UV axes.
+	// margin.x = |inv_rot row0| dot half_cell, margin.y = |inv_rot row1| dot half_cell
+	vec2 margin;
+	margin.x = abs(inv_rot[0][0]) * half_cell.x + abs(inv_rot[0][1]) * half_cell.y;
+	margin.y = abs(inv_rot[1][0]) * half_cell.x + abs(inv_rot[1][1]) * half_cell.y;
 
-		for (int i = 0; i < 4; i++) {
-			vec4 n = texture(TEXTURE, snapped_uv + AXIS_OFFSETS[i] * block_size);
-
-			/* Never pull outline into interior */
-			if (is_outline(n)) continue;
-
-			vec3 d = color.rgb - n.rgb;
-			float diff = dot(d * d, vec3(0.299, 0.587, 0.114));
-
-			if (diff < best_diff) {
-				best = n;
-				best_diff = diff;
-			}
-		}
-
-		/* Only replace if the error is meaningful */
-		if (best_diff > sample_threshold) {
-			color = best;
-		}
-	}
-
-	/* --- Tight edge clipping --- */
-	float rot_extent = max(
-		abs(rot_x.x) + abs(rot_x.y),
-		abs(rot_y.x) + abs(rot_y.y)
+	bool outside = (
+		snapped_uv.x < margin.x || snapped_uv.x > 1.0 - margin.x ||
+		snapped_uv.y < margin.y || snapped_uv.y > 1.0 - margin.y
 	);
 
-	float cut_x = rot_extent * block_size.x * 0.5;
-	float cut_y = rot_extent * block_size.y * 0.5;
+	// Clamp sample UV to avoid wrap/repeat bleed at edges (optional but usually good)
+	vec2 sample_uv = clamp(snapped_uv, margin, vec2(1.0) - margin);
 
-	float inside =
-		step(cut_x, snapped_uv.x) *
-		step(cut_y, snapped_uv.y) *
-		step(snapped_uv.x, 1.0 - cut_x) *
-		step(snapped_uv.y, 1.0 - cut_y);
+	vec4 color = texture(TEXTURE, sample_uv);
 
-	/* Weapons: strict alpha */
-	float dither = bayer2(snapped_uv / block_size);
-	color.a *= inside * step(max(0.75, dither), color.a);
+	// Mix sampling (nearest “most similar” neighbor)
+	if (mix_sampling > 0) {
+		int count = 4 * mix_sampling; // 4 (cross) or 8 (cross + diagonals)
 
-	COLOR = color;
+		vec4 best = color;
+		float best_d = 1e20;
+
+		for (int i = 0; i < 8; i++) {
+			if (i >= count) break;
+
+			vec2 nuv = sample_uv + OFFS[i] * cell;
+			vec4 ncol = texture(TEXTURE, nuv);
+			float d = length(color - ncol);
+
+			if (d < best_d) {
+				best_d = d;
+				best = ncol;
+			}
+		}
+		color = best;
+	}
+
+	// Your alpha rules, but applied after outside test
+	if (outside) {
+    color.a = 0.0;
+} else {
+    if (harden_opaque_alpha) {
+        float a = color.a;
+
+        // t=0 for low alpha (keep glow soft), t->1 as alpha approaches 1 (make sprite crisp)
+        float t = smoothstep(harden_start, 1.0, a);
+
+        float hard = step(alpha_cutoff, a);
+        color.a = mix(a, hard, t);
+    }
+    // else keep alpha as-is
+}
+
+COLOR = color;
 }
