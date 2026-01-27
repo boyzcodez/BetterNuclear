@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://4wimolk5hhs4"]
+[gd_scene format=3 uid="uid://4wimolk5hhs4"]
 
 [ext_resource type="Script" uid="uid://bo0hvevub4ad0" path="res://Main/Entities/Components/Hurtbox.cs" id="1_kc5vq"]
 
-[node name="Hurtbox" type="Node2D"]
+[node name="Hurtbox" type="Node2D" unique_id=1063203560]
 script = ExtResource("1_kc5vq")
