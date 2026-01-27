@@ -33,7 +33,7 @@ public partial class Camera : Camera2D
 
         Eventbus.ScreenShake += StartShake;
     }
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (player == null)
             return;
