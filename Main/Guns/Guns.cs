@@ -24,15 +24,15 @@ public partial class Guns : Node2D
 
     public bool shooting = false;
 
-    private int _currentGunIndex = 0;
-    private float _cooldown = 0f;
+    private int currentGunIndex = 0;
+    private float cooldown = 0f;
     public string id;
 
     // Charge state
-    private bool _prevShooting = false;
-    private bool _isCharging = false;
-    private bool _chargeReady = false;
-    private int _chargeToken = 0;  // cancels old async charge if gun switches / released early
+    private bool prevShooting = false;
+    private bool isCharging = false;
+    private bool chargeReady = false;
+    private int chargeToken = 0;  // cancels old async charge if gun switches / released early
 
     private bool RequiresCharge(GunData g)
         => g != null && g.ChargeAnimationData != null;
@@ -101,10 +101,10 @@ public partial class Guns : Node2D
 
     public void SwitchGuns(int direction)
     {
-        _currentGunIndex = (_currentGunIndex + direction) % guns.Length;
-        if (_currentGunIndex < 0) _currentGunIndex = guns.Length - 1;
+        currentGunIndex = (currentGunIndex + direction) % guns.Length;
+        if (currentGunIndex < 0) currentGunIndex = guns.Length - 1;
 
-        EquipGun(_currentGunIndex);
+        EquipGun(currentGunIndex);
     }
 
     public void EquipGun(int index)
@@ -137,12 +137,12 @@ public partial class Guns : Node2D
         if (currentGun == null) return;
 
         // cooldown timer
-        if (_cooldown > 0f) _cooldown -= (float)delta;
+        if (cooldown > 0f) cooldown -= (float)delta;
 
         // detect press/release edges from your existing `shooting` bool
-        bool justPressed = shooting && !_prevShooting;
-        bool justReleased = !shooting && _prevShooting;
-        _prevShooting = shooting;
+        bool justPressed = shooting && !prevShooting;
+        bool justReleased = !shooting && prevShooting;
+        prevShooting = shooting;
 
         if (RequiresCharge(currentGun))
         {
@@ -152,15 +152,15 @@ public partial class Guns : Node2D
             if (justReleased)
             {
                 // Release fires only if charge complete, otherwise cancels charge
-                if (_chargeReady)
+                if (chargeReady)
                 {
                     HideChargeIndicator();
-                    _chargeReady = false;
+                    chargeReady = false;
 
-                    if (_cooldown <= 0f)
+                    if (cooldown <= 0f)
                         Shoot();
                 }
-                else if (_isCharging)
+                else if (isCharging)
                 {
                     // released before ready: cancel
                     CancelChargeState();
@@ -170,7 +170,7 @@ public partial class Guns : Node2D
         else
         {
             // Normal weapon flow
-            if (shooting && _cooldown <= 0f)
+            if (shooting && cooldown <= 0f)
                 Shoot();
         }
 
@@ -194,19 +194,19 @@ public partial class Guns : Node2D
     private void TryStartCharge()
     {
         if (currentGun == null) return;
-        if (_cooldown > 0f) return;
+        if (cooldown > 0f) return;
         if (currentGun.CurrentAmmo <= 0) return;
 
         if (Main.Instance.IsWallAt(muzzleFlash.GlobalPosition)) return;
 
-        if (_isCharging || _chargeReady) return;
+        if (isCharging || chargeReady) return;
 
         HideChargeIndicator();
-        _isCharging = true;
-        _chargeReady = false;
+        isCharging = true;
+        chargeReady = false;
 
-        _chargeToken++;
-        int token = _chargeToken;
+        chargeToken++;
+        int token = chargeToken;
 
         // Ensure normal playback speed for the charge anim
         if (sprite != null) sprite.SpeedScale = 1f;
@@ -221,10 +221,10 @@ public partial class Guns : Node2D
         // If there's no charge anim, treat as instantly ready
         if (sprite == null || sprite.SpriteFrames == null || !sprite.SpriteFrames.HasAnimation(animName))
         {
-            if (token != _chargeToken) return;
-            if (!shooting) { _isCharging = false; return; }
+            if (token != chargeToken) return;
+            if (!shooting) { isCharging = false; return; }
 
-            _isCharging = false;
+            isCharging = false;
             SetChargeReadyHoldLastFrame(animName);
             return;
         }
@@ -234,23 +234,23 @@ public partial class Guns : Node2D
         await ToSignal(sprite, "animation_finished");
 
         // canceled or switched guns?
-        if (token != _chargeToken) return;
+        if (token != chargeToken) return;
 
         // player must still be holding to become "ready"
         if (!shooting)
         {
-            _isCharging = false;
+            isCharging = false;
             return;
         }
 
-        _isCharging = false;
+        isCharging = false;
         SetChargeReadyHoldLastFrame(animName);
     }
 
     // IMPORTANT: this holds the gun on the final charge frame using PAUSE (not Stop)
     private void SetChargeReadyHoldLastFrame(string animName)
     {
-        _chargeReady = true;
+        chargeReady = true;
 
         // indicator
         if (ChargeAnimation != null)
@@ -285,9 +285,9 @@ public partial class Guns : Node2D
 
     private void CancelChargeState()
     {
-        _chargeToken++; // cancels any pending await
-        _isCharging = false;
-        _chargeReady = false;
+        chargeToken++; // cancels any pending await
+        isCharging = false;
+        chargeReady = false;
 
         HideChargeIndicator();
 
@@ -348,7 +348,7 @@ public partial class Guns : Node2D
             );
         }
 
-        _cooldown = currentGun.FireRate;
+        cooldown = currentGun.FireRate;
     }
 
     private async void PlayAnimation()
@@ -359,8 +359,8 @@ public partial class Guns : Node2D
         await ToSignal(sprite, "animation_finished");
 
         // If we’re charging / charged, don't stomp the charge pose.
-        if (_isCharging) return;
-        if (_chargeReady) return;
+        if (isCharging) return;
+        if (chargeReady) return;
 
         sprite.Play(currentGun.GunId);
     }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://wtqj1t7hpe8p"]
+[gd_scene format=3 uid="uid://wtqj1t7hpe8p"]
 
 [ext_resource type="Script" uid="uid://8smk5neawaxj" path="res://Main/Entities/Player/Player.cs" id="1_1skx3"]
 [ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="1_iov3m"]
@@ -505,60 +505,60 @@ animations = [{
 "speed": 7.0
 }]
 
-[node name="Player" type="Node2D" groups=["Player"]]
+[node name="Player" type="Node2D" unique_id=1053065262 groups=["Player"]]
 script = ExtResource("1_1skx3")
 
-[node name="Hurtbox" parent="." instance=ExtResource("10_rx3r3")]
+[node name="Hurtbox" parent="." unique_id=1553185450 instance=ExtResource("10_rx3r3")]
 position = Vector2(0, -9)
 SetCollisionLayer = 1
 Radius = 10.0
 MaxHealth = 10.0
 
-[node name="AnimatedBody" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedBody" type="AnimatedSprite2D" parent="." unique_id=870129259]
 material = ExtResource("3_0qxmk")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
 animation = &"BackHit"
 script = ExtResource("2_0atn1")
 
-[node name="Direction" parent="AnimatedBody" node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("4_a3eui")]
+[node name="Direction" parent="AnimatedBody" unique_id=254615139 node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("4_a3eui")]
 gun = NodePath("../../Look/Guns")
 animatedSprite = NodePath("..")
 
-[node name="HitFlash" parent="AnimatedBody" instance=ExtResource("7_0qxmk")]
+[node name="HitFlash" parent="AnimatedBody" unique_id=263611783 instance=ExtResource("7_0qxmk")]
 
-[node name="DashCooldown" type="Timer" parent="."]
+[node name="DashCooldown" type="Timer" parent="." unique_id=524323255]
 one_shot = true
 
-[node name="GetDirection" type="Node2D" parent="." node_paths=PackedStringArray("look")]
+[node name="GetDirection" type="Node2D" parent="." unique_id=1682985734 node_paths=PackedStringArray("look")]
 script = ExtResource("8_ospub")
 look = NodePath("../Look")
 
-[node name="Look" parent="." instance=ExtResource("9_ospub")]
+[node name="Look" parent="." unique_id=230200979 instance=ExtResource("9_ospub")]
 position = Vector2(0, -8)
 
-[node name="GunHandler" type="Node" parent="Look" node_paths=PackedStringArray("guns")]
+[node name="GunHandler" type="Node" parent="Look" unique_id=1012118623 node_paths=PackedStringArray("guns")]
 script = ExtResource("7_a3eui")
 guns = NodePath("../Guns")
 
-[node name="Timer" type="Timer" parent="Look/GunHandler"]
+[node name="Timer" type="Timer" parent="Look/GunHandler" unique_id=2121299857]
 wait_time = 0.1
 one_shot = true
 
-[node name="Guns" parent="Look" node_paths=PackedStringArray("ChargeAnimation") instance=ExtResource("6_jujs3")]
+[node name="Guns" parent="Look" unique_id=374270604 node_paths=PackedStringArray("ChargeAnimation") instance=ExtResource("6_jujs3")]
 ChargeAnimation = NodePath("../../Charge")
-guns = Array[Object]([ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya"), ExtResource("15_jgy2k")])
+guns = [ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya"), ExtResource("15_jgy2k")]
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=439487527]
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=707890466]
 shape = SubResource("CircleShape2D_ovqya")
 
-[node name="Shadow" parent="." instance=ExtResource("12_m26o7")]
+[node name="Shadow" parent="." unique_id=202684976 instance=ExtResource("12_m26o7")]
 
-[node name="Charge" type="AnimatedSprite2D" parent="."]
+[node name="Charge" type="AnimatedSprite2D" parent="." unique_id=1551066489]
 visible = false
 z_index = -1
 position = Vector2(0, -16)
