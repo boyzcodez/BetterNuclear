@@ -27,7 +27,6 @@ window/size/window_width_override=1440
 window/size/window_height_override=810
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
-window/vsync/vsync_mode=0
 
 [dotnet]
 
@@ -102,3 +101,4 @@ weapon_wheel={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true

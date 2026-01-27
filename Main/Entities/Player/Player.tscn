@@ -5,11 +5,15 @@
 [ext_resource type="Script" uid="uid://dat11fw722oki" path="res://Main/Entities/Player/AnimatedBody.cs" id="2_0atn1"]
 [ext_resource type="Material" uid="uid://dicctmxaa1dwu" path="res://Components/Shaders/HitFlash.tres" id="3_0qxmk"]
 [ext_resource type="PackedScene" uid="uid://cywwylr6aqd1b" path="res://Main/Entities/Components/Direction.tscn" id="4_a3eui"]
+[ext_resource type="Script" uid="uid://bp77yfnkeihw1" path="res://Main/Entities/Player/BetterCamera.cs" id="6_c5hhg"]
 [ext_resource type="PackedScene" uid="uid://c4um521ghunku" path="res://Main/Guns/Guns.tscn" id="6_jujs3"]
 [ext_resource type="Resource" uid="uid://vfqgjerlv601" path="res://Main/Guns/Player/Rifle.tres" id="7_0j4od"]
 [ext_resource type="PackedScene" uid="uid://brhsqj15bd123" path="res://Main/Entities/Components/HitFlash.tscn" id="7_0qxmk"]
 [ext_resource type="Script" uid="uid://bcue2ep2kxlrd" path="res://Main/Entities/Player/GunHandler.cs" id="7_a3eui"]
+[ext_resource type="PackedScene" uid="uid://bqu4r8oidfk01" path="res://Main/GUI/Gui.tscn" id="7_yjn54"]
+[ext_resource type="Shader" uid="uid://nlivjsru7y5y" path="res://Components/Shaders/Crack.gdshader" id="8_hlkv5"]
 [ext_resource type="Script" uid="uid://c04mvbkieatjs" path="res://Main/Entities/Player/GetDirection.cs" id="8_ospub"]
+[ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="9_f6ot2"]
 [ext_resource type="PackedScene" uid="uid://neorycm12xqs" path="res://Main/Entities/Components/Look.tscn" id="9_ospub"]
 [ext_resource type="Resource" uid="uid://dti7bbgbg8ss" path="res://Main/Guns/Player/Shotgun.tres" id="10_ovqya"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
@@ -473,6 +477,12 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ph7be"]
+shader = ExtResource("8_hlkv5")
+shader_parameter/refraction_offset = Vector2(25, 25)
+shader_parameter/reflection_offset = Vector2(1, 1)
+shader_parameter/reflection_color = Color(0.3529412, 0.99607843, 1, 0.39215687)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_qiaq8"]
 atlas = ExtResource("16_ospub")
 region = Rect2(0, 0, 64, 64)
@@ -520,6 +530,52 @@ position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
 animation = &"FrontRightHit"
 script = ExtResource("2_0atn1")
+
+[node name="BetterCamera" type="Camera2D" parent="AnimatedBody" unique_id=2027059384 node_paths=PackedStringArray("crack1", "crack2", "crack3")]
+position = Vector2(0, 16)
+process_callback = 0
+limit_enabled = false
+script = ExtResource("6_c5hhg")
+crack1 = NodePath("GUI/ScreenCrack")
+crack2 = NodePath("GUI/ScreenCrack2")
+crack3 = NodePath("GUI/ScreenCrack3")
+
+[node name="GUI" parent="AnimatedBody/BetterCamera" unique_id=1535903028 instance=ExtResource("7_yjn54")]
+
+[node name="ScreenCrack" type="TextureRect" parent="AnimatedBody/BetterCamera/GUI" unique_id=900173810]
+material = SubResource("ShaderMaterial_ph7be")
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -222.0
+offset_top = -10.0
+offset_right = -30.0
+offset_bottom = 182.0
+grow_horizontal = 0
+texture = ExtResource("9_f6ot2")
+
+[node name="ScreenCrack2" type="TextureRect" parent="AnimatedBody/BetterCamera/GUI" unique_id=211571502]
+material = SubResource("ShaderMaterial_ph7be")
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 172.0
+offset_bottom = 162.0
+texture = ExtResource("9_f6ot2")
+
+[node name="ScreenCrack3" type="TextureRect" parent="AnimatedBody/BetterCamera/GUI" unique_id=1176383075]
+material = SubResource("ShaderMaterial_ph7be")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = -160.0
+offset_right = 2.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_f6ot2")
 
 [node name="Shadow" parent="AnimatedBody" unique_id=202684976 instance=ExtResource("12_m26o7")]
 position = Vector2(0, 16)

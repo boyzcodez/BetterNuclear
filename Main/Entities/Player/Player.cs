@@ -35,9 +35,9 @@ public partial class Player : Entity
         hurtbox.Hit += Knockback;
         hurtbox.Death += OnDeath;
 
-        VisualOffset = Visuals.Position;
+        if (Visuals != null) VisualOffset = Visuals.Position;
     }
-    public override void _Process(double delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (!active) return;
 

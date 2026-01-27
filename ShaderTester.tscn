@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://qqipf5dutiog"]
+
+[ext_resource type="Texture2D" uid="uid://dd47r2t1araq0" path="res://Assets/Entities/PlayerChar.png" id="2_t5f2r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6yh5y"]
+
+[node name="Sprite2D" type="Sprite2D" unique_id=74559882]
+material = SubResource("ShaderMaterial_6yh5y")
+position = Vector2(185, 92)
+texture = ExtResource("2_t5f2r")
+hframes = 6
+vframes = 17

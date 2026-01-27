@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dicctmxaa1dwu"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dicctmxaa1dwu"]
 
 [ext_resource type="Shader" uid="uid://c7tl51j8lpick" path="res://Components/Shaders/HitFlash.gdshader" id="1_rmmc5"]
 

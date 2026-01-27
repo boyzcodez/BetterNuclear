@@ -1,25 +1,22 @@
-[gd_scene load_steps=7 format=3 uid="uid://dh45k8re21imm"]
+[gd_scene format=3 uid="uid://dh45k8re21imm"]
 
 [ext_resource type="Script" uid="uid://bjy5lrnxejv8m" path="res://Main/Main.cs" id="1_yh5la"]
 [ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://wtqj1t7hpe8p" path="res://Main/Entities/Player/Player.tscn" id="3_qvhan"]
-[ext_resource type="PackedScene" uid="uid://c78gs38bkpe7c" path="res://Main/Entities/Player/Camera.tscn" id="4_liyct"]
 [ext_resource type="PackedScene" uid="uid://50et3mcpgeue" path="res://Main/Guns/Bullets/NewBullet/ModularBullet.tscn" id="6_ib3t1"]
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
 
-[node name="Main" type="Node2D" groups=["Main"]]
+[node name="Main" type="Node2D" unique_id=1913754685 groups=["Main"]]
 script = ExtResource("1_yh5la")
 
-[node name="YSort" type="Node2D" parent="."]
+[node name="YSort" type="Node2D" parent="." unique_id=1806800210]
 y_sort_enabled = true
 
-[node name="MapGenerator" parent="YSort" instance=ExtResource("2_2w1kt")]
+[node name="MapGenerator" parent="YSort" unique_id=1113932412 instance=ExtResource("2_2w1kt")]
 
-[node name="BulletPool" type="Node2D" parent="YSort" groups=["BulletPool"]]
+[node name="BulletPool" type="Node2D" parent="YSort" unique_id=1779249326 groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
 BulletScene = ExtResource("6_ib3t1")
 
-[node name="Player" parent="YSort" instance=ExtResource("3_qvhan")]
-
-[node name="Camera" parent="." instance=ExtResource("4_liyct")]
+[node name="Player" parent="YSort" unique_id=1488751500 instance=ExtResource("3_qvhan")]

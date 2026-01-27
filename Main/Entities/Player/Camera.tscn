@@ -1,82 +1,16 @@
 [gd_scene format=3 uid="uid://c78gs38bkpe7c"]
 
 [ext_resource type="Script" uid="uid://caoawx78mp4aa" path="res://Main/GUI/Camera.cs" id="1_3q388"]
-[ext_resource type="Script" uid="uid://e7a24qw1bk2m" path="res://Main/GUI/Fps.cs" id="2_lp24j"]
-[ext_resource type="Shader" uid="uid://nlivjsru7y5y" path="res://Components/Shaders/Crack.gdshader" id="3_2dgwf"]
-[ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="4_jd7fp"]
-[ext_resource type="PackedScene" uid="uid://dgemyfw2ii4mp" path="res://Main/GUI/WeaponWheel/WeaponWheel.tscn" id="5_lp24j"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qac2q"]
-shader = ExtResource("3_2dgwf")
-shader_parameter/refraction_offset = Vector2(25, 25)
-shader_parameter/reflection_offset = Vector2(1, 1)
-shader_parameter/reflection_color = Color(0.3529412, 0.99607843, 1, 0.39215687)
+[ext_resource type="PackedScene" uid="uid://bqu4r8oidfk01" path="res://Main/GUI/Gui.tscn" id="2_iuqxt"]
 
 [node name="Camera" type="Camera2D" unique_id=836349319 node_paths=PackedStringArray("crack1", "crack2", "crack3")]
 limit_enabled = false
 script = ExtResource("1_3q388")
-crack1 = NodePath("GUI/UI/ScreenCrack")
-crack2 = NodePath("GUI/UI/ScreenCrack2")
-crack3 = NodePath("GUI/UI/ScreenCrack3")
+crack1 = NodePath("")
+crack2 = NodePath("")
+crack3 = NodePath("")
 
-[node name="GUI" type="CanvasLayer" parent="." unique_id=325228952]
-layer = 10
-
-[node name="UI" type="Control" parent="GUI" unique_id=1512307186]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="fps" type="Label" parent="GUI/UI" unique_id=1317217356]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("2_lp24j")
-
-[node name="ScreenCrack" type="TextureRect" parent="GUI/UI" unique_id=390912113]
-material = SubResource("ShaderMaterial_qac2q")
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -222.0
-offset_top = -10.0
-offset_right = -30.0
-offset_bottom = 182.0
-grow_horizontal = 0
-texture = ExtResource("4_jd7fp")
-
-[node name="ScreenCrack2" type="TextureRect" parent="GUI/UI" unique_id=2098026148]
-material = SubResource("ShaderMaterial_qac2q")
-layout_mode = 1
-offset_left = -20.0
-offset_top = -30.0
-offset_right = 172.0
-offset_bottom = 162.0
-texture = ExtResource("4_jd7fp")
-
-[node name="ScreenCrack3" type="TextureRect" parent="GUI/UI" unique_id=1727315160]
-material = SubResource("ShaderMaterial_qac2q")
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -190.0
-offset_top = -160.0
-offset_right = 2.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("4_jd7fp")
-
-[node name="WeaponWheel" parent="GUI" unique_id=2123350784 instance=ExtResource("5_lp24j")]
-visible = false
-mouse_filter = 2
+[node name="GUI" parent="." unique_id=1535903028 instance=ExtResource("2_iuqxt")]
 
 [node name="Bg" type="CanvasLayer" parent="." unique_id=558182005]
 layer = -100
