@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://xx8wm6pgpb8x"]
+[gd_scene format=3 uid="uid://xx8wm6pgpb8x"]
 
 [ext_resource type="Script" uid="uid://dxn6novh3ehk3" path="res://Main/Entities/Enemy/Enemy.cs" id="1_4prcw"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="2_760vj"]
@@ -470,18 +470,19 @@ animations = [{
 "speed": 9.0
 }]
 
-[node name="Enemy" type="Node2D" node_paths=PackedStringArray("gun")]
+[node name="Enemy" type="Node2D" unique_id=565628820 node_paths=PackedStringArray("Visuals", "gun")]
 script = ExtResource("1_4prcw")
+Visuals = NodePath("EnemyAnimations")
 gun = NodePath("Look/Guns")
 items = [ExtResource("2_re15m")]
 Speed = 45.0
 Radius = 17.0
 
-[node name="Hurtbox" parent="." instance=ExtResource("2_760vj")]
+[node name="Hurtbox" parent="." unique_id=1193061585 instance=ExtResource("2_760vj")]
 position = Vector2(0, -9)
 Radius = 13.0
 
-[node name="EnemyAnimations" type="AnimatedSprite2D" parent="." node_paths=PackedStringArray("look")]
+[node name="EnemyAnimations" type="AnimatedSprite2D" parent="." unique_id=459768863 node_paths=PackedStringArray("look")]
 material = ExtResource("3_spb1j")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_760vj")
@@ -489,35 +490,36 @@ animation = &"FrontRightHit"
 script = ExtResource("4_bqycu")
 look = NodePath("../EnemyLook")
 
-[node name="Direction" parent="EnemyAnimations" node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("5_we2vw")]
+[node name="Shadow" parent="EnemyAnimations" unique_id=2088218494 instance=ExtResource("10_wbxch")]
+position = Vector2(0, 16)
+
+[node name="Direction" parent="EnemyAnimations" unique_id=1053742216 node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("5_we2vw")]
 gun = NodePath("../../Look/Guns")
 animatedSprite = NodePath("..")
 
-[node name="HitFlash" parent="EnemyAnimations" instance=ExtResource("6_rrfo4")]
+[node name="HitFlash" parent="EnemyAnimations" unique_id=1573083194 instance=ExtResource("6_rrfo4")]
 
-[node name="EnemyLook" type="Marker2D" parent="."]
+[node name="EnemyLook" type="Marker2D" parent="." unique_id=1889908074]
 position = Vector2(0, -8)
 script = ExtResource("4_pnidg")
 
-[node name="Raycast" type="RayCast2D" parent="EnemyLook"]
+[node name="Raycast" type="RayCast2D" parent="EnemyLook" unique_id=1961291657]
 target_position = Vector2(200, 0)
 collide_with_areas = true
 collide_with_bodies = false
 
-[node name="GunRotator" type="Node2D" parent="." node_paths=PackedStringArray("look", "guns")]
+[node name="GunRotator" type="Node2D" parent="." unique_id=1896092912 node_paths=PackedStringArray("look", "guns")]
 position = Vector2(0, -8)
 script = ExtResource("7_352va")
 look = NodePath("../Look")
 guns = NodePath("../Look/Guns")
 
-[node name="Look" parent="." instance=ExtResource("12_1eabv")]
+[node name="Look" parent="." unique_id=1309396272 instance=ExtResource("12_1eabv")]
 position = Vector2(0, -8)
 
-[node name="Guns" parent="Look" instance=ExtResource("8_26qsg")]
+[node name="Guns" parent="Look" unique_id=1874674534 instance=ExtResource("8_26qsg")]
 position = Vector2(6, -8)
-guns = Array[Object]([ExtResource("9_r7fjr")])
-
-[node name="Shadow" parent="." instance=ExtResource("10_wbxch")]
+guns = [ExtResource("9_r7fjr")]
 
 [connection signal="Hit" from="Hurtbox" to="EnemyAnimations" method="_on_hurtbox_hit"]
 [connection signal="Hit" from="Hurtbox" to="EnemyAnimations/HitFlash" method="_on_hurtbox_hit"]

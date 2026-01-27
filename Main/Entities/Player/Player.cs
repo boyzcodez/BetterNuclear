@@ -3,6 +3,9 @@ using System;
 
 public partial class Player : Entity
 {
+    [Export] private AnimatedSprite2D Visuals;
+    private Vector2 VisualOffset;
+
     public static Player Instance {get; private set;}
     public Main main;
 
@@ -31,8 +34,10 @@ public partial class Player : Entity
 
         hurtbox.Hit += Knockback;
         hurtbox.Death += OnDeath;
+
+        VisualOffset = Visuals.Position;
     }
-    public override void _PhysicsProcess(double delta)
+    public override void _Process(double delta)
     {
         if (!active) return;
 
@@ -62,12 +67,20 @@ public partial class Player : Entity
 
         GlobalPosition = pos;
         Velocity = vel; // optional: keeps sliding clean if you reuse Velocity elsewhere
+
+        if (Visuals != null)
+        {
+            // Snap in world space, then convert to a local offset so the parent stays smooth
+            Vector2 snappedWorld = pos + VisualOffset;
+            Visuals.Position = snappedWorld - pos;
+        }
     }
 
     private void Movement(float delta)
     {
         Vector2 direction = Input.GetVector("left", "right", "up", "down");
-        Velocity = Velocity.Lerp(direction * SPEED, 1.0f - (float)Mathf.Exp(-25f * GetPhysicsProcessDeltaTime()));
+        //Velocity = Velocity.Lerp(direction * SPEED, 1.0f - (float)Mathf.Exp(-25f * GetPhysicsProcessDeltaTime()));
+        Velocity = direction * SPEED;
 
         if (Input.IsActionJustPressed("dodge") && direction != Vector2.Zero && isDodging == false)
         {

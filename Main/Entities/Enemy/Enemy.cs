@@ -19,6 +19,7 @@ public partial class Enemy : Entity
         Nothing
     }
 
+    [Export] private AnimatedSprite2D Visuals;
     [Export] public EnemyActions action = EnemyActions.Nothing;
     [Export] public Guns gun;
     [Export] public Node2D ability;
@@ -41,11 +42,13 @@ public partial class Enemy : Entity
 
     public Vector2 Velocity { get; private set; }
     private Vector2 lastPosition;
+    private Vector2 VisualOffset;
 
 
     public override void _Ready()
     {
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
+        VisualOffset = Visuals.Position;
 
         Connect(SignalName.Activation, new Callable(this, nameof(Activate)));
         Connect(SignalName.Deactivation, new Callable(this, nameof(Deactivate)));
@@ -84,6 +87,7 @@ public partial class Enemy : Entity
         MathCollision.MoveCircle(ref pos, ref vel, Radius, delta);
 
         GlobalPosition = pos;
+        Visuals.GlobalPosition = (pos + VisualOffset).Round();
         // If you want enemy AI to keep its original intended velocity (not the slid one),
         // don't write vel back anywhere.
     }

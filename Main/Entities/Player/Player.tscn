@@ -276,7 +276,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"BackIdle",
-"speed": 7.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -310,7 +310,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"BackRightIdle",
-"speed": 7.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -333,7 +333,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"BackRightRun",
-"speed": 9.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -356,7 +356,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"BackRun",
-"speed": 9.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -390,7 +390,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"FrontIdle",
-"speed": 7.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -424,7 +424,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"FrontRightIdle",
-"speed": 7.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -447,7 +447,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"FrontRightRun",
-"speed": 9.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -470,11 +470,8 @@ animations = [{
 }],
 "loop": true,
 "name": &"FrontRun",
-"speed": 9.0
+"speed": 10.0
 }]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ovqya"]
-radius = 7.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qiaq8"]
 atlas = ExtResource("16_ospub")
@@ -505,6 +502,9 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ovqya"]
+radius = 7.0
+
 [node name="Player" type="Node2D" unique_id=1053065262 groups=["Player"]]
 script = ExtResource("1_1skx3")
 
@@ -518,8 +518,18 @@ MaxHealth = 10.0
 material = ExtResource("3_0qxmk")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8ydey")
-animation = &"BackHit"
+animation = &"FrontRightHit"
 script = ExtResource("2_0atn1")
+
+[node name="Shadow" parent="AnimatedBody" unique_id=202684976 instance=ExtResource("12_m26o7")]
+position = Vector2(0, 16)
+
+[node name="Charge" type="AnimatedSprite2D" parent="AnimatedBody" unique_id=1551066489]
+visible = false
+z_index = -1
+sprite_frames = SubResource("SpriteFrames_t4h0r")
+frame = 1
+frame_progress = 0.891642
 
 [node name="Direction" parent="AnimatedBody" unique_id=254615139 node_paths=PackedStringArray("gun", "animatedSprite") instance=ExtResource("4_a3eui")]
 gun = NodePath("../../Look/Guns")
@@ -546,7 +556,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="Guns" parent="Look" unique_id=374270604 node_paths=PackedStringArray("ChargeAnimation") instance=ExtResource("6_jujs3")]
-ChargeAnimation = NodePath("../../Charge")
+ChargeAnimation = NodePath("../../AnimatedBody/Charge")
 guns = [ExtResource("7_0j4od"), ExtResource("10_ovqya"), ExtResource("11_ovqya"), ExtResource("15_jgy2k")]
 
 [node name="Area2D" type="Area2D" parent="." unique_id=439487527]
@@ -555,16 +565,6 @@ monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=707890466]
 shape = SubResource("CircleShape2D_ovqya")
-
-[node name="Shadow" parent="." unique_id=202684976 instance=ExtResource("12_m26o7")]
-
-[node name="Charge" type="AnimatedSprite2D" parent="." unique_id=1551066489]
-visible = false
-z_index = -1
-position = Vector2(0, -16)
-sprite_frames = SubResource("SpriteFrames_t4h0r")
-frame = 1
-frame_progress = 0.891642
 
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody" method="_on_hurtbox_hit"]
 [connection signal="Hit" from="Hurtbox" to="AnimatedBody/HitFlash" method="_on_hurtbox_hit"]
