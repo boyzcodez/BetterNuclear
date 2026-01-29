@@ -1,79 +1,24 @@
-[gd_scene load_steps=10 format=3 uid="uid://j3njt40cp30h"]
+[gd_scene format=3 uid="uid://j3njt40cp30h"]
 
 [ext_resource type="Script" uid="uid://cknaxwehe61nj" path="res://Main/Items/DustExplosion.cs" id="1_nrxwi"]
 [ext_resource type="PackedScene" uid="uid://bo4nnh3nwfxrs" path="res://Main/Items/Dust.tscn" id="1_u8e1p"]
-[ext_resource type="Shader" uid="uid://chlitnn26jnif" path="res://Components/Shaders/Guns.gdshader" id="2_nrxwi"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1nonp"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nrxwi"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrd3j"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jmlkk"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbnn8"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_os2hb"]
-resource_local_to_scene = true
-shader = ExtResource("2_nrxwi")
-shader_parameter/pixel_size = 1.0
-shader_parameter/mix_sampling = 0
-shader_parameter/flip_h = false
-shader_parameter/flip_v = false
-
-[node name="DustExplosion" type="Node2D"]
+[node name="DustExplosion" type="Node2D" unique_id=1391667208]
 script = ExtResource("1_nrxwi")
 
-[node name="Dust" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_1nonp")
+[node name="Dust" parent="." unique_id=458984221 instance=ExtResource("1_u8e1p")]
 
-[node name="Dust2" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_nrxwi")
+[node name="Dust2" parent="." unique_id=1016592770 instance=ExtResource("1_u8e1p")]
 minDuration = 0.2
 
-[node name="Dust3" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_hrd3j")
+[node name="Dust3" parent="." unique_id=394493091 instance=ExtResource("1_u8e1p")]
 
-[node name="Dust4" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_jmlkk")
+[node name="Dust4" parent="." unique_id=87892588 instance=ExtResource("1_u8e1p")]
 
-[node name="Dust5" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_xbnn8")
+[node name="Dust5" parent="." unique_id=1169953313 instance=ExtResource("1_u8e1p")]
 
-[node name="Dust6" parent="." instance=ExtResource("1_u8e1p")]
-material = SubResource("ShaderMaterial_os2hb")
+[node name="Dust6" parent="." unique_id=1581777119 instance=ExtResource("1_u8e1p")]
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=231546125]
 wait_time = 4.0
 one_shot = true
