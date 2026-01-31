@@ -62,10 +62,6 @@ public partial class Guns : Node2D
 
         foreach (var gunData in guns)
         {
-            var itemsPool = GetTree().GetFirstNodeInGroup("ItemsPool") as Items;
-
-            foreach (var item in gunData.items)
-                itemsPool.PreparePool(item);
 
             gunData.BulletData = new IBulletData(
                 gunData.priority,

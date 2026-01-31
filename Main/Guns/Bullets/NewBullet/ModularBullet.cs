@@ -142,7 +142,8 @@ public partial class ModularBullet : Sprite2D, ICollidable
 
     public void NotifyEnemyKilled(ICollidable hurtbox)
     {
-        foreach (var b in Behaviors)
+        var snapshot = Behaviors.ToArray();
+        foreach (var b in snapshot)
             b.OnKill(this, hurtbox);
     }
 

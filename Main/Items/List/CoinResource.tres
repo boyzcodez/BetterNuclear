@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://wnkw22n0l7g0"]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://wnkw22n0l7g0"]
 
 [ext_resource type="PackedScene" uid="uid://dyfxa7dpl0ppa" path="res://Main/Items/Coin.tscn" id="1_p88ek"]
 [ext_resource type="Script" uid="uid://buo4n5miby8sq" path="res://Components/ResourceTypes/ItemResource.cs" id="1_ryrkq"]
@@ -7,5 +7,5 @@
 script = ExtResource("1_ryrkq")
 itemScene = ExtResource("1_p88ek")
 Id = "Coin"
-AmountOfItem = 1
+AmountOfItem = 100
 metadata/_custom_type_script = "uid://buo4n5miby8sq"

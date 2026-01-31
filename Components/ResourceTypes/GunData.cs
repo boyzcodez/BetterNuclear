@@ -28,7 +28,6 @@ public partial class GunData : Resource
     [Export] public int BulletCount { get; set; } = 1;
     [Export] public float SpreadAngle { get; set; } = 0f;
     [Export] public float RandomFactor { get; set; } = 0f;
-    [Export] public ItemResource[] items {get; set;} = [];
 
     [ExportGroup("Bullet")]
     

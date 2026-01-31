@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 public partial class Items : Node2D
 {
-
+    [Export] private ItemResource[] items = [];
     public Dictionary<string, Queue<Node2D>> _pools = new();
     private int TotalBulletAmount = 0;
 
     public override void _Ready()
     {
         Eventbus.SpawnItem += SpawnItem;
+
+        foreach (var item in items)
+        {
+            PreparePool(item);
+        }
     }
 
     public void PreparePool(ItemResource item)

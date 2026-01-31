@@ -50,10 +50,6 @@ public partial class WalkerHead : Node2D
         Eventbus.Explosion += Explosion;
         Eventbus.Reset += GenerateMap;
 
-        var itemsPool = GetTree().GetFirstNodeInGroup("ItemsPool") as Items;
-        
-        itemsPool.PreparePool(dust);
-
         GenerateMap();
     }
 
