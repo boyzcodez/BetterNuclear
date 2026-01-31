@@ -72,6 +72,42 @@ public partial class Main : Node2D
     }
 
 
+
+    // tracking method
+    public ICollidable GetNearestCollidable(Vector2 fromWorldPos, int collisionLayer, float maxRange = 999999f, ICollidable ignore = null)
+    {
+        float maxRangeSq = maxRange * maxRange;
+
+        ICollidable best = null;
+        float bestDistSq = maxRangeSq;
+
+        for (int i = 0; i < hurtboxes.Count; i++)
+        {
+            var hb = hurtboxes[i];
+            if (hb == null) continue;
+            if (!hb.active) continue;
+
+            // Same layer values interact
+            if (hb.SetCollisionLayer != collisionLayer) continue;
+
+            // Optional ignore (if you ever want to skip one)
+            if (ignore != null && ReferenceEquals(hb, ignore)) continue;
+
+            // Optional: ignore dead targets (if Hurtbox has Health)
+            if (hb.Health <= 0) continue;
+
+            float dSq = fromWorldPos.DistanceSquaredTo(hb.GlobalPosition);
+            if (dSq > bestDistSq) continue;
+
+            bestDistSq = dSq;
+            best = hb; // Hurtbox implements ICollidable
+        }
+
+        return best;
+    }
+
+
+
     // this is for hit detection
 
     public void DamageHurtboxesInArea(float radius, Vector2 position, DamageData damageData)
