@@ -9,4 +9,5 @@ hframes = 3
 vframes = 4
 script = ExtResource("3_kin5y")
 maxDuration = 1.8
+minDistance = 15.0
 maxDistance = 45.0
