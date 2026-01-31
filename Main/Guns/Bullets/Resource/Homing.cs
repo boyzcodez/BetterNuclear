@@ -65,7 +65,6 @@ public partial class Homing : BehaviorResource
                 }
             }
 
-            // Move like Normal does
             b.AddDisplacement(b.Velocity * b.Speed * delta);
             b.Rotation = b.Velocity.Angle();
         }
@@ -83,8 +82,6 @@ public partial class Homing : BehaviorResource
                 return;
             }
 
-            // Same layer values interact:
-            // bullet.Layer determines what it can hit, and also what it tracks
             _target = main.GetNearestCollidable(
                 fromWorldPos: b.GlobalPosition,
                 collisionLayer: b.Layer,

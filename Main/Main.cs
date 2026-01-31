@@ -100,7 +100,7 @@ public partial class Main : Node2D
             if (dSq > bestDistSq) continue;
 
             bestDistSq = dSq;
-            best = hb; // Hurtbox implements ICollidable
+            best = hb;
         }
 
         return best;
