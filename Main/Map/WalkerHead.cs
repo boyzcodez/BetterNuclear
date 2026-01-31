@@ -3,19 +3,9 @@ using System.Collections.Generic;
 
 public partial class WalkerHead : Node2D
 {
-    const int VIEW_WIDTH = 40;
-    const int VIEW_HEIGHT = 30;
-    const int MAP_PADDING = 10;
-
-    int width = VIEW_WIDTH + MAP_PADDING * 2;
-    int height = VIEW_HEIGHT + MAP_PADDING * 2;
-
     public enum Dirs { Left, Right, Up, Down }
 
-    [Export] public int WalkerAmount = 6;
-    [Export] public int PathLength = 100;
-
-    [Export] public int WallPadding = 3;
+    [Export] public MapData Map;
 
     [Export] public TileMapLayer UnderGround;
     [Export] public TileMapLayer GroundMap;
@@ -25,7 +15,7 @@ public partial class WalkerHead : Node2D
 
     private Rect2I mapBounds;
     private Rect2I destructionBounds;
-    private HashSet<Vector2I> floorSet = new();
+    private readonly HashSet<Vector2I> floorSet = new();
 
     private Player player;
     private Main main;
@@ -40,6 +30,9 @@ public partial class WalkerHead : Node2D
 
     public override void _Ready()
     {
+        // If you forget to assign a resource, we still run with your old defaults.
+        Map ??= new MapData();
+
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
         player = GetTree().GetFirstNodeInGroup("Player") as Player;
 
@@ -67,9 +60,11 @@ public partial class WalkerHead : Node2D
         SpawnPlayerAndEnemies();
     }
 
-
     private void BuildPaths()
     {
+        int width = Map.Width;
+        int height = Map.Height;
+
         mapBounds = new Rect2I(
             -width / 2,
             -height / 2,
@@ -78,11 +73,11 @@ public partial class WalkerHead : Node2D
         );
 
         destructionBounds = new Rect2I(
-        mapBounds.Position + Vector2I.One * WallPadding,
-        mapBounds.Size - Vector2I.One * WallPadding * 2
+            mapBounds.Position + Vector2I.One * Map.WallPadding,
+            mapBounds.Size - Vector2I.One * Map.WallPadding * 2
         );
 
-        for (int i = 0; i < WalkerAmount; i++)
+        for (int i = 0; i < Map.WalkerAmount; i++)
             RunWalker();
     }
 
@@ -91,10 +86,12 @@ public partial class WalkerHead : Node2D
         Vector2I pos = Vector2I.Zero;
         floorSet.Add(pos);
 
-        for (int i = 0; i < PathLength; i++)
+        for (int i = 0; i < Map.PathLength; i++)
         {
             pos += Directions[GD.RandRange(0, 3)];
 
+            // Important: keep behavior the same as before.
+            // If out of bounds, we just don't add a tile, but we do NOT undo the step.
             if (!mapBounds.HasPoint(pos))
                 continue;
 
@@ -102,13 +99,11 @@ public partial class WalkerHead : Node2D
         }
     }
 
-
     private void BuildFloors()
     {
         var floorArray = new Godot.Collections.Array<Vector2I>(floorSet);
-        GroundMap.SetCellsTerrainConnect(floorArray, 0, 0);
+        GroundMap.SetCellsTerrainConnect(floorArray, Map.GroundTerrainSet, Map.GroundTerrain);
     }
-
 
     private void BuildWalls()
     {
@@ -129,12 +124,10 @@ public partial class WalkerHead : Node2D
 
         foreach (var pos in walls)
         {
-            WallMap.SetCell(pos, 5, new Vector2I(12, 6));  // remove later
-            UnderGround.SetCell(pos, 5, new Vector2I(8, 5));
+            WallMap.SetCell(pos, Map.WallSourceId, Map.WallAtlasCoords);
+            UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
         }
-            
     }
-
 
     private void SpawnPlayerAndEnemies()
     {
@@ -152,26 +145,17 @@ public partial class WalkerHead : Node2D
             Eventbus.TriggerSpawnEnemies(GroundMap);
     }
 
-    // ------------------------
-    // INPUT (DEBUG)
-    // ------------------------
     public override void _Input(InputEvent e)
     {
-        Eventbus.gameOn = true;
-
         if (e.IsActionPressed("space"))
             Eventbus.TriggerGenerateMap();
     }
 
-    // Explosion doesnt take into account that the map needs to be updated
-    // once a wall is gone, there is no ground underneath, hence the map flow field doesnt
-    // have a direction for said spot
     public void Explosion(float radius, Vector2 position, DamageData sm)
     {
         int size = Mathf.RoundToInt(radius / 25f);
 
         Vector2I centerPos = GroundMap.LocalToMap(GroundMap.ToLocal(position));
-
         int size2 = size * size;
 
         for (int x = -size; x <= size; x++)

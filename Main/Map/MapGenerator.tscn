@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
+[ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="3_letl8"]
 [ext_resource type="Script" uid="uid://bvt060s0mfqqe" path="res://Main/Entities/Components/EnemyPool.cs" id="5_rvxhn"]
 [ext_resource type="Resource" uid="uid://ixuvv54rvmwx" path="res://Main/Entities/Enemy/List/PistolDude.tres" id="6_8scsi"]
 [ext_resource type="Resource" uid="uid://bn2vn85t4t0wj" path="res://Main/Entities/Enemy/List/ChaseDude.tres" id="7_uvev8"]
@@ -15,6 +16,10 @@
 [ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="14_bttlk"]
 [ext_resource type="Resource" uid="uid://d1uwb30p506de" path="res://Main/Items/List/ExplosionResource.tres" id="14_u2u1l"]
 [ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="15_yhdjt"]
+
+[sub_resource type="Resource" id="Resource_mskix"]
+script = ExtResource("3_letl8")
+metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
 [node name="MapGenerator" type="Node2D" unique_id=1292098880]
 y_sort_enabled = true
@@ -33,7 +38,7 @@ tile_set = ExtResource("1_toh0s")
 
 [node name="WalkerHead" type="Node2D" parent="." unique_id=1114734000 node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
 script = ExtResource("1_7qmhp")
-WallPadding = 5
+Map = SubResource("Resource_mskix")
 UnderGround = NodePath("../UnderGround")
 GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")
