@@ -533,12 +533,13 @@ script = ExtResource("2_0atn1")
 
 [node name="BetterCamera" type="Camera2D" parent="AnimatedBody" unique_id=2027059384 node_paths=PackedStringArray("crack1", "crack2", "crack3")]
 position = Vector2(0, 16)
-process_callback = 0
 limit_enabled = false
 script = ExtResource("6_c5hhg")
 crack1 = NodePath("GUI/ScreenCrack")
 crack2 = NodePath("GUI/ScreenCrack2")
 crack3 = NodePath("GUI/ScreenCrack3")
+MouseLookSmoothing = 50.0
+SnapOffsetToPixelGrid = false
 
 [node name="GUI" parent="AnimatedBody/BetterCamera" unique_id=1535903028 instance=ExtResource("7_yjn54")]
 

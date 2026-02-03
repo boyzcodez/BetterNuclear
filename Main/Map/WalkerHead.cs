@@ -124,7 +124,7 @@ public partial class WalkerHead : Node2D
 
         foreach (var pos in walls)
         {
-            WallMap.SetCell(pos, Map.WallSourceId, Map.WallAtlasCoords);
+            WallMap.SetCell(pos, 5, new Vector2I(12, 6));
             UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
         }
     }
