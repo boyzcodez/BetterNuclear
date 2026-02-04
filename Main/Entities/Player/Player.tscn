@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://c04mvbkieatjs" path="res://Main/Entities/Player/GetDirection.cs" id="8_ospub"]
 [ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="9_f6ot2"]
 [ext_resource type="PackedScene" uid="uid://neorycm12xqs" path="res://Main/Entities/Components/Look.tscn" id="9_ospub"]
+[ext_resource type="Shader" uid="uid://bu0pj6r7w0rvb" path="res://Components/Shaders/VignetteShader.gdshader" id="10_f6ot2"]
 [ext_resource type="Resource" uid="uid://dti7bbgbg8ss" path="res://Main/Guns/Player/Shotgun.tres" id="10_ovqya"]
 [ext_resource type="PackedScene" uid="uid://4wimolk5hhs4" path="res://Main/Entities/Components/Hurtbox.tscn" id="10_rx3r3"]
 [ext_resource type="Resource" uid="uid://byv5fpmgrbf2n" path="res://Main/Guns/Player/Minigun.tres" id="11_ovqya"]
@@ -483,6 +484,13 @@ shader_parameter/refraction_offset = Vector2(25, 25)
 shader_parameter/reflection_offset = Vector2(1, 1)
 shader_parameter/reflection_color = Color(0.3529412, 0.99607843, 1, 0.39215687)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ny40"]
+shader = ExtResource("10_f6ot2")
+shader_parameter/strength = 1.0
+shader_parameter/softness = 1.00000004424012
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_f6ot2"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_qiaq8"]
 atlas = ExtResource("16_ospub")
 region = Rect2(0, 0, 64, 64)
@@ -579,6 +587,7 @@ texture = ExtResource("9_f6ot2")
 
 [node name="BG" type="CanvasLayer" parent="AnimatedBody/BetterCamera" unique_id=1518406935]
 layer = -99
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="AnimatedBody/BetterCamera/BG" unique_id=834709695]
 anchors_preset = 15
@@ -587,6 +596,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="VignetteLayer" type="CanvasLayer" parent="AnimatedBody/BetterCamera" unique_id=919253341]
+layer = 10
+
+[node name="TextureRect" type="TextureRect" parent="AnimatedBody/BetterCamera/VignetteLayer" unique_id=101176858]
+material = SubResource("ShaderMaterial_6ny40")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("CanvasTexture_f6ot2")
 
 [node name="Shadow" parent="AnimatedBody" unique_id=202684976 instance=ExtResource("12_m26o7")]
 position = Vector2(0, 16)
