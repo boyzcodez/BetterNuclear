@@ -102,7 +102,7 @@ public partial class WalkerHead : Node2D
     private void BuildFloors()
     {
         var floorArray = new Godot.Collections.Array<Vector2I>(floorSet);
-        GroundMap.SetCellsTerrainConnect(floorArray, Map.GroundTerrainSet, Map.GroundTerrain);
+        GroundMap.SetCellsTerrainConnect(floorArray, Map.GroundTerrainSet, Map.GroundTerrain, false);
     }
 
     private void BuildWalls()
@@ -122,9 +122,11 @@ public partial class WalkerHead : Node2D
         // use this when wall terrain set is ready
         //WallMap.SetCellsTerrainConnect(walls, 0, 1);
 
+        var wallArray = new Godot.Collections.Array<Vector2I>(walls);
+        WallMap.SetCellsTerrainConnect(wallArray, Map.WallTerrainSet, Map.WallTerrain, false);
+
         foreach (var pos in walls)
         {
-            WallMap.SetCell(pos, 5, new Vector2I(12, 6));
             UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
         }
     }
@@ -181,7 +183,7 @@ public partial class WalkerHead : Node2D
 
     public void DestroyWall(Vector2I pos)
     {
-        WallMap.EraseCell(pos);
+        WallMap.SetCellsTerrainConnect([pos], Map.WallTerrainSet, -1, false);
         main.NotifyWallRemoved(pos);   // keep Main cache in sync
     }
 }
