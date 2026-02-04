@@ -16,6 +16,7 @@ public partial class WalkerHead : Node2D
     private Rect2I mapBounds;
     private Rect2I destructionBounds;
     private readonly HashSet<Vector2I> floorSet = new();
+    private readonly HashSet<Vector2I> wallSet = new();
 
     private Player player;
     private Main main;
@@ -46,24 +47,21 @@ public partial class WalkerHead : Node2D
         GenerateMap();
     }
 
-    public async void GenerateMap()
+    public void GenerateMap()
     {
         floorSet.Clear();
+        wallSet.Clear();
 
         GroundMap.Clear();
         WallMap.Clear();
         UnderGround.Clear();
 
         BuildPaths();
+        RecomputeBoundsFromFloors_Tight();
 
         BuildFloors();
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 
-        WallMap.Hide();
         BuildWalls();
-        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        WallMap.Show();
-
 
         SpawnPlayerAndEnemies();
     }
@@ -87,6 +85,37 @@ public partial class WalkerHead : Node2D
 
         for (int i = 0; i < Map.WalkerAmount; i++)
             RunWalker();
+    }
+    private void RecomputeBoundsFromFloors_Tight()
+    {
+        if (floorSet.Count == 0)
+            return;
+
+        int minX = int.MaxValue, minY = int.MaxValue;
+        int maxX = int.MinValue, maxY = int.MinValue;
+
+        foreach (var p in floorSet)
+        {
+            if (p.X < minX) minX = p.X;
+            if (p.Y < minY) minY = p.Y;
+            if (p.X > maxX) maxX = p.X;
+            if (p.Y > maxY) maxY = p.Y;
+        }
+
+        // Total padding = (your desired outer ring) + (small safety for terrain peering)
+        int pad = Map.TightOuterPadding + Map.TerrainSafetyMargin;
+
+        // +1 because your loops treat End as exclusive
+        Vector2I pos = new Vector2I(minX - pad, minY - pad);
+        Vector2I end = new Vector2I(maxX + pad + 1, maxY + pad + 1);
+
+        mapBounds = new Rect2I(pos, end - pos);
+
+        // Destruction allowed only inside an inset ring
+        destructionBounds = new Rect2I(
+            mapBounds.Position + Vector2I.One * Map.TightDestructionInset,
+            mapBounds.Size - Vector2I.One * Map.TightDestructionInset * 2
+        );
     }
 
     private void RunWalker()
@@ -115,7 +144,6 @@ public partial class WalkerHead : Node2D
 
     private void BuildWalls()
     {
-        Godot.Collections.Array<Vector2I> walls = new();
 
         for (int x = mapBounds.Position.X; x < mapBounds.End.X; x++)
         {
@@ -123,15 +151,15 @@ public partial class WalkerHead : Node2D
             {
                 Vector2I pos = new(x, y);
                 if (!floorSet.Contains(pos))
-                    walls.Add(pos);
+                    wallSet.Add(pos);
             }
         }
 
         // this is causing dips in frames
-        var wallArray = new Godot.Collections.Array<Vector2I>(walls);
+        var wallArray = new Godot.Collections.Array<Vector2I>(wallSet);
         WallMap.SetCellsTerrainConnect(wallArray, Map.WallTerrainSet, Map.WallTerrain, false);
 
-        foreach (var pos in walls)
+        foreach (var pos in wallSet)
         {
             UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
         }
