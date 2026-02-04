@@ -30,7 +30,7 @@ public partial class WalkerHead : Node2D
 
     public override void _Ready()
     {
-        // If you forget to assign a resource, we still run with your old defaults.
+        // If resource not assigned
         Map ??= new MapData();
 
         main = GetTree().GetFirstNodeInGroup("Main") as Main;
@@ -46,7 +46,7 @@ public partial class WalkerHead : Node2D
         GenerateMap();
     }
 
-    public void GenerateMap()
+    public async void GenerateMap()
     {
         floorSet.Clear();
 
@@ -55,8 +55,16 @@ public partial class WalkerHead : Node2D
         UnderGround.Clear();
 
         BuildPaths();
+
         BuildFloors();
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+
+        WallMap.Hide();
         BuildWalls();
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        WallMap.Show();
+
+
         SpawnPlayerAndEnemies();
     }
 
@@ -119,9 +127,7 @@ public partial class WalkerHead : Node2D
             }
         }
 
-        // use this when wall terrain set is ready
-        //WallMap.SetCellsTerrainConnect(walls, 0, 1);
-
+        // this is causing dips in frames
         var wallArray = new Godot.Collections.Array<Vector2I>(walls);
         WallMap.SetCellsTerrainConnect(wallArray, Map.WallTerrainSet, Map.WallTerrain, false);
 

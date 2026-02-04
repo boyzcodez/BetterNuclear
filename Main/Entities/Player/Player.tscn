@@ -539,7 +539,6 @@ crack1 = NodePath("GUI/ScreenCrack")
 crack2 = NodePath("GUI/ScreenCrack2")
 crack3 = NodePath("GUI/ScreenCrack3")
 MouseLookSmoothing = 50.0
-SnapOffsetToPixelGrid = false
 
 [node name="GUI" parent="AnimatedBody/BetterCamera" unique_id=1535903028 instance=ExtResource("7_yjn54")]
 
