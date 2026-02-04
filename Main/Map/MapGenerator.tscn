@@ -19,6 +19,7 @@
 
 [sub_resource type="Resource" id="Resource_mskix"]
 script = ExtResource("3_letl8")
+GroundTerrain = 3
 TightOuterPadding = 2
 metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 

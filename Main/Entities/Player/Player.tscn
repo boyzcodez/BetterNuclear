@@ -577,6 +577,17 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("9_f6ot2")
 
+[node name="BG" type="CanvasLayer" parent="AnimatedBody/BetterCamera" unique_id=1518406935]
+layer = -99
+
+[node name="ColorRect" type="ColorRect" parent="AnimatedBody/BetterCamera/BG" unique_id=834709695]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
 [node name="Shadow" parent="AnimatedBody" unique_id=202684976 instance=ExtResource("12_m26o7")]
 position = Vector2(0, 16)
 
