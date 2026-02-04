@@ -189,16 +189,13 @@ public partial class WalkerHead : Node2D
 
     public void Explosion(float radius, Vector2 position, DamageData sm)
     {
-        int size = Mathf.RoundToInt(radius / 25f);
+        int size = Mathf.RoundToInt(radius / 50f);
 
         Vector2I centerPos = GroundMap.LocalToMap(GroundMap.ToLocal(position));
-        int size2 = size * size;
 
         for (int x = -size; x <= size; x++)
         for (int y = -size; y <= size; y++)
         {
-            if (x * x + y * y > size2) continue;
-
             Vector2I wallPos = centerPos + new Vector2I(x, y);
 
             if (!destructionBounds.HasPoint(wallPos))
