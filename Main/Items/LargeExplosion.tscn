@@ -77,7 +77,7 @@ animations = [{
 }]
 
 [node name="LargeExplosion" type="AnimatedSprite2D" unique_id=258272724]
-z_index = 1
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_fboqv")
 script = ExtResource("2_sfs4w")
 DustExplosion = ExtResource("3_lud5k")
