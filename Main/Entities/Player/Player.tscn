@@ -546,7 +546,7 @@ script = ExtResource("6_c5hhg")
 crack1 = NodePath("GUI/ScreenCrack")
 crack2 = NodePath("GUI/ScreenCrack2")
 crack3 = NodePath("GUI/ScreenCrack3")
-MouseLookSmoothing = 50.0
+MouseLookSmoothing = 75.0
 
 [node name="GUI" parent="AnimatedBody/BetterCamera" unique_id=1535903028 instance=ExtResource("7_yjn54")]
 
@@ -587,7 +587,6 @@ texture = ExtResource("9_f6ot2")
 
 [node name="BG" type="CanvasLayer" parent="AnimatedBody/BetterCamera" unique_id=1518406935]
 layer = -99
-visible = false
 
 [node name="ColorRect" type="ColorRect" parent="AnimatedBody/BetterCamera/BG" unique_id=834709695]
 anchors_preset = 15

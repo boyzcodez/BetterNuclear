@@ -20,6 +20,8 @@
 [sub_resource type="Resource" id="Resource_mskix"]
 script = ExtResource("3_letl8")
 GroundTerrain = 3
+UnderGroundSourceId = 1
+UnderGroundAtlasCoords = Vector2i(38, 15)
 TightOuterPadding = 2
 metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
