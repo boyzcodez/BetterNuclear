@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://deteoufwqrx6c"]
+
+[ext_resource type="Script" uid="uid://b4pr5nb8s5fr8" path="res://Main/Entities/Player/SubpixelCamera.cs" id="1_detwt"]
+
+[node name="SubpixelCamera" type="Camera2D" unique_id=164152540]
+script = ExtResource("1_detwt")

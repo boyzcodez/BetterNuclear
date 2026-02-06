@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://cnabh4q5ksji3"]
+
+[ext_resource type="Script" uid="uid://bp77yfnkeihw1" path="res://Main/Entities/Player/BetterCamera.cs" id="1_t84l8"]
+[ext_resource type="PackedScene" uid="uid://bqu4r8oidfk01" path="res://Main/GUI/Gui.tscn" id="2_7dvbe"]
+[ext_resource type="Shader" uid="uid://nlivjsru7y5y" path="res://Components/Shaders/Crack.gdshader" id="3_rr1o4"]
+[ext_resource type="Texture2D" uid="uid://blf5jmhxbefkc" path="res://Assets/SFX/screen crack.png" id="4_c803f"]
+[ext_resource type="PackedScene" uid="uid://dg4lyxd7eo3ae" path="res://Main/GUI/BG.tscn" id="5_7dvbe"]
+[ext_resource type="PackedScene" uid="uid://2gmdt0xg347e" path="res://Main/GUI/VignetteLayer.tscn" id="6_7dvbe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ph7be"]
+shader = ExtResource("3_rr1o4")
+shader_parameter/refraction_offset = Vector2(25, 25)
+shader_parameter/reflection_offset = Vector2(1, 1)
+shader_parameter/reflection_color = Color(0.3529412, 0.99607843, 1, 0.39215687)
+
+[node name="BetterCamera" type="Camera2D" unique_id=586937795 node_paths=PackedStringArray("crack1", "crack2", "crack3")]
+process_callback = 0
+limit_enabled = false
+script = ExtResource("1_t84l8")
+crack1 = NodePath("GUI/ScreenCrack")
+crack2 = NodePath("GUI/ScreenCrack2")
+crack3 = NodePath("GUI/ScreenCrack3")
+MouseLookMaxDistance = 500.0
+MouseLookSmoothing = 50.0
+
+[node name="GUI" parent="." unique_id=1535903028 instance=ExtResource("2_7dvbe")]
+
+[node name="ScreenCrack" type="TextureRect" parent="GUI" unique_id=1768726809]
+material = SubResource("ShaderMaterial_ph7be")
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -222.0
+offset_top = -10.0
+offset_right = -30.0
+offset_bottom = 182.0
+grow_horizontal = 0
+texture = ExtResource("4_c803f")
+
+[node name="ScreenCrack2" type="TextureRect" parent="GUI" unique_id=536357395]
+material = SubResource("ShaderMaterial_ph7be")
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 172.0
+offset_bottom = 162.0
+texture = ExtResource("4_c803f")
+
+[node name="ScreenCrack3" type="TextureRect" parent="GUI" unique_id=1551966198]
+material = SubResource("ShaderMaterial_ph7be")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = -160.0
+offset_right = 2.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_c803f")
+
+[node name="BG" parent="." unique_id=444587312 instance=ExtResource("5_7dvbe")]
+
+[node name="VignetteLayer" parent="." unique_id=1931328941 instance=ExtResource("6_7dvbe")]

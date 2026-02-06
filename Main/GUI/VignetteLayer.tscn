@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://2gmdt0xg347e"]
+
+[ext_resource type="Shader" uid="uid://bu0pj6r7w0rvb" path="res://Components/Shaders/VignetteShader.gdshader" id="1_y58xe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ny40"]
+shader = ExtResource("1_y58xe")
+shader_parameter/strength = 1.0
+shader_parameter/softness = 1.00000004424012
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_f6ot2"]
+
+[node name="VignetteLayer" type="CanvasLayer" unique_id=1931328941]
+layer = 10
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=355605959]
+material = SubResource("ShaderMaterial_6ny40")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("CanvasTexture_f6ot2")

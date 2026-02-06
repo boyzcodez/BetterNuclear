@@ -2,21 +2,57 @@
 
 [ext_resource type="Script" uid="uid://bjy5lrnxejv8m" path="res://Main/Main.cs" id="1_yh5la"]
 [ext_resource type="PackedScene" uid="uid://bvj3rj3lgr7cn" path="res://Main/Map/MapGenerator.tscn" id="2_2w1kt"]
+[ext_resource type="Shader" uid="uid://cjrokgtvle5i" path="res://Components/Shaders/Subpixel.gdshader" id="2_ib3t1"]
 [ext_resource type="PackedScene" uid="uid://wtqj1t7hpe8p" path="res://Main/Entities/Player/Player.tscn" id="3_qvhan"]
+[ext_resource type="PackedScene" uid="uid://deteoufwqrx6c" path="res://Main/Entities/Player/SubpixelCamera.tscn" id="6_f6fdm"]
 [ext_resource type="PackedScene" uid="uid://50et3mcpgeue" path="res://Main/Guns/Bullets/NewBullet/ModularBullet.tscn" id="6_ib3t1"]
 [ext_resource type="Script" uid="uid://c2futuks7fc1d" path="res://Main/Guns/BulletPool.cs" id="6_liyct"]
+[ext_resource type="PackedScene" uid="uid://bqu4r8oidfk01" path="res://Main/GUI/Gui.tscn" id="8_f6fdm"]
+[ext_resource type="PackedScene" uid="uid://dg4lyxd7eo3ae" path="res://Main/GUI/BG.tscn" id="9_rj11h"]
+[ext_resource type="PackedScene" uid="uid://2gmdt0xg347e" path="res://Main/GUI/VignetteLayer.tscn" id="10_qac2q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f6fdm"]
+shader = ExtResource("2_ib3t1")
+shader_parameter/cam_offset = Vector2(0, 0)
 
 [node name="Main" type="Node2D" unique_id=1913754685 groups=["Main"]]
 script = ExtResource("1_yh5la")
 
-[node name="YSort" type="Node2D" parent="." unique_id=1806800210]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1884061154]
+material = SubResource("ShaderMaterial_f6fdm")
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 481.0
+offset_bottom = 271.0
+
+[node name="GUI" parent="SubViewportContainer" unique_id=1535903028 instance=ExtResource("8_f6fdm")]
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=213221558]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(482, 272)
+render_target_update_mode = 4
+
+[node name="YSort" type="Node2D" parent="SubViewportContainer/SubViewport" unique_id=1806800210]
 y_sort_enabled = true
+texture_filter = 1
 
-[node name="MapGenerator" parent="YSort" unique_id=1113932412 instance=ExtResource("2_2w1kt")]
+[node name="MapGenerator" parent="SubViewportContainer/SubViewport/YSort" unique_id=1113932412 instance=ExtResource("2_2w1kt")]
 
-[node name="BulletPool" type="Node2D" parent="YSort" unique_id=1779249326 groups=["BulletPool"]]
+[node name="BulletPool" type="Node2D" parent="SubViewportContainer/SubViewport/YSort" unique_id=1779249326 groups=["BulletPool"]]
 y_sort_enabled = true
 script = ExtResource("6_liyct")
 BulletScene = ExtResource("6_ib3t1")
 
-[node name="Player" parent="YSort" unique_id=1488751500 instance=ExtResource("3_qvhan")]
+[node name="Player" parent="SubViewportContainer/SubViewport/YSort" unique_id=1488751500 instance=ExtResource("3_qvhan")]
+
+[node name="SubpixelCamera" parent="SubViewportContainer/SubViewport/YSort" unique_id=164152540 node_paths=PackedStringArray("player", "viewportContainer") instance=ExtResource("6_f6fdm")]
+player = NodePath("../Player")
+viewportContainer = NodePath("../../..")
+FollowSmoothing = 10.0
+MouseLookSmoothing = 25.0
+
+[node name="BG" parent="SubViewportContainer/SubViewport/YSort/SubpixelCamera" unique_id=444587312 instance=ExtResource("9_rj11h")]
+
+[node name="VignetteLayer" parent="SubViewportContainer/SubViewport/YSort/SubpixelCamera" unique_id=1931328941 instance=ExtResource("10_qac2q")]
