@@ -179,6 +179,8 @@ public partial class WalkerHead : Node2D
 
         if (Eventbus.gameOn)
             Eventbus.TriggerSpawnEnemies(GroundMap);
+        
+        Explosion(50f, spawnPos);
     }
 
     public override void _Input(InputEvent e)
@@ -187,7 +189,7 @@ public partial class WalkerHead : Node2D
             Eventbus.TriggerGenerateMap();
     }
 
-    public void Explosion(float radius, Vector2 position, DamageData sm)
+    public void Explosion(float radius, Vector2 position, DamageData sm = null)
     {
         int size = Mathf.RoundToInt(radius / 50f);
 
