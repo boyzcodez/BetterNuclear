@@ -38,6 +38,8 @@ y_sort_enabled = true
 texture_filter = 1
 
 [node name="MapGenerator" parent="SubViewportContainer/SubViewport/YSort" unique_id=1113932412 instance=ExtResource("2_2w1kt")]
+texture_filter = 1
+texture_repeat = 1
 
 [node name="BulletPool" type="Node2D" parent="SubViewportContainer/SubViewport/YSort" unique_id=1779249326 groups=["BulletPool"]]
 y_sort_enabled = true
@@ -53,6 +55,5 @@ FollowSmoothing = 10.0
 MouseLookSmoothing = 25.0
 
 [node name="BG" parent="SubViewportContainer/SubViewport/YSort/SubpixelCamera" unique_id=444587312 instance=ExtResource("9_rj11h")]
-visible = false
 
 [node name="VignetteLayer" parent="SubViewportContainer/SubViewport/YSort/SubpixelCamera" unique_id=1931328941 instance=ExtResource("10_qac2q")]

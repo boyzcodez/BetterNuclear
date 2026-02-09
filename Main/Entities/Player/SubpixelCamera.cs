@@ -10,7 +10,7 @@ public partial class SubpixelCamera : Camera2D
     [Export] private TextureRect crack2;
     [Export] private TextureRect crack3;
 
-    // Follow smoothing (your existing value was delta * 3)
+    // (Removed follow smoothing usage, kept export if you want to re-enable later)
     [Export] private float FollowSmoothing = 5f;
 
     // Mouse look
@@ -65,9 +65,8 @@ public partial class SubpixelCamera : Camera2D
         // Target world position includes mouse look + shake, but stays in world-space
         Vector2 targetWorldPos = player.GlobalPosition + _mouseLookOffset + _shakeOffset;
 
-        // Smooth follow in "actual" (subpixel) space
-        float t = 1f - Mathf.Exp(-FollowSmoothing * d);
-        _actualPos = _actualPos.Lerp(targetWorldPos, t);
+        // NO FOLLOW SMOOTHING: snap immediately in "actual" (subpixel) space
+        _actualPos = targetWorldPos;
 
         // Subpixel workflow: round for actual camera position, send fractional offset to shader
         Vector2 rounded = _actualPos.Round();
