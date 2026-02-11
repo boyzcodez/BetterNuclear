@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://bvj3rj3lgr7cn"]
 
 [ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
+[ext_resource type="Script" uid="uid://cscc1fvx8euy7" path="res://Main/Map/MapGenerator.cs" id="1_mskix"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
 [ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="3_letl8"]
 [ext_resource type="Script" uid="uid://bvt060s0mfqqe" path="res://Main/Entities/Components/EnemyPool.cs" id="5_rvxhn"]
 [ext_resource type="Resource" uid="uid://ixuvv54rvmwx" path="res://Main/Entities/Enemy/List/PistolDude.tres" id="6_8scsi"]
+[ext_resource type="Script" uid="uid://daat6cx8vuj5i" path="res://Main/Map/DungeonMaker.cs" id="6_u2u1l"]
 [ext_resource type="Resource" uid="uid://bn2vn85t4t0wj" path="res://Main/Entities/Enemy/List/ChaseDude.tres" id="7_uvev8"]
 [ext_resource type="Resource" uid="uid://ds17dw2ryhtl" path="res://Main/Entities/Enemy/List/Elite.tres" id="8_lpw80"]
 [ext_resource type="Resource" uid="uid://cwb802hcofpcf" path="res://Main/Entities/Enemy/List/ShotgunDude.tres" id="9_ccqbt"]
@@ -27,6 +29,7 @@ metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
 [node name="MapGenerator" type="Node2D" unique_id=1292098880]
 y_sort_enabled = true
+script = ExtResource("1_mskix")
 
 [node name="UnderGround" type="TileMapLayer" parent="." unique_id=516538842]
 z_index = -5
@@ -53,6 +56,9 @@ UnderGround = NodePath("../UnderGround")
 GroundMap = NodePath("../Ground")
 WallMap = NodePath("../Walls")
 dust = ExtResource("14_bttlk")
+
+[node name="DungeonMaker" type="Node2D" parent="." unique_id=1990555058]
+script = ExtResource("6_u2u1l")
 
 [node name="Environment" type="Node2D" parent="." unique_id=2045239963]
 

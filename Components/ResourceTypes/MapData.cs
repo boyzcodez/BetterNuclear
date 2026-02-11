@@ -3,31 +3,40 @@ using Godot;
 [GlobalClass]
 public partial class MapData : Resource
 {
-    [Export] public int ViewWidth = 40;
-    [Export] public int ViewHeight = 30;
-    [Export] public int MapPadding = 10;
+    [Export] private int _walkerAmount = 6;
+    [Export] private int _pathLength = 100;
 
-    [Export] public int WalkerAmount = 6;
-    [Export] public int PathLength = 100;
+    public int WalkerAmount => Mathf.Max(1, _walkerAmount);
+    public int PathLength   => Mathf.Max(1, _pathLength);
 
-    [Export] public int WallPadding = 2;
+    [Export] private int _initialSafetyPadding = 8;
+    public int InitialSafetyPadding => Mathf.Max(0, _initialSafetyPadding);
 
-    // Floor terrain
+    [Export] private int _wallPadding = 2;
+    public int WallPadding => Mathf.Max(0, _wallPadding);
+
+    [Export] private int _tightOuterPadding = 3;
+    [Export] private int _tightDestructionInset = 2;
+    [Export] private int _terrainSafetyMargin = 1;
+
+    public int TightOuterPadding      => Mathf.Max(0, _tightOuterPadding);
+    public int TightDestructionInset  => Mathf.Max(0, _tightDestructionInset);
+    public int TerrainSafetyMargin    => Mathf.Max(0, _terrainSafetyMargin);
+
+    // Terrain
     [Export] public int GroundTerrainSet = 0;
     [Export] public int GroundTerrain = 0;
 
-    // Wall terrain (your new autotile terrain)
     [Export] public int WallTerrainSet = 0;
     [Export] public int WallTerrain = 2;
 
-    // Underground still uses a specific tile (fine)
     [Export] public int UnderGroundSourceId = 5;
-    [Export] public Vector2I UnderGroundAtlasCoords = new Vector2I(8, 5);
+    [Export] public Vector2I UnderGroundAtlasCoords = new(8, 5);
 
-    public int Width => ViewWidth + MapPadding * 2;
-    public int Height => ViewHeight + MapPadding * 2;
-
-    [Export] public int TightOuterPadding = 3;      // how many tiles beyond the walk area to build (2–4 is typical)
-    [Export] public int TightDestructionInset = 2;  // how many tiles from the edge destruction is disallowed
-    [Export] public int TerrainSafetyMargin = 1;    // extra ring so SetCellsTerrainConnect has neighbors
+    public int InitialExtent =>
+        PathLength
+        + InitialSafetyPadding
+        + TightOuterPadding
+        + TerrainSafetyMargin
+        + WallPadding;
 }

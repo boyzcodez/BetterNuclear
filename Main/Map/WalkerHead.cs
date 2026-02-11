@@ -68,15 +68,11 @@ public partial class WalkerHead : Node2D
 
     private void BuildPaths()
     {
-        int width = Map.Width;
-        int height = Map.Height;
+        int e = Map.InitialExtent;
 
-        mapBounds = new Rect2I(
-            -width / 2,
-            -height / 2,
-            width,
-            height
-        );
+        int size = e * 2 + 1;
+
+        mapBounds = new Rect2I(-e, -e, size, size);
 
         destructionBounds = new Rect2I(
             mapBounds.Position + Vector2I.One * Map.WallPadding,
@@ -102,19 +98,17 @@ public partial class WalkerHead : Node2D
             if (p.Y > maxY) maxY = p.Y;
         }
 
-        // Total padding = (your desired outer ring) + (small safety for terrain peering)
         int pad = Map.TightOuterPadding + Map.TerrainSafetyMargin;
 
-        // +1 because your loops treat End as exclusive
-        Vector2I pos = new Vector2I(minX - pad, minY - pad);
-        Vector2I end = new Vector2I(maxX + pad + 1, maxY + pad + 1);
-
+        Vector2I pos = new(minX - pad, minY - pad);
+        Vector2I end = new(maxX + pad + 1, maxY + pad + 1); // +1 because End is exclusive
         mapBounds = new Rect2I(pos, end - pos);
 
-        // Destruction allowed only inside an inset ring
+        int inset = Mathf.Min(Map.TightDestructionInset, Mathf.Min(mapBounds.Size.X / 2, mapBounds.Size.Y / 2));
+
         destructionBounds = new Rect2I(
-            mapBounds.Position + Vector2I.One * Map.TightDestructionInset,
-            mapBounds.Size - Vector2I.One * Map.TightDestructionInset * 2
+            mapBounds.Position + Vector2I.One * inset,
+            mapBounds.Size - Vector2I.One * inset * 2
         );
     }
 
