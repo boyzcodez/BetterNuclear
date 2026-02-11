@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://sxvc477iyiio"]
+
+[ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_wg8hd"]
+[ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="2_he0ps"]
+[ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="3_062cw"]
+
+[sub_resource type="Resource" id="Resource_mskix"]
+script = ExtResource("2_he0ps")
+GroundTerrain = 3
+UnderGroundSourceId = 1
+UnderGroundAtlasCoords = Vector2i(38, 15)
+metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
+
+[node name="WalkerHead" type="Node2D" unique_id=282948068 node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
+script = ExtResource("1_wg8hd")
+Map = SubResource("Resource_mskix")
+UnderGround = NodePath("")
+GroundMap = NodePath("")
+WallMap = NodePath("")
+dust = ExtResource("3_062cw")

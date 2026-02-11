@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bvj3rj3lgr7cn"]
 
-[ext_resource type="Script" uid="uid://c41l3v0j8iaxr" path="res://Main/Map/WalkerHead.cs" id="1_7qmhp"]
 [ext_resource type="Script" uid="uid://cscc1fvx8euy7" path="res://Main/Map/MapGenerator.cs" id="1_mskix"]
 [ext_resource type="TileSet" uid="uid://cdcfmc2sc2hyf" path="res://Main/Map/MapSet.tres" id="1_toh0s"]
 [ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="3_letl8"]
@@ -18,18 +17,22 @@
 [ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="14_bttlk"]
 [ext_resource type="Resource" uid="uid://d1uwb30p506de" path="res://Main/Items/List/ExplosionResource.tres" id="14_u2u1l"]
 [ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="15_yhdjt"]
+[ext_resource type="Script" uid="uid://txpfqgd7arky" path="res://Main/Map/WalkerGenerator.cs" id="18_yhdjt"]
 
-[sub_resource type="Resource" id="Resource_mskix"]
+[sub_resource type="Resource" id="Resource_u2u1l"]
 script = ExtResource("3_letl8")
-GroundTerrain = 3
-UnderGroundSourceId = 1
-UnderGroundAtlasCoords = Vector2i(38, 15)
-TightOuterPadding = 2
 metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
-[node name="MapGenerator" type="Node2D" unique_id=1292098880]
+[node name="MapGenerator" type="Node2D" unique_id=1292098880 node_paths=PackedStringArray("walker", "dungeon", "UnderGround", "GroundMap", "WallMap")]
 y_sort_enabled = true
 script = ExtResource("1_mskix")
+Map = SubResource("Resource_u2u1l")
+walker = NodePath("WalkerGenerator")
+dungeon = NodePath("DungeonGenerator")
+UnderGround = NodePath("UnderGround")
+GroundMap = NodePath("Ground")
+WallMap = NodePath("Walls")
+dust = ExtResource("14_bttlk")
 
 [node name="UnderGround" type="TileMapLayer" parent="." unique_id=516538842]
 z_index = -5
@@ -49,14 +52,6 @@ texture_filter = 1
 texture_repeat = 1
 tile_set = ExtResource("1_toh0s")
 
-[node name="WalkerHead" type="Node2D" parent="." unique_id=1114734000 node_paths=PackedStringArray("UnderGround", "GroundMap", "WallMap")]
-script = ExtResource("1_7qmhp")
-Map = SubResource("Resource_mskix")
-UnderGround = NodePath("../UnderGround")
-GroundMap = NodePath("../Ground")
-WallMap = NodePath("../Walls")
-dust = ExtResource("14_bttlk")
-
 [node name="DungeonMaker" type="Node2D" parent="." unique_id=1990555058]
 script = ExtResource("6_u2u1l")
 
@@ -71,3 +66,8 @@ enemies = [ExtResource("6_8scsi"), ExtResource("7_uvev8"), ExtResource("8_lpw80"
 y_sort_enabled = true
 script = ExtResource("11_lpw80")
 items = [ExtResource("11_d41uc"), ExtResource("12_letl8"), ExtResource("13_mskix"), ExtResource("14_bttlk"), ExtResource("14_u2u1l"), ExtResource("15_yhdjt")]
+
+[node name="WalkerGenerator" type="Node" parent="." unique_id=900424287]
+script = ExtResource("18_yhdjt")
+
+[node name="DungeonGenerator" type="Node" parent="." unique_id=433833424]

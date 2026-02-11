@@ -3,6 +3,7 @@ using Godot;
 [GlobalClass]
 public partial class MapData : Resource
 {
+    [Export] public Generators generator {get; set;} = Generators.Walker;
     [Export] private int _walkerAmount = 6;
     [Export] private int _pathLength = 100;
 
@@ -23,15 +24,14 @@ public partial class MapData : Resource
     public int TightDestructionInset  => Mathf.Max(0, _tightDestructionInset);
     public int TerrainSafetyMargin    => Mathf.Max(0, _terrainSafetyMargin);
 
-    // Terrain
     [Export] public int GroundTerrainSet = 0;
-    [Export] public int GroundTerrain = 0;
+    [Export] public int GroundTerrain = 3;
 
     [Export] public int WallTerrainSet = 0;
     [Export] public int WallTerrain = 2;
 
-    [Export] public int UnderGroundSourceId = 5;
-    [Export] public Vector2I UnderGroundAtlasCoords = new(8, 5);
+    [Export] public int UnderGroundSourceId = 1;
+    [Export] public Vector2I UnderGroundAtlasCoords = new(38, 15);
 
     public int InitialExtent =>
         PathLength

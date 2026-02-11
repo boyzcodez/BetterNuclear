@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public enum Generators
 {
@@ -10,21 +10,176 @@ public enum Generators
 
 public partial class MapGenerator : Node2D
 {
-    [Export] private WalkerHead walker;
-    [Export] private DungeonMaker dungeon;
+    [Export] public MapData Map;
 
-    public void Generate(Generators key)
+    [Export] private WalkerGenerator walker;
+    [Export] private Node dungeon;
+    [Export] private Node something; // later
+
+
+    [Export] public TileMapLayer UnderGround;
+    [Export] public TileMapLayer GroundMap;
+    [Export] public TileMapLayer WallMap;
+
+    [Export] public ItemResource dust;
+
+    private Rect2I _mapBounds;
+    private Rect2I _destructionBounds;
+
+    private readonly HashSet<Vector2I> _floorSet = new();
+    private readonly HashSet<Vector2I> _wallSet = new();
+
+    private Player _player;
+    private Main _main;
+
+    public override void _Ready()
     {
-        switch (key)
+        Map ??= new MapData();
+
+        _main = GetTree().GetFirstNodeInGroup("Main") as Main;
+        _player = GetTree().GetFirstNodeInGroup("Player") as Player;
+
+        // keep Main pointers centralized here now
+        if (_main != null)
         {
-            case Generators.Walker:
-                break;
-            case Generators.Dungeon:
-                break;
-            case Generators.Something:
-                break;
-            default:
-                break;
+            _main.walls = WallMap;
+            _main.ground = GroundMap;
         }
+
+        Eventbus.GenerateMap += GenerateMap;
+        Eventbus.Reset += GenerateMap;
+        Eventbus.Explosion += Explosion;
+
+        GenerateMap();
+    }
+
+    public override void _ExitTree()
+    {
+        Eventbus.GenerateMap -= GenerateMap;
+        Eventbus.Reset -= GenerateMap;
+        Eventbus.Explosion -= Explosion;
+    }
+
+    public void GenerateMap()
+    {
+        _floorSet.Clear();
+        _wallSet.Clear();
+
+        GroundMap.Clear();
+        WallMap.Clear();
+        UnderGround.Clear();
+
+        MapGenResult result = RunSelectedGenerator(Map.generator);
+
+        _mapBounds = result.MapBounds;
+        _destructionBounds = result.DestructionBounds;
+
+        _floorSet.UnionWith(result.Floors);
+
+        BuildFloors();
+        BuildWalls_FullFillLikeBefore();
+
+        SpawnPlayerAndEnemies(result.SpawnTile);
+    }
+
+    private MapGenResult RunSelectedGenerator(Generators key)
+    {
+        IMapAlgorithm algo = key switch
+        {
+            Generators.Walker => walker as IMapAlgorithm,
+            Generators.Dungeon => dungeon as IMapAlgorithm,
+            Generators.Something => something as IMapAlgorithm,
+            _ => walker as IMapAlgorithm
+        };
+
+        if (algo == null)
+        {
+            GD.PushError($"No generator found/assigned for {key}. Falling back to Walker.");
+            algo = walker;
+        }
+
+        return algo.Generate(Map);
+    }
+
+    private void BuildFloors()
+    {
+        var floorArray = new Godot.Collections.Array<Vector2I>(_floorSet);
+        GroundMap.SetCellsTerrainConnect(floorArray, Map.GroundTerrainSet, Map.GroundTerrain, false);
+    }
+
+    private void BuildWalls_FullFillLikeBefore()
+    {
+        for (int x = _mapBounds.Position.X; x < _mapBounds.End.X; x++)
+        {
+            for (int y = _mapBounds.Position.Y; y < _mapBounds.End.Y; y++)
+            {
+                Vector2I pos = new(x, y);
+                if (!_floorSet.Contains(pos))
+                    _wallSet.Add(pos);
+            }
+        }
+
+        var wallArray = new Godot.Collections.Array<Vector2I>(_wallSet);
+        WallMap.SetCellsTerrainConnect(wallArray, Map.WallTerrainSet, Map.WallTerrain, false);
+
+        foreach (var pos in _wallSet)
+            UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
+    }
+
+    private void SpawnPlayerAndEnemies(Vector2I spawnTile)
+    {
+        if (_player == null || _main == null)
+            return;
+
+        Vector2 spawnPos = GroundMap.MapToLocal(spawnTile);
+        _player.GlobalPosition = spawnPos;
+
+        _main.RebuildWallCacheFromTilemap();
+
+        if (Eventbus.gameOn)
+            Eventbus.TriggerSpawnEnemies(GroundMap);
+
+        Explosion(50f, spawnPos);
+    }
+
+    public override void _Input(InputEvent e)
+    {
+        if (e.IsActionPressed("space"))
+            Eventbus.TriggerGenerateMap();
+    }
+
+    public void Explosion(float radius, Vector2 position, DamageData sm = null)
+    {
+        if (_main == null) return;
+
+        int size = Mathf.RoundToInt(radius / 50f);
+        Vector2I centerPos = GroundMap.LocalToMap(GroundMap.ToLocal(position));
+
+        for (int x = -size; x <= size; x++)
+        for (int y = -size; y <= size; y++)
+        {
+            Vector2I wallPos = centerPos + new Vector2I(x, y);
+
+            if (!_destructionBounds.HasPoint(wallPos))
+                continue;
+
+            // Fast check via Main cache
+            if (!_main.IsWallCell(wallPos))
+                continue;
+
+            DestroyWall(wallPos);
+
+            if (dust != null)
+            {
+                Vector2 dustPos = WallMap.ToGlobal(WallMap.MapToLocal(wallPos));
+                Eventbus.TriggerSpawnItem(dust.Id, dustPos);
+            }
+        }
+    }
+
+    public void DestroyWall(Vector2I pos)
+    {
+        WallMap.SetCellsTerrainConnect([pos], Map.WallTerrainSet, -1, false);
+        _main?.NotifyWallRemoved(pos);
     }
 }
