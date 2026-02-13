@@ -13,12 +13,21 @@ public enum BulletSpawnPoint
     Muzzle,
     Mouse
 }
+public enum Rarity
+{
+    S,
+    A,
+    B,
+    C,
+    D
+}
 
 [GlobalClass]
 public partial class GunData : Resource
 {
     [Export] public StringName GunId {get; set; } = "";
     [Export] public DamageTypes DamageType { get; set; } = DamageTypes.Impact;
+    [Export] public Rarity GunRarity {get; set;} = Rarity.D;
     [Export] public Texture2D Icon {get; set;}
     
     [Export] public bool UsesAmmo { get; set; } = true;
