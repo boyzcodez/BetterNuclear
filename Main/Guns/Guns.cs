@@ -310,36 +310,53 @@ public partial class Guns : Node2D
         if (currentGun == null || currentGun.CurrentAmmo <= 0)
             return;
 
-        if (currentGun.SpawnPoint == BulletSpawnPoint.Muzzle && Main.Instance.IsWallAt(muzzleFlash.GlobalPosition)) return;
+        if (currentGun.SpawnPoint == BulletSpawnPoint.Muzzle && Main.Instance.IsWallAt(muzzleFlash.GlobalPosition))
+            return;
 
         Vector2 spawnPos = GetBulletSpawnPosition();
 
-
-        // If we were paused holding the charge pose, restore speed so shoot anim works
         if (sprite != null) sprite.SpeedScale = 1f;
 
         currentGun.UseBullet();
 
-        Eventbus.TriggerScreenShake(
-            currentGun.ShakeIntensity,
-            currentGun.ShakeDuration
-        );
+        Eventbus.TriggerScreenShake(currentGun.ShakeIntensity, currentGun.ShakeDuration);
 
         sprite.FireAnimation();
         PlayAnimation();
 
-        Vector2 muzzlePos = muzzleFlash.GlobalPosition;
+        int n = Mathf.Max(1, currentGun.BulletCount);
 
         float baseAngle = GlobalRotation;
         float halfSpreadRad = Mathf.DegToRad(currentGun.SpreadAngle * 0.5f);
 
-        for (int i = 0; i < currentGun.BulletCount; i++)
+        // Forward + perpendicular (right) vectors based on *center* aim direction
+        Vector2 forward = new Vector2(Mathf.Cos(baseAngle), Mathf.Sin(baseAngle));
+        Vector2 right   = new Vector2(-forward.Y, forward.X);
+
+        float centerIndex = (n - 1) * 0.5f;
+
+        for (int i = 0; i < n; i++)
         {
-            float angle = baseAngle + rng.RandfRange(-halfSpreadRad, halfSpreadRad);
+            float t = (n == 1) ? 0f : ((i - centerIndex) / centerIndex); 
+            float angle = baseAngle + (t * halfSpreadRad);
+
+            float angleJitterRad = Mathf.DegToRad(rng.RandfRange(-currentGun.AngleJitter, currentGun.AngleJitter));
+            angle += angleJitterRad;
+
+            Vector2 velDir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized();
+            
+            float lateral = (i - centerIndex) * currentGun.BulletSpawnSpacing;
+            lateral += rng.RandfRange(-currentGun.BulletSpawnSpacingJitter, currentGun.BulletSpawnSpacingJitter);
+
+            Vector2 bulletPos = spawnPos + right * lateral;
+
+            // If spacing pushes a pellet into a wall, skip that pellet (muzzle-only)
+            if (currentGun.SpawnPoint == BulletSpawnPoint.Muzzle && Main.Instance.IsWallAt(bulletPos))
+                continue;
 
             BulletPool.Spawn(
-                position: spawnPos,
-                velocity: new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).Normalized(),
+                position: bulletPos,
+                velocity: velDir,
                 currentGun.BulletData
             );
         }

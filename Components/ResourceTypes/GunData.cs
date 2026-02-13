@@ -24,10 +24,15 @@ public partial class GunData : Resource
     [Export] public bool UsesAmmo { get; set; } = true;
     [Export] public int CurrentAmmo { get; set; } = 10;
     [Export] public int MaxAmmo { get; set; } = 10;
+
     [Export] public float FireRate { get; set; } = 0.2f;
     [Export] public int BulletCount { get; set; } = 1;
+
     [Export] public float SpreadAngle { get; set; } = 0f;
-    [Export] public float RandomFactor { get; set; } = 0f;
+    [Export] public float AngleJitter { get; set; } = 0f;
+
+    [Export] public float BulletSpawnSpacing { get; set; } = 0f;
+    [Export] public float BulletSpawnSpacingJitter { get; set; } = 0f;
 
     [ExportGroup("Bullet")]
     
