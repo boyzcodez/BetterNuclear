@@ -23,16 +23,21 @@
 script = ExtResource("3_letl8")
 metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
-[node name="MapGenerator" type="Node2D" unique_id=1292098880 node_paths=PackedStringArray("walker", "dungeon", "UnderGround", "GroundMap", "WallMap")]
+[node name="MapGenerator" type="Node2D" unique_id=1292098880 node_paths=PackedStringArray("walker", "dungeon", "ShadowMap", "UnderGround", "GroundMap", "WallMap")]
 y_sort_enabled = true
 script = ExtResource("1_mskix")
 Map = SubResource("Resource_u2u1l")
 walker = NodePath("WalkerGenerator")
 dungeon = NodePath("DungeonGenerator")
+ShadowMap = NodePath("Shadows")
 UnderGround = NodePath("UnderGround")
 GroundMap = NodePath("Ground")
 WallMap = NodePath("Walls")
 dust = ExtResource("14_bttlk")
+
+[node name="Shadows" type="TileMapLayer" parent="." unique_id=2110251238]
+z_index = -4
+tile_set = ExtResource("1_toh0s")
 
 [node name="UnderGround" type="TileMapLayer" parent="." unique_id=516538842]
 z_index = -5

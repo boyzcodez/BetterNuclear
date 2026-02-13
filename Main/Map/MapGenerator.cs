@@ -10,13 +10,17 @@ public enum Generators
 
 public partial class MapGenerator : Node2D
 {
+    private const int ShadowSourceId = 1;
+    private static readonly Vector2I ShadowAtlasCoords = new Vector2I(42, 18);
+    private static readonly Vector2I ShadowOffset = new(0, 1);
+
     [Export] public MapData Map;
 
     [Export] private WalkerGenerator walker;
     [Export] private Node dungeon;
     [Export] private Node something; // later
 
-
+    [Export] public TileMapLayer ShadowMap;
     [Export] public TileMapLayer UnderGround;
     [Export] public TileMapLayer GroundMap;
     [Export] public TileMapLayer WallMap;
@@ -68,6 +72,7 @@ public partial class MapGenerator : Node2D
         GroundMap.Clear();
         WallMap.Clear();
         UnderGround.Clear();
+        ShadowMap.Clear();
 
         MapGenResult result = RunSelectedGenerator(Map.generator);
 
@@ -78,6 +83,8 @@ public partial class MapGenerator : Node2D
 
         BuildFloors();
         BuildWalls_FullFillLikeBefore();
+
+        BuildAllShadows();
 
         SpawnPlayerAndEnemies(result.SpawnTile);
     }
@@ -124,6 +131,47 @@ public partial class MapGenerator : Node2D
 
         foreach (var pos in _wallSet)
             UnderGround.SetCell(pos, Map.UnderGroundSourceId, Map.UnderGroundAtlasCoords);
+    }
+    
+    private void BuildAllShadows()
+    {
+        if (ShadowMap == null) return;
+
+        ShadowMap.Clear();
+        foreach (var wallPos in _wallSet)
+            RefreshShadowAt(wallPos + ShadowOffset);
+    }
+    private bool HasAnyGround(Vector2I pos)
+    {
+        // "Ground" can be either the autotiled floor OR the underground fill
+        bool hasFloor = GroundMap != null && GroundMap.GetCellSourceId(pos) != -1;
+        bool hasUnderground = UnderGround != null && UnderGround.GetCellSourceId(pos) != -1;
+        return hasFloor || hasUnderground;
+    }
+
+    private void RefreshShadowAt(Vector2I shadowPos)
+    {
+        if (ShadowMap == null || WallMap == null) return;
+
+        bool hasGround = HasAnyGround(shadowPos);
+        bool hasWallAbove = WallMap.GetCellSourceId(shadowPos - ShadowOffset) != -1;
+
+        if (hasGround && hasWallAbove)
+            ShadowMap.SetCell(shadowPos, ShadowSourceId, ShadowAtlasCoords);
+        else
+            ShadowMap.EraseCell(shadowPos);
+    }
+    private void RefreshExplosionTopShadowLine(Vector2I centerPos, int size)
+    {
+        if (ShadowMap == null || GroundMap == null || WallMap == null) return;
+
+        int yTopInside = centerPos.Y - size; // top row *inside* the explosion square
+
+        for (int x = centerPos.X - size; x <= centerPos.X + size; x++)
+        {
+            Vector2I shadowPos = new(x, yTopInside);
+            RefreshShadowAt(shadowPos); // checks wall above + ground here, then set/erase shadow
+        }
     }
 
     private void SpawnPlayerAndEnemies(Vector2I spawnTile)
@@ -175,11 +223,14 @@ public partial class MapGenerator : Node2D
                 Eventbus.TriggerSpawnItem(dust.Id, dustPos);
             }
         }
+
+        RefreshExplosionTopShadowLine(centerPos, size);
     }
 
     public void DestroyWall(Vector2I pos)
     {
         WallMap.SetCellsTerrainConnect([pos], Map.WallTerrainSet, -1, false);
         _main?.NotifyWallRemoved(pos);
+        RefreshShadowAt(pos + ShadowOffset);
     }
 }
