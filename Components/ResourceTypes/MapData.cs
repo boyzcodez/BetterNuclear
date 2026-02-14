@@ -4,6 +4,8 @@ using Godot;
 public partial class MapData : Resource
 {
     [Export] public Generators generator {get; set;} = Generators.Walker;
+
+    [ExportGroup("Walker")]
     [Export] private int _walkerAmount = 6;
     [Export] private int _pathLength = 100;
 
@@ -24,6 +26,18 @@ public partial class MapData : Resource
     public int TightDestructionInset  => Mathf.Max(0, _tightDestructionInset);
     public int TerrainSafetyMargin    => Mathf.Max(0, _terrainSafetyMargin);
 
+    [ExportGroup("Dungeon")]
+    [Export] private int _roomAmount = 12;
+    public int RoomAmount => Mathf.Max(1, _roomAmount);
+
+    [Export] private bool _dungeonLinear = false;
+    public bool DungeonLinear => _dungeonLinear;
+
+    // Folder containing your room .txt files
+    [Export(PropertyHint.Dir)] public string AsciiRoomsFolder = "res://Main/Map/Rooms/";
+
+
+    [ExportGroup("Terrain")]
     [Export] public int GroundTerrainSet = 0;
     [Export] public int GroundTerrain = 3;
 

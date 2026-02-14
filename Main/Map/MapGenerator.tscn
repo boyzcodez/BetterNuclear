@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://c0cl4rnoarrqe" path="res://Components/ResourceTypes/MapData.cs" id="3_letl8"]
 [ext_resource type="Script" uid="uid://bvt060s0mfqqe" path="res://Main/Entities/Components/EnemyPool.cs" id="5_rvxhn"]
 [ext_resource type="Resource" uid="uid://ixuvv54rvmwx" path="res://Main/Entities/Enemy/List/PistolDude.tres" id="6_8scsi"]
-[ext_resource type="Script" uid="uid://daat6cx8vuj5i" path="res://Main/Map/DungeonMaker.cs" id="6_u2u1l"]
 [ext_resource type="Resource" uid="uid://bn2vn85t4t0wj" path="res://Main/Entities/Enemy/List/ChaseDude.tres" id="7_uvev8"]
 [ext_resource type="Resource" uid="uid://ds17dw2ryhtl" path="res://Main/Entities/Enemy/List/Elite.tres" id="8_lpw80"]
 [ext_resource type="Resource" uid="uid://cwb802hcofpcf" path="res://Main/Entities/Enemy/List/ShotgunDude.tres" id="9_ccqbt"]
@@ -17,10 +16,12 @@
 [ext_resource type="Resource" uid="uid://hu46ft230uve" path="res://Main/Items/List/DustExplosionResource.tres" id="14_bttlk"]
 [ext_resource type="Resource" uid="uid://d1uwb30p506de" path="res://Main/Items/List/ExplosionResource.tres" id="14_u2u1l"]
 [ext_resource type="Resource" uid="uid://c81a5py8wpbe8" path="res://Main/Items/List/LargeExplosionResource.tres" id="15_yhdjt"]
+[ext_resource type="Script" uid="uid://4gqhd0k5mhvq" path="res://Main/Map/DungeonGenerator.cs" id="18_u2u1l"]
 [ext_resource type="Script" uid="uid://txpfqgd7arky" path="res://Main/Map/WalkerGenerator.cs" id="18_yhdjt"]
 
 [sub_resource type="Resource" id="Resource_u2u1l"]
 script = ExtResource("3_letl8")
+generator = 1
 metadata/_custom_type_script = "uid://c0cl4rnoarrqe"
 
 [node name="MapGenerator" type="Node2D" unique_id=1292098880 node_paths=PackedStringArray("walker", "dungeon", "ShadowMap", "UnderGround", "GroundMap", "WallMap")]
@@ -57,9 +58,6 @@ texture_filter = 1
 texture_repeat = 1
 tile_set = ExtResource("1_toh0s")
 
-[node name="DungeonMaker" type="Node2D" parent="." unique_id=1990555058]
-script = ExtResource("6_u2u1l")
-
 [node name="Environment" type="Node2D" parent="." unique_id=2045239963]
 
 [node name="EnemyPool" type="Node2D" parent="." unique_id=459132154]
@@ -76,3 +74,4 @@ items = [ExtResource("11_d41uc"), ExtResource("12_letl8"), ExtResource("13_mskix
 script = ExtResource("18_yhdjt")
 
 [node name="DungeonGenerator" type="Node" parent="." unique_id=433833424]
+script = ExtResource("18_u2u1l")
